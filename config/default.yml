@@ -1,0 +1,8 @@
+db:
+  type: 'postgres'
+  port: 5432
+  database: 'jay'
+  host: 'localhost'
+  username: 'postgres'
+  password: 'Mm121212'
+  synchronize: true
