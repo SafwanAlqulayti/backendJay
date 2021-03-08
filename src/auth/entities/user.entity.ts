@@ -1,7 +1,8 @@
 
-import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from "typeorm";
-// import * as bcrypt from 'bcrypt' 
-// import * as bcrypt from 'bcryptjs';
+import { BaseEntity, Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, Unique } from "typeorm";
+import {UserRole} from '../user-role.enum'
+import * as bcrypt from 'bcryptjs';
+import { Restaurant } from "src/restaurant/entities/restaurant.entity";
 
 @Entity()
 // @Unique(['email'])
@@ -17,7 +18,7 @@ export class User extends BaseEntity {
     email: string;
 
     @Column()
-    userName: string;
+    user_name: string;
 
     @Column()
     password: string;
@@ -26,23 +27,24 @@ export class User extends BaseEntity {
     salt: string;
 
     @Column()
-    phoneNumber :string;
+    phone_number :string;
  
     @Column()
-    userKind:string;
+    user_role:UserRole;
 
 
-    // @OneToMany(type =>RealStateEntity , realstate=>realstate.admin,{eager:true})
-    // realstate:RealStateEntity[];
+    @OneToOne(type =>Restaurant,Restaurant=>Restaurant)
+    @JoinColumn()
+    Restaurant:Restaurant;
 
 
-    //  async validateLogin(password:string):Promise<boolean>{
-    //     const hash=await bcrypt.hash(password,this.Salt);
+     async validateLogin(password:string):Promise<boolean>{
+        const hash=await bcrypt.hash(password,this.salt);
 
 
-    //     return hash===this.Password
+        return hash===this.password
         
-    //         }
+            }
 
  
 

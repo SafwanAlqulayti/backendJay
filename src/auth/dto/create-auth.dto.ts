@@ -1,18 +1,14 @@
-import { IsEmail, isEmpty, IsInt, IsNotEmpty, IsString, Length, Matches, Max, Min, MinLength } from "class-validator";
+import { IsString, Length } from "class-validator";
 
+export class CreateAuthDto{
 
-export class CreateAuthDto {
-
-    @IsEmail()
     email: string;
 
     userName: string;
 
-    @Length(10,10)
-    phoneNumber :string;
-
     password: string;
 
-    userKind:string;
+    @Length(9,9)
+    phoneNumber:string;
 
 }

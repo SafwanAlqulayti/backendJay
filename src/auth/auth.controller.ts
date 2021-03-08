@@ -6,11 +6,16 @@ import { CreateAuthDto } from './dto/create-auth.dto';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post()
+  @Post('/signUp')
   @UsePipes(ValidationPipe)
   signUp(@Body() createAuthDto: CreateAuthDto) {
     return this.authService.signUp(createAuthDto);
   }
+
+  @Post('/signIn')
+  signIn(@Body() createAuthDto: CreateAuthDto) {
+    return this.authService.signIn(createAuthDto);
+  } 
 
   @Get() 
   findAll() {
