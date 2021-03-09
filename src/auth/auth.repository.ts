@@ -4,6 +4,7 @@ import { User } from '../auth/entities/user.entity';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import * as bcrypt from 'bcryptjs';
 import { UserRole } from './user-role.enum';
+import { Restaurant } from 'src/restaurant/entities/restaurant.entity';
 
 const phone = require('phone');
 
@@ -11,6 +12,12 @@ const phone = require('phone');
 export class UserRepository extends Repository<User> {
   async signUp(createAuthDto: CreateAuthDto) {
     const { email, userName, phoneNumber, password } = createAuthDto;
+
+
+   
+
+
+
     const user = new User();
     user.email = email;
     user.user_name = userName;
@@ -24,7 +31,10 @@ export class UserRepository extends Repository<User> {
       console.log(error);
       throw new InternalServerErrorException();
     }
-
+    // const rasturant =new Restaurant();
+    // rasturant.name='Meshary'
+    // rasturant.CASHIER=user
+    // await rasturant.save();
     return true;
   }
   private async hashPassword(password: string, salt: string): Promise<string> {

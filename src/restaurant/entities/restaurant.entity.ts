@@ -1,8 +1,14 @@
+import { type } from 'os';
 import { from } from 'rxjs';
-import { Column, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { RestaurantCashire } from 'src/restaurant-cashire/entities/restaurant-cashire.entity';
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import {User} from '../../auth/entities/user.entity'
+import {Order} from '../../order/entities/order.entity'
 
-export class Restaurant {
+
+
+@Entity()
+export class Restaurant extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -25,6 +31,16 @@ export class Restaurant {
   photo: string;
 
 
-  @OneToOne(type=>User,CASHIER=>CASHIER.Restaurant)
+  @ManyToOne(type=>User,CASHIER=>CASHIER.Restaurant, {eager: true})
+  @JoinColumn()
   CASHIER:User;
+
+
+
+  @OneToOne(type=>RestaurantCashire,RestaurantCashire=>RestaurantCashire.Restaurant, {eager: false})
+  RestaurantCashire:RestaurantCashire
+
+
+  @OneToMany(type=>Order,Order=>Order.Restaurant)
+  Order:Order[]
 }

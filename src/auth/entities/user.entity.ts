@@ -3,6 +3,7 @@ import { BaseEntity, Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGen
 import {UserRole} from '../user-role.enum'
 import * as bcrypt from 'bcryptjs';
 import { Restaurant } from "src/restaurant/entities/restaurant.entity";
+import { Order } from "src/order/entities/order.entity";
 
 @Entity()
 // @Unique(['email'])
@@ -33,9 +34,14 @@ export class User extends BaseEntity {
     user_role:UserRole;
 
 
-    @OneToOne(type =>Restaurant,Restaurant=>Restaurant)
-    @JoinColumn()
-    Restaurant:Restaurant;
+    @OneToMany(type =>Restaurant,Restaurant=>Restaurant.CASHIER,{eager: false})
+    Restaurant:Restaurant[];
+
+
+
+    @OneToMany(type =>Order,Order=>Order.User)
+    Order:Order[];
+    
 
 
      async validateLogin(password:string):Promise<boolean>{
