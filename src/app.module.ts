@@ -5,9 +5,15 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { typeOrm } from './config/typeOrm.config';
 import { RestaurantModule } from './restaurant/restaurant.module';
+import { RestaurantFileModule } from './restaurant-file/restaurant-file.module';
+import { ConfigModule } from '@nestjs/config';
+import { MealModule } from './meal/meal.module';
 
 @Module({
-  imports: [AuthModule,TypeOrmModule.forRoot(typeOrm), RestaurantModule],
+  imports: [ConfigModule.forRoot({
+    envFilePath: '.development.env',
+  }),
+    AuthModule,TypeOrmModule.forRoot(typeOrm), RestaurantModule, RestaurantFileModule, MealModule],
   controllers: [AppController],
   providers: [AppService],
 })

@@ -1,42 +1,37 @@
 
 import { BaseEntity, Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, Unique } from "typeorm";
-import {UserRole} from '../user-role.enum'
+import {UserRole} from '../auth/user-role.enum'
 import * as bcrypt from 'bcryptjs';
-import { Restaurant } from "src/restaurant/entities/restaurant.entity";
+import { AbstractEntity } from "src/common/abstract.entity";
 
 @Entity()
 // @Unique(['email'])
 // @Unique(['phoneNumber'])
-export class User extends BaseEntity {
+export class UserEntity extends AbstractEntity {
 
-     
-
-    @PrimaryGeneratedColumn()
-    id: number;
-
-    @Column()
+    @Column({nullable:true})
     email: string;
 
-    @Column()
-    user_name: string;
+    @Column({nullable:true})
+    userName: string;
 
-    @Column()
+    @Column({nullable:true})
     password: string;
 
-    @Column()
+    @Column({nullable:true})
     salt: string;
 
-    @Column()
+    @Column({nullable:true})
     phone_number :string;
  
-    @Column()
-    user_role:UserRole;
+    @Column({nullable:true})
+    userRole:UserRole;
 
 
-    @OneToOne(type =>Restaurant,Restaurant=>Restaurant)
-    @JoinColumn()
-    Restaurant:Restaurant;
-
+    // @OneToOne(type =>Restaurant,Restaurant=>Restaurant)
+    // @JoinColumn()
+    // Restaurant:Restaurant;
+    
 
      async validateLogin(password:string):Promise<boolean>{
         const hash=await bcrypt.hash(password,this.salt);
