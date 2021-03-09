@@ -1,19 +1,53 @@
 import { Injectable } from '@nestjs/common';
+import { userInfo } from 'node:os';
+import { AuthService } from 'src/auth/auth.service';
+import { RestaurantEntity } from 'src/entities/restaurant.entity';
 import { CreateRestaurantDto } from './dto/create-restaurant.dto';
+import { DeleteRestaurantDto } from './dto/deleteRestaurantDto';
+import { UpdateRestaurantDto } from './dto/updateRestaurantDto';
+import { RestaurantRepository } from './restaurantRepository';
 // import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
 
 @Injectable()
+
 export class RestaurantService {
-  create(createRestaurantDto: CreateRestaurantDto) {
-    return 'This action adds a new restaurant';
+constructor(
+  private _restaurantRepository:RestaurantRepository ,
+  private _authService:AuthService
+){}
+
+async create(createRestaurantDto: CreateRestaurantDto ,user) {
+  console.log(user)
+  // let user = await this._authService.findOne(5)
+    let resturant = new RestaurantEntity()
+    resturant.kind = createRestaurantDto.kind
+    resturant.name = createRestaurantDto.name
+    resturant.userId = user.id
+    await this._restaurantRepository.save(resturant)
+    return resturant
   }
 
-  findAll() {
-    return `This action returns all restaurant`;
+ async update(user, updateRestaurantDto:UpdateRestaurantDto){
+    let restaurant = await this._restaurantRepository.findOne({userId:user.id , id:updateRestaurantDto.id})
+    restaurant.name = updateRestaurantDto.name
+    restaurant.kind = updateRestaurantDto.kind
+    await this._restaurantRepository.save(restaurant)
+
+    return restaurant
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} restaurant`;
+  async delete(user, deleteRestaurantDto:DeleteRestaurantDto){
+    this._restaurantRepository.delete({id:deleteRestaurantDto.id ,userId:user.id})
+    return `Restaurant with ${deleteRestaurantDto.id} has been deleted`
+  }
+
+
+  findAll(user) {
+    return this._restaurantRepository.find({where: {userId:user.id},relations:["restaurantFile"] });
+  }
+
+  findOne(id) {
+    return this._restaurantRepository.findOne({id:id})
   }
 
   // update(id: number, updateRestaurantDto: UpdateRestaurantDto) {

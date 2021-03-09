@@ -4,6 +4,7 @@ import { UserRepository } from './auth.repository';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtPayload } from './jwt-payload.interface';
+import { uuid } from 'aws-sdk/clients/customerprofiles';
 
 @Injectable()
 export class AuthService {
@@ -23,17 +24,17 @@ export class AuthService {
     if (User.email === null) {
       throw new UnauthorizedException('Invalid credentials');
     }
-    const payload: JwtPayload = { email: User.email, username: User.user_name };
+    const payload: JwtPayload = { email: User.email, username: User.userName };
     const accessToken = await this.jwtService.sign(payload);
     return { accessToken };
   }
 
-  findAll() {
+  findAll() {// for admin only
     return `This action returns all auth`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
+  findOne(id) {
+    return this.UserRepository.findOne({id:id})
   }
 
   // update(id: number, updateAuthDto: UpdateAuthDto) {

@@ -1,41 +1,30 @@
-import { InternalServerErrorException } from '@nestjs/common';
+import { BadRequestException, InternalServerErrorException } from '@nestjs/common';
 import { EntityRepository, Repository } from 'typeorm';
-import { User } from '../auth/entities/user.entity';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import * as bcrypt from 'bcryptjs';
-import { UserRole } from './user-role.enum';
-import { Restaurant } from 'src/restaurant/entities/restaurant.entity';
+import { UserEntity } from '../entities/user.entity';
 
 const phone = require('phone');
 
-@EntityRepository(User)
-export class UserRepository extends Repository<User> {
+@EntityRepository(UserEntity)
+export class UserRepository extends Repository<UserEntity> {
   async signUp(createAuthDto: CreateAuthDto) {
     const { email, userName, phoneNumber, password } = createAuthDto;
-
-
-   
-
-
-
-    const user = new User();
+    let user = new UserEntity()
     user.email = email;
-    user.user_name = userName;
-    user.phone_number = phone(phoneNumber, 'SAU')[0];
+    user.userName = userName;
+    user.phone_number = phone(phoneNumber, 'SAU')[966];
     user.salt = await bcrypt.genSalt();
     user.password = await this.hashPassword(password, user.salt);
-    user.user_role = UserRole.USER;
+   // user.userRole = UserEntityRole.UserEntity;
     try {
-      await user.save();
+      await this.save(user);
     } catch (error) {
       console.log(error);
-      throw new InternalServerErrorException();
+      throw new BadRequestException();
     }
-    // const rasturant =new Restaurant();
-    // rasturant.name='Meshary'
-    // rasturant.CASHIER=user
-    // await rasturant.save();
-    return true;
+    
+    return user;
   }
   private async hashPassword(password: string, salt: string): Promise<string> {
     return bcrypt.hash(password, salt);
@@ -43,12 +32,12 @@ export class UserRepository extends Repository<User> {
 
   async signIn(createAuthDto: CreateAuthDto) {
     const { email, password } = createAuthDto;
-    const user = await this.findOne({ email: email });
+    const UserEntity = await this.findOne({ email: email });
 
-    if (user) {
-      let x = await user.validateLogin(password);
+    if (UserEntity) {
+      let x = await UserEntity.validateLogin(password);
       if (x) {
-        return user;
+        return UserEntity;
       } else {
         return null;
       }
