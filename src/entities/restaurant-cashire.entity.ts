@@ -1,6 +1,6 @@
 
-import { Restaurant } from "src/restaurant/entities/restaurant.entity";
 import { BaseEntity, Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { RestaurantEntity } from "./restaurant.entity";
 
 
 @Entity()
@@ -19,9 +19,9 @@ export class RestaurantCashire extends BaseEntity {
   
 
 
-    @OneToOne(type=>Restaurant,Restaurant=>Restaurant.RestaurantCashire, {eager: true})
+    @OneToOne(type=>RestaurantEntity,Restaurant=>Restaurant.RestaurantCashire)
       @JoinColumn()
-    Restaurant:Restaurant;
+    Restaurant:RestaurantEntity;
 
 
 

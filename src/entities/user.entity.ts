@@ -3,6 +3,8 @@ import { BaseEntity, Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGen
 import {UserRole} from '../auth/user-role.enum'
 import * as bcrypt from 'bcryptjs';
 import { AbstractEntity } from "src/common/abstract.entity";
+import { Order } from "./order.entity";
+import { RestaurantEntity } from "./restaurant.entity";
 
 @Entity()
 // @Unique(['email'])
@@ -13,7 +15,7 @@ export class UserEntity extends AbstractEntity {
     email: string;
 
     @Column({nullable:true})
-    userName: string;
+    user_name: string;
 
     @Column({nullable:true})
     password: string;
@@ -25,7 +27,16 @@ export class UserEntity extends AbstractEntity {
     phone_number :string;
  
     @Column({nullable:true})
-    userRole:UserRole;
+    user_role:UserRole;
+
+
+    @OneToMany(type =>Order,Order=>Order.User)
+    Order:Order[];
+
+
+    
+    @OneToMany(type =>RestaurantEntity,Restaurant=>Restaurant.userId)
+    Restaurant:RestaurantEntity[];
 
 
     // @OneToOne(type =>Restaurant,Restaurant=>Restaurant)

@@ -12,7 +12,7 @@ export class UserRepository extends Repository<UserEntity> {
     const { email, userName, phoneNumber, password } = createAuthDto;
     let user = new UserEntity()
     user.email = email;
-    user.userName = userName;
+    user.user_name = userName;
     user.phone_number = phone(phoneNumber, 'SAU')[966];
     user.salt = await bcrypt.genSalt();
     user.password = await this.hashPassword(password, user.salt);
