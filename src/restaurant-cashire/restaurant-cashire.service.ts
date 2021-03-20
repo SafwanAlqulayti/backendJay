@@ -1,11 +1,19 @@
 import { Injectable } from '@nestjs/common';
+import { RestaurantCashire } from 'src/entities/restaurant-cashire.entity';
 import { CreateRestaurantCashireDto } from './dto/create-restaurant-cashire.dto';
 import { UpdateRestaurantCashireDto } from './dto/update-restaurant-cashire.dto';
 
 @Injectable()
 export class RestaurantCashireService {
   create(createRestaurantCashireDto: CreateRestaurantCashireDto) {
-    return 'This action adds a new restaurantCashire';
+
+    const {user_name,password}=createRestaurantCashireDto;
+
+    let cashire=new RestaurantCashire();
+    cashire.user_name=user_name;
+    cashire.password=password;
+
+
   }
 
   findAll() {

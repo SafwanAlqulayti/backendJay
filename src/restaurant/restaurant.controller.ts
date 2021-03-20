@@ -1,11 +1,11 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, UseGuards, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { RestaurantService } from './restaurant.service';
 import { CreateRestaurantDto } from './dto/create-restaurant.dto';
 import { GetUser } from 'src/auth/getUser.decorator';
 import { AuthGuard } from '@nestjs/passport';
-import { UserEntity } from 'src/entities/user.entity';
 import { UpdateRestaurantDto } from './dto/updateRestaurantDto';
 import { DeleteRestaurantDto } from './dto/deleteRestaurantDto';
+import { FileInterceptor } from '@nestjs/platform-express';
 // import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
 
 @Controller('restaurant')
@@ -14,19 +14,39 @@ import { DeleteRestaurantDto } from './dto/deleteRestaurantDto';
 export class RestaurantController {
   constructor(private readonly restaurantService: RestaurantService) { }
 
-  @Post()
+  @Get('user')
+  findAll(@GetUser() user
+  ) {
+    return this.restaurantService.findAll(user);
+  }
 
+  @Post()
   create(@Body() createRestaurantDto: CreateRestaurantDto,
     @GetUser() user
   ) {
     return this.restaurantService.create(createRestaurantDto, user);
   }
 
-  @Get()
-  findAll(@GetUser() user
-  ) {
-    return this.restaurantService.findAll(user);
+  @Post('sava-image')
+  @UseInterceptors(
+    FileInterceptor("photo",{
+      dest:"./Upload"
+    })
+    )
+  saveImage(@UploadedFile()file){
+    console.log(file);
   }
+
+
+
+  // update(@Param('id') id: string, @Body()
+
+
+  @Get('all-restaurant')
+  getAllRestaurant(){
+    return this.restaurantService.getAllRestaurant();
+  }
+
 
   @Put()
   updateRestaurant(@Body() updateRestaurantDto: UpdateRestaurantDto,
@@ -43,6 +63,10 @@ export class RestaurantController {
   }
 
 
+  @Get(':id')
+  getRestaurant(@Param() id:string){
+    return this.restaurantService.getRestaurant(id);
+  }
 
 
   // @Get(':id')
@@ -55,8 +79,8 @@ export class RestaurantController {
   //   return this.restaurantService.update(+id, updateRestaurantDto);
   // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.restaurantService.remove(+id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.restaurantService.remove(+id);
+  // }
 }

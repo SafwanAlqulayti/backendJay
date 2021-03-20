@@ -1,0 +1,131 @@
+
+import { IsNotEmpty } from "class-validator";
+
+export class CreateKeyclockDto {
+
+    familyName: string;
+    givenName: string;
+
+}
+
+export class IamAttributesDto {
+    mobile: string;
+    gender: string;
+
+}
+
+export class IamAttributesKycUserDto {
+    twitter:string;
+    facebook:string
+
+}
+export class IamUpdateUserDto {
+    constructor(){
+        this.schemas = [`${process.env.SCHEMA_CORE}​​​​​​​​`];
+        this.name = new CreateKeyclockDto();
+        this.attributes = new IamAttributesDto();
+        this.attributesKycUser=new IamAttributesKycUserDto()
+    }
+    schemas: string[];
+    userName: string;
+    name: CreateKeyclockDto;
+    active: boolean;
+    locale:string;
+    email: string
+    attributes: IamAttributesDto;
+
+    attributesKycUser:IamAttributesKycUserDto
+
+
+}​​​​​​​​
+-----------------------------------------------------------
+import { Injectable } from '@nestjs/common';
+import { from } from 'rxjs';
+import { EntityRepository } from 'typeorm';
+import { CreateKeyclockDto } from './dto/create-keyclock.dto';
+import { UpdateKeyclockDto } from './dto/update-keyclock.dto';
+import { Keyclock } from './keyclock.entity';
+import { KeyclockRepository } from './keyclock.repository'
+
+@Injectable()
+export class KeyclockService {
+  constructor(private KeyclockRepository: KeyclockRepository) { }
+
+
+  async create(createKeyclockDto: CreateKeyclockDto) {
+    let user = new Keyclock()
+    user.name = 'name';
+    user.phoneNumber = 'phoneNumber';
+    user.isAvilable = true;
+    return await this.KeyclockRepository.save(user);
+  }
+  findSaso(id: number) {
+    let sasoAdmin = this.KeyclockRepository.findOne(id);
+    return sasoAdmin;
+  }
+
+  async deleteSaso(id: number) {
+    await this.KeyclockRepository.delete(id)
+  }
+
+
+
+
+
+
+
+  update(id: number, updateKeyclockDto: UpdateKeyclockDto) {
+    return `This action updates a #${id} keyclock`;
+  }
+
+  remove(id: number) {
+    return `This action removes a #${id} keyclock`;
+  }
+}
+----------------------------------------------------
+
+
+import { Controller, Get, Post, Body, Put, Param, Delete, Patch } from '@nestjs/common';
+import { KeyclockService } from './keyclock.service';
+import { CreateKeyclockDto, IamUpdateUserDto } from './dto/create-keyclock.dto';
+import { UpdateKeyclockDto } from './dto/update-keyclock.dto';
+
+@Controller('keyclock')
+export class KeyclockController {
+  constructor(private readonly keyclockService: KeyclockService) {}
+
+  @Post('create')
+  create(@Body() createKeyclockDto) {
+    console.log(createKeyclockDto)
+    return this.keyclockService.create(createKeyclockDto);
+  }
+
+  @Patch(':id')
+  deleteSaso(@Body() IamUpdateUserDto){
+    console.log(IamUpdateUserDto);
+    return {}
+  }
+
+  @Get(':id')
+  findSaso(@Param('id') id: number) {
+    return this.keyclockService.findSaso(id);
+  }
+
+  // @Patch(':id')
+  // deleteSaso(@Param('id') id: number){
+  //   return this.keyclockService.deleteSaso(id);
+  // }
+
+
+ 
+
+  // @Put(':id')
+  // update(@Param('id') id: string, @Body() updateKeyclockDto: UpdateKeyclockDto) {
+  //   return this.keyclockService.update(+id, updateKeyclockDto);
+  // }
+
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.keyclockService.remove(+id);
+  // }
+}

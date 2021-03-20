@@ -13,7 +13,7 @@ export class UserRepository extends Repository<UserEntity> {
     let user = new UserEntity()
     user.email = email;
     user.user_name = userName;
-    user.phone_number = phone(phoneNumber, 'SAU')[966];
+    user.phone_number = phone(phoneNumber, 'SAU')[0];
     user.salt = await bcrypt.genSalt();
     user.password = await this.hashPassword(password, user.salt);
    // user.userRole = UserEntityRole.UserEntity;

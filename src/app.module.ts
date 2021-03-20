@@ -8,6 +8,9 @@ import { RestaurantModule } from './restaurant/restaurant.module';
 import { RestaurantFileModule } from './restaurant-file/restaurant-file.module';
 import { ConfigModule } from '@nestjs/config';
 import { MealModule } from './meal/meal.module';
+import * as config from "../src/config/typeOrm.config"
+
+
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -16,5 +19,6 @@ import { MealModule } from './meal/meal.module';
     AuthModule,TypeOrmModule.forRoot(typeOrm), RestaurantModule, RestaurantFileModule, MealModule],
   controllers: [AppController],
   providers: [AppService],
+
 })
 export class AppModule {}

@@ -18,6 +18,9 @@ export class MealEntity extends AbstractEntity {
     @Column({nullable:false})
     isAvilable:boolean;
 
+    @Column({nullable:false})
+    aa:boolean;
+    
     @ManyToOne(()=>RestaurantEntity ,(restaurantEntity:RestaurantEntity)=>restaurantEntity.id)
     restaurantId: RestaurantEntity
 }
