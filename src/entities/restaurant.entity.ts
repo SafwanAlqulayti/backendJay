@@ -1,7 +1,7 @@
-import { type } from 'os';
-import { from } from 'rxjs';
+
 import { AbstractEntity } from 'src/common/abstract.entity';
-import { Column, Entity, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, OneToOne } from 'typeorm';
+import { CategoryEntity } from './category.entity';
 import { Order } from './order.entity';
 import { RestaurantCashire } from './restaurant-cashire.entity';
 import { RestaurantFileEntity } from './restaurantFile.entity';
@@ -41,6 +41,10 @@ export class RestaurantEntity extends AbstractEntity {
 
   @OneToMany(type=>Order,Order=>Order.Restaurant)
   Order:Order[]
+
+  @OneToMany(type=>CategoryEntity , categoryEntity=>categoryEntity.Restaurant)
+  categoryEntity:CategoryEntity[]
+
 
 
 

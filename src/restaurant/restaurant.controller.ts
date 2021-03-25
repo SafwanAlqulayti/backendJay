@@ -24,6 +24,7 @@ export class RestaurantController {
   create(@Body() createRestaurantDto: CreateRestaurantDto,
     @GetUser() user
   ) {
+    console.log(createRestaurantDto)
     return this.restaurantService.create(createRestaurantDto, user);
   }
 

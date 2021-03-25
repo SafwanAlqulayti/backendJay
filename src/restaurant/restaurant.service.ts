@@ -55,7 +55,7 @@ export class RestaurantService {
   getAllRestaurant() {
     return this._restaurantRepository.find();
 
-  }
+  } 
 
   findOne(id) {
     return this._restaurantRepository.findOne({ id: id })
