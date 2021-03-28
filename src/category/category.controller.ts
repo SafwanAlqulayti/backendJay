@@ -16,8 +16,10 @@ export class CategoryController {
     return this.categoryService.create(createCategoryDto);
   }
 
+
+  //Get all category that belongs to the resturant
   @Get()
-  getAll() {
+  findAll() {
     return this.categoryService.findAll();
   }
 

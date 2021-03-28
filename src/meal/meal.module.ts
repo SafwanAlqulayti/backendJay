@@ -4,11 +4,13 @@ import { MealController } from './meal.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MealRepository } from './mealRepository';
 import { RestaurantModule } from 'src/restaurant/restaurant.module';
+import { CategoryModule } from 'src/category/category.module';
 
 @Module({
-  imports:[RestaurantModule,
+  imports:[RestaurantModule,CategoryModule , 
     TypeOrmModule.forFeature([MealRepository])],
   providers: [MealService],
-  controllers: [MealController]
+  controllers: [MealController],
+  exports:[MealService]
 })
 export class MealModule {}

@@ -29,13 +29,16 @@ export class CategoryService {
 
   }
 
+
+  //Get all category that belongs to the resturant
   async findAll() {
     let resturant = await this._restaurantService.findOne(1);
     return this._categoryRepo.find({ where: { Restaurant: resturant.id }, relations: ["Restaurant"] })
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} category`;
+ async findOne(id: number) {
+
+    return await this._categoryRepo.findOne(id) 
   }
 
   update(id: number, updateCategoryDto: UpdateCategoryDto) {

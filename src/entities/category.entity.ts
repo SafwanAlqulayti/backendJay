@@ -1,6 +1,7 @@
 
 import { AbstractEntity } from 'src/common/abstract.entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne } from 'typeorm';
+import { MealEntity } from './meal.entity';
 import { RestaurantEntity } from './restaurant.entity';
 
 
@@ -18,4 +19,11 @@ export class CategoryEntity extends AbstractEntity {
   @ManyToOne(tyoe=>RestaurantEntity,Restaurant=>Restaurant.categoryEntity)
     @JoinColumn()
     Restaurant:RestaurantEntity
-}
+
+
+
+
+
+    @OneToMany(()=>MealEntity ,(MealEntity:MealEntity)=>MealEntity.id)
+    MealEntity: MealEntity
+}      

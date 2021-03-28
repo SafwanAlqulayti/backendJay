@@ -10,6 +10,8 @@ import { RestaurantModule } from 'src/restaurant/restaurant.module';
 
   imports:[AuthModule,RestaurantModule , TypeOrmModule.forFeature([CategoryRepo])],
   controllers: [CategoryController],
-  providers: [CategoryService]
+  providers: [CategoryService],
+  exports:[CategoryService]
+
 })
 export class CategoryModule {}
