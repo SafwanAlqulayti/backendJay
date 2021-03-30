@@ -10,6 +10,7 @@ import { ConfigModule } from '@nestjs/config';
 import { MealModule } from './meal/meal.module';
 import { CategoryModule } from './category/category.module';
 import { OrderCategoryModule } from './order-category/order-category.module';
+import { OrderCategoryDetailModule } from './order-category-detail/order-category-detail.module';
 import * as config from "../src/config/typeOrm.config"
 
 
@@ -18,7 +19,7 @@ import * as config from "../src/config/typeOrm.config"
   imports: [ConfigModule.forRoot({
     envFilePath: '.development.env',
   }),
-    AuthModule,TypeOrmModule.forRoot(typeOrm), RestaurantModule, RestaurantFileModule, MealModule, CategoryModule, OrderCategoryModule],
+    AuthModule,TypeOrmModule.forRoot(typeOrm), RestaurantModule, RestaurantFileModule, MealModule, CategoryModule, OrderCategoryModule, OrderCategoryDetailModule],
   controllers: [AppController],
   providers: [AppService],
 

@@ -8,7 +8,6 @@ import { AuthModule } from 'src/auth/auth.module';
 @Module({
   imports:[AuthModule,
     TypeOrmModule.forFeature([RestaurantRepository]),
-    
   ],
   controllers: [RestaurantController],
   providers: [RestaurantService],

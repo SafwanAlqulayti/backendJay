@@ -12,23 +12,29 @@ export class OrderCategoryService {
   constructor(private MealService:MealService ,private _orderCategoryRepository:OrderCategoryRepository){}
   async create(createOrderCategoryDto: CreateOrderCategoryDto) {
     let meal = await this.MealService.findMeal(8);
-
     let orderCategory = new OrderCategory()
     orderCategory.name = createOrderCategoryDto.name;
     orderCategory.MealEntity = meal;
-
-    console.log(meal)
     return await this._orderCategoryRepository.save(orderCategory);
     
     
   }
 
   findAll() {
-    return `This action returns all orderCategory`;
+    
+    return ;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} orderCategory`;
+ async findOne(id: number) {
+    let meal = await this.MealService.findMeal(8);
+
+    return this._orderCategoryRepository.find({where :{MealEntity : meal.id}, relations:["MealEntity"]})
+
+  }
+
+  async findById(id :any){
+    return this._orderCategoryRepository.findOne(id);
+
   }
 
   update(id: number, updateOrderCategoryDto: UpdateOrderCategoryDto) {

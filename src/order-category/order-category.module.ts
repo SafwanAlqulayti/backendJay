@@ -12,6 +12,7 @@ import { MealModule } from 'src/meal/meal.module';
   imports:[RestaurantModule,MealModule ,
     TypeOrmModule.forFeature([OrderCategoryRepository])],
   controllers: [OrderCategoryController],
-  providers: [OrderCategoryService]
+  providers: [OrderCategoryService],
+  exports : [OrderCategoryService]
 })
 export class OrderCategoryModule {}
