@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { OrderCategoryDetail } from 'src/entities/order-category-detail.entity';
-import { OrderCategoryRepository } from './order-category-detail.repository';
+import { OrderCategoryDetailRepository } from './order-category-detail.repository';
 import { OrderCategoryService } from 'src/order-category/order-category.service';
 import { EntityRepository } from 'typeorm';
 import { CreateOrderCategoryDetailDto } from './dto/create-order-category-detail.dto';
@@ -10,28 +10,26 @@ import { UpdateOrderCategoryDetailDto } from './dto/update-order-category-detail
 @EntityRepository(OrderCategoryDetail)
 export class OrderCategoryDetailService {
 
-  constructor(private _orderCategoryRepository:OrderCategoryRepository,private _orderCategoryService:OrderCategoryService){}
- async create(createOrderCategoryDetailDto: CreateOrderCategoryDetailDto) {
+  constructor(private _orderCategoryRepository: OrderCategoryDetailRepository, private _orderCategoryService: OrderCategoryService) { }
+  async create(createOrderCategoryDetailDto: CreateOrderCategoryDetailDto) {
 
     let category = await this._orderCategoryService.findById(1);
 
-    let categoryDetail= new OrderCategoryDetail();
+    let categoryDetail = new OrderCategoryDetail();
     categoryDetail.name = createOrderCategoryDetailDto.name;
     categoryDetail.price = createOrderCategoryDetailDto.price;
-
     categoryDetail.OrderCategory = category;
-
-    console.log(categoryDetail)
 
     await this._orderCategoryRepository.save(categoryDetail);
     return categoryDetail
 
 
-
   }
 
-  findAll() {
-    return `This action returns all orderCategoryDetail`;
+  //Find all order-category-detil That belongs to orderCategory id
+  async findAll(id) {
+    let orderCategory = await this._orderCategoryService.findById(1);
+    return this._orderCategoryRepository.find({ where: { OrderCategory: orderCategory.id }, relations: ["OrderCategory"] })
   }
 
   findOne(id: number) {

@@ -3,3 +3,4 @@ import { EntityRepository, Repository } from "typeorm";
 
 @EntityRepository(RestaurantEntity)
 export class RestaurantRepository extends Repository<RestaurantEntity>{}
+

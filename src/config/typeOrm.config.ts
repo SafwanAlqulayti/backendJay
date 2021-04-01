@@ -10,7 +10,7 @@ export const typeOrm :TypeOrmModuleOptions={
 
     type: 'postgres',
   port: 5432,
-  database: 'jay',
+  database: 'Jay',
   host: 'localhost',
   username: 'postgres',
   password: 'Mm121212',

@@ -4,4 +4,4 @@ import { RestaurantEntity } from "src/entities/restaurant.entity";
 import { EntityRepository, Repository } from "typeorm";
 
 @EntityRepository(OrderCategoryDetail)
-export class OrderCategoryRepository extends Repository<OrderCategoryDetail>{}
+export class OrderCategoryDetailRepository extends Repository<OrderCategoryDetail>{}

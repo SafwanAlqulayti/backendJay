@@ -14,7 +14,7 @@ export class OrderCategoryDetailController {
 
   @Get()
   findAll() {
-    return this.orderCategoryDetailService.findAll();
+    return this.orderCategoryDetailService.findAll(1);
   }
 
   @Get(':id')

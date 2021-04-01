@@ -32,8 +32,10 @@ export class OrderCategoryService {
 
   }
 
+
+
   async findById(id :any){
-    return this._orderCategoryRepository.findOne(id);
+    return await this._orderCategoryRepository.findOne(id);
 
   }
 
