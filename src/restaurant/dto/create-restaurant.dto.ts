@@ -1,11 +1,11 @@
 import { IsNotEmpty, IsString } from "class-validator";
 
 export class CreateRestaurantDto {
-    // @IsNotEmpty()
-    // @IsString()
+    @IsNotEmpty()
+    @IsString()
     name:string;
 
-    // @IsNotEmpty()
-    // @IsString()
+    @IsNotEmpty()
+    @IsString()
     kind:string;
 }

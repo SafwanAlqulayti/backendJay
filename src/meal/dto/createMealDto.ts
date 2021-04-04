@@ -11,4 +11,8 @@ export class CreateMealDto {
 
     @IsOptional()
     isAvilable:boolean
+
+    @IsNotEmpty()
+    @IsString()
+    category:string
 }

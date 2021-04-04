@@ -13,27 +13,28 @@ export class CategoryService {
   constructor(private _categoryRepo:CategoryRepo,  private _restaurantService: RestaurantService){}
   async create(createCategoryDto: CreateCategoryDto) {
 
-    let resturant = await this._restaurantService.findOne(1);
+    // let resturant = await this._restaurantService.findOne(1);
 
-    let category = new CategoryEntity();
+    // let category = new CategoryEntity();
 
-    category.name = createCategoryDto.name;
-    category.order = createCategoryDto.order;
-    category.Restaurant= resturant;
+    // category.name = createCategoryDto.name;
+    // category.order = createCategoryDto.order;
+    // category.Restaurant= resturant;
 
 
 
-    await this._categoryRepo.save(category)
+    // await this._categoryRepo.save(category)
 
-    return category;
+    return {}//category;
 
   }
 
 
   //Get all category that belongs to the resturant
   async findAll() {
-    let resturant = await this._restaurantService.findOne(1);
-    return this._categoryRepo.find({ where: { Restaurant: resturant.id }, relations: ["Restaurant"] })
+   // let resturant = await this._restaurantService.findOne(1);
+   // return this._categoryRepo.find({ where: { Restaurant: resturant.id }, relations: ["Restaurant"] })
+   return {}
   }
 
  async findOne(id: number) {

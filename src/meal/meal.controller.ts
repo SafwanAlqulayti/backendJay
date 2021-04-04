@@ -1,16 +1,21 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from 'src/auth/getUser.decorator';
 import { CreateMealDto } from './dto/createMealDto';
 import { MealService } from './meal.service';
 
 @Controller('meal')
+@UseGuards(AuthGuard('jwt'))
 export class MealController {
     constructor(
         private _mealService:MealService
     ){ } 
 
     @Post()
-    addMeal(@Body() createMealDto:CreateMealDto){
-        return this._mealService.addMeal(createMealDto)
+    addMeal(@Body() createMealDto:CreateMealDto,
+    @GetUser() user
+    ){
+        return this._mealService.addMeal(createMealDto,user)
     }
 
 

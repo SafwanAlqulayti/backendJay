@@ -106,7 +106,7 @@ export class RestaurantFileService {
 //     return new Promise((resolve, reject) => {
 //       this.s3.deleteObject(data, function (err) {
 //         if (err) {
-//           console.log('Unable to remove object', err)
+//           ('Unable to remove object', err)
 //           return reject(err)
 //         }
 //         return resolve({

@@ -24,8 +24,8 @@ export class MealEntity extends AbstractEntity {
     // @Column({nullable:true})
     // images:string
     
-    // @ManyToOne(()=>RestaurantEntity ,(restaurantEntity:RestaurantEntity)=>restaurantEntity.id)
-    // restaurantId: RestaurantEntity
+    @ManyToOne(()=>RestaurantEntity ,(restaurantEntity:RestaurantEntity)=>restaurantEntity.id)
+    restaurantId: RestaurantEntity
 
     
     @ManyToOne(()=>CategoryEntity ,(CategoryEntity:CategoryEntity)=>CategoryEntity.id)

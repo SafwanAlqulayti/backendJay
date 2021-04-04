@@ -20,10 +20,10 @@ export class UserRepository extends Repository<UserEntity> {
     try {
       await this.save(user);
     } catch (error) {
-      console.log(error);
+      (error);
       throw new BadRequestException();
     }
-    
+    delete user.password
     return user;
   }
   private async hashPassword(password: string, salt: string): Promise<string> {

@@ -14,7 +14,7 @@ export class UserEntity extends AbstractEntity {
     @Column({nullable:true})
     email: string;
 
-    @Column({nullable:true})
+    @Column({nullable:true ,unique:true})
     user_name: string;
 
     @Column({nullable:true})
