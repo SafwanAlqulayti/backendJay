@@ -1,9 +1,7 @@
 
 import { AbstractEntity } from "src/common/abstract.entity";
 import { Column, Entity, JoinColumn, ManyToOne } from "typeorm";
-import { CategoryEntity } from "./category.entity";
 import { OrderCategory } from "./order-category.entity";
-import { RestaurantEntity } from "./restaurant.entity";
 
 @Entity('order-category-detail')
 export class OrderCategoryDetail extends AbstractEntity {

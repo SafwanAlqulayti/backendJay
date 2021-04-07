@@ -8,7 +8,7 @@ export const typeOrm :TypeOrmModuleOptions={
 
 
 
-    type: 'postgres',
+  type: 'postgres',
   port: 5432,
   database: 'Jay',
   host: 'localhost',

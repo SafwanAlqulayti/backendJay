@@ -1,3 +1,16 @@
-import { CreateOrderCategoryDetailDto } from './create-order-category-detail.dto';
+import { IsString } from 'class-validator';
+import { DeleteOrderCategoryDetailDto } from './delete-order-category-detail.dto';
 
-export class UpdateOrderCategoryDetailDto extends (CreateOrderCategoryDetailDto) {}
+export class UpdateOrderCategoryDetailDto extends (DeleteOrderCategoryDetailDto) {
+
+
+
+   @IsString()
+    name: string
+
+    
+    @IsString()
+    price:string
+
+
+}
