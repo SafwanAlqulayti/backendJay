@@ -1,11 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from 'src/auth/auth.service';
+import { UserRole } from 'src/auth/user-role.enum';
 import { RestaurantEntity } from 'src/entities/restaurant.entity';
 import { EntityRepository } from 'typeorm';
 import { CreateRestaurantDto } from './dto/create-restaurant.dto';
 import { DeleteRestaurantDto } from './dto/deleteRestaurantDto';
 import { UpdateRestaurantDto } from './dto/updateRestaurantDto';
 import { RestaurantRepository } from './restaurantRepository';
+import { getConnection } from "typeorm";
+
 // import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
 
 @Injectable()
@@ -17,18 +20,26 @@ export class RestaurantService {
   ) { }
 
   async create(createRestaurantDto: CreateRestaurantDto, user) {
-    console.log(user)
     // let user = await this._authService.findOne(5)
     let resturant = new RestaurantEntity()
     resturant.kind = createRestaurantDto.kind
     resturant.name = createRestaurantDto.name
+    resturant.rate = createRestaurantDto.rate
+    resturant.latitude = createRestaurantDto.latitude
+    resturant.longitude = createRestaurantDto.longitude
+    resturant.image = createRestaurantDto.image;
     resturant.userId = user.id
     await this._restaurantRepository.save(resturant)
     return resturant
   }
 
   async update(user, updateRestaurantDto: UpdateRestaurantDto) {
-    let restaurant = await this._restaurantRepository.findOne({ userId: user.id, id: updateRestaurantDto.id })
+    // let restaurant = await this._restaurantRepository.findOne({ userId: user.id, id: updateRestaurantDto.id })
+
+    if (!user.user_role.includes(UserRole.ADMIN)) {
+      throw new UnauthorizedException()
+    } 
+    let restaurant = await this.findOne(updateRestaurantDto.id)
     restaurant.name = updateRestaurantDto.name
     restaurant.kind = updateRestaurantDto.kind
     await this._restaurantRepository.save(restaurant)
@@ -43,8 +54,18 @@ export class RestaurantService {
   }
 
   async delete(user, deleteRestaurantDto: DeleteRestaurantDto) {
-    this._restaurantRepository.delete({ id: deleteRestaurantDto.id, userId: user.id })
-    return `Restaurant with ${deleteRestaurantDto.id} has been deleted`
+
+
+    if (!user.user_role.includes(UserRole.ADMIN)) {
+      throw new UnauthorizedException()
+    }
+
+
+    const queryBuilder = await this._restaurantRepository.createQueryBuilder()
+      .update(RestaurantEntity)
+      .set({ IsDeleted: true })
+      .where({ id: deleteRestaurantDto.id }).execute();
+    return true;
   }
 
 
@@ -55,7 +76,7 @@ export class RestaurantService {
   getAllRestaurant() {
     return this._restaurantRepository.find();
 
-  } 
+  }
 
   findOne(id) {
     return this._restaurantRepository.findOne({ id: id })

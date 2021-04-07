@@ -3,6 +3,8 @@ import { EntityRepository, Repository } from 'typeorm';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import * as bcrypt from 'bcryptjs';
 import { UserEntity } from '../entities/user.entity';
+import { UserRole } from './user-role.enum';
+import { SignInDto } from './dto/signIn-auth.dto';
 
 const phone = require('phone');
 
@@ -16,21 +18,22 @@ export class UserRepository extends Repository<UserEntity> {
     user.phone_number = phone(phoneNumber, 'SAU')[0];
     user.salt = await bcrypt.genSalt();
     user.password = await this.hashPassword(password, user.salt);
-   // user.userRole = UserEntityRole.UserEntity;
+   user.user_role = createAuthDto.userRole;
     try {
       await this.save(user);
     } catch (error) {
       console.log(error);
       throw new BadRequestException();
     }
+
     
-    return user;
+    return user.user_name;
   }
   private async hashPassword(password: string, salt: string): Promise<string> {
     return bcrypt.hash(password, salt);
   }
 
-  async signIn(createAuthDto: CreateAuthDto) {
+  async signIn(createAuthDto: SignInDto) {
     const { email, password } = createAuthDto;
     const UserEntity = await this.findOne({ email: email });
 

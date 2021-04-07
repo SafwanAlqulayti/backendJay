@@ -1,11 +1,40 @@
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsNotEmpty, IsString, IsUUID } from "class-validator";
 
 export class CreateRestaurantDto {
-    // @IsNotEmpty()
-    // @IsString()
+
+
+    @IsUUID()
+    id:string
+
+    @IsNotEmpty()
+    @IsString()
     name:string;
 
-    // @IsNotEmpty()
-    // @IsString()
+    @IsNotEmpty()
+    @IsString()
     kind:string;
+
+    @IsNotEmpty()
+    @IsString()
+    rate:string;
+    
+
+    @IsNotEmpty()
+    @IsString()
+    latitude:string;
+
+
+    @IsNotEmpty()
+    @IsString()
+    longitude:string;
+
+
+    @IsNotEmpty()
+    @IsString()
+    image:string;
+    
+
+
+
+
 }

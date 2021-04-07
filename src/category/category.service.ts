@@ -1,4 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { UUID } from 'aws-sdk/clients/inspector';
+import { UserRole } from 'src/auth/user-role.enum';
 import { CategoryEntity } from 'src/entities/category.entity';
 import { RestaurantService } from 'src/restaurant/restaurant.service';
 import { EntityRepository } from 'typeorm';
@@ -13,7 +15,7 @@ export class CategoryService {
   constructor(private _categoryRepo:CategoryRepo,  private _restaurantService: RestaurantService){}
   async create(createCategoryDto: CreateCategoryDto) {
 
-    let resturant = await this._restaurantService.findOne(1);
+    let resturant = await this._restaurantService.findOne(createCategoryDto.restaurantEntity);
 
     let category = new CategoryEntity();
 
@@ -31,21 +33,38 @@ export class CategoryService {
 
 
   //Get all category that belongs to the resturant
-  async findAll() {
-    let resturant = await this._restaurantService.findOne(1);
+  async findAll(getById) {
+    let resturant = await this._restaurantService.findOne(getById);
     return this._categoryRepo.find({ where: { Restaurant: resturant.id }, relations: ["Restaurant"] })
   }
 
- async findOne(id: number) {
+ async findOne(id: UUID) {
 
     return await this._categoryRepo.findOne(id) 
   }
 
-  update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    return `This action updates a #${id} category`;
+  async update(updateCategoryDto: UpdateCategoryDto ,user) {
+
+    if (!user.user_role.includes(UserRole.ADMIN)) {
+      throw new UnauthorizedException()
+    } 
+    let category = await this.findOne(updateCategoryDto.categoryId)
+    category.name = updateCategoryDto.name
+    category.order = updateCategoryDto.order
+    await this._categoryRepo.save(category)
+
+    return category
   }
 
-  remove(id: number) {
-    
+ async delete(id,user) {
+    if (!user.user_role.includes(UserRole.ADMIN)) {
+      throw new UnauthorizedException()
+    }
+
+    const queryBuilder = await this._categoryRepo.createQueryBuilder()
+      .update(CategoryEntity)
+      .set({ IsDeleted: true })
+      .where({ id: id}).execute();
+    return true;    
   }
 }
