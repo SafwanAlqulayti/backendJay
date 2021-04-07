@@ -14,17 +14,11 @@ import { FileInterceptor } from '@nestjs/platform-express';
 export class RestaurantController {
   constructor(private readonly restaurantService: RestaurantService) { }
 
-  @Get('')
-  findAll(@GetUser() user
-  ) {
-    return this.restaurantService.findAll(user);
-  }
 
   @Post()
   create(@Body() createRestaurantDto: CreateRestaurantDto,
     @GetUser() user
   ) {
-    (createRestaurantDto)
     return this.restaurantService.create(createRestaurantDto, user);
   }
 
@@ -37,12 +31,7 @@ export class RestaurantController {
   saveImage(@UploadedFile()file){
     (file);
   }
-
-
-
   // update(@Param('id') id: string, @Body()
-
-
   @Get('all-restaurant')
   getAllRestaurant(){
     return this.restaurantService.getAllRestaurant();
@@ -56,10 +45,11 @@ export class RestaurantController {
     return this.restaurantService.update(user, updateRestaurantDto)
   }
 
-  @Delete()
-  deleteRestaurant(@Body() deleteRestaurantDto: DeleteRestaurantDto,
+  @Delete(':id')
+  deleteRestaurant(@Param() deleteRestaurantDto: DeleteRestaurantDto,
     @GetUser() user
   ) {
+    console.log(deleteRestaurantDto)
     return this.restaurantService.delete(user, deleteRestaurantDto)
   }
 
@@ -67,6 +57,12 @@ export class RestaurantController {
   @Get(':id')
   getRestaurant(@Param() id:string){
     return this.restaurantService.getRestaurant(id);
+  }
+
+  @Get('user')
+  findAll(@GetUser() user
+  ) {
+    return this.restaurantService.findAll(user);
   }
 
 

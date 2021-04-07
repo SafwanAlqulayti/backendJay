@@ -1,6 +1,11 @@
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsNotEmpty, IsString, IsUUID } from "class-validator";
 
 export class CreateRestaurantDto {
+
+
+    @IsUUID()
+    id:string
+
     @IsNotEmpty()
     @IsString()
     name:string;
@@ -8,4 +13,28 @@ export class CreateRestaurantDto {
     @IsNotEmpty()
     @IsString()
     kind:string;
+
+    @IsNotEmpty()
+    @IsString()
+    rate:string;
+    
+
+    @IsNotEmpty()
+    @IsString()
+    latitude:string;
+
+
+    @IsNotEmpty()
+    @IsString()
+    longitude:string;
+
+
+    @IsNotEmpty()
+    @IsString()
+    image:string;
+    
+
+
+
+
 }

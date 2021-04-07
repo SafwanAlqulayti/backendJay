@@ -1,7 +1,10 @@
 import { Controller, Get, Post, Body, Put, Param, Delete, Req, Request, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from 'src/auth/getUser.decorator';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
+import { DeleteCategoryDto } from './dto/deleteCategory.dto';
+import { GetById } from './dto/getById.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 
 
@@ -18,9 +21,9 @@ export class CategoryController {
 
 
   //Get all category that belongs to the resturant
-  @Get()
-  findAll() {
-    return this.categoryService.findAll();
+  @Get(':restaurantId')
+  findAll(@Param('restaurantId') getById:GetById ) {
+    return this.categoryService.findAll(getById);
   }
 
   // @Get(':id')
@@ -28,13 +31,13 @@ export class CategoryController {
   //   return this.categoryService.findOne(+id);
   // }
 
-  @Put(':id')
-  update(@Param('id') id: string, @Body() updateCategoryDto: UpdateCategoryDto) {
-    return this.categoryService.update(+id, updateCategoryDto);
+  @Put()
+  update(@Body() updateCategoryDto: UpdateCategoryDto,@GetUser() user ) {
+    return this.categoryService.update(updateCategoryDto,user);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.categoryService.remove(+id);
+  @Delete(':categoryId')
+  remove(@Param('categoryId') deleteCategoryDto:DeleteCategoryDto,@GetUser() user) {
+    return this.categoryService.delete(deleteCategoryDto , user);
   }
 }

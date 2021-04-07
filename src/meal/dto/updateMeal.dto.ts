@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsOptional, IsString, IsUUID } from "class-validator";
 
-export class CreateMealDto {
+export class UpdateMealDto {
     @IsNotEmpty()
     @IsString()
     name:string;
@@ -9,12 +9,14 @@ export class CreateMealDto {
     @IsString()
     price:string;
 
+
     @IsNotEmpty()
     @IsString()
     image:string
 
+
     @IsUUID()
-    categoryId
+    MealId
 
     @IsOptional()
     isAvilable:boolean

@@ -26,7 +26,7 @@ export class RestaurantEntity extends AbstractEntity {
   longitude: string;
 
   @Column({nullable:true})
-  photo: string;
+  image: string;
 
 
   // @OneToOne(type=>User,CASHIER=>CASHIER.Restaurant)

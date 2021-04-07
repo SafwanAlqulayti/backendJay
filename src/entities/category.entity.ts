@@ -8,22 +8,18 @@ import { RestaurantEntity } from './restaurant.entity';
 @Entity()
 export class CategoryEntity extends AbstractEntity {
 
-  @Column({nullable:true})
+  @Column({ nullable: true })
   name: string;
 
-  @Column({nullable:true})
+  @Column({ nullable: true })
   order: string;
 
 
-
-  @ManyToOne(tyoe=>RestaurantEntity,Restaurant=>Restaurant.categoryEntity)
-    @JoinColumn()
-    Restaurant:RestaurantEntity
-
+  @ManyToOne(type => RestaurantEntity, Restaurant => Restaurant.categoryEntity)
+  @JoinColumn()
+  Restaurant: RestaurantEntity
 
 
-
-
-    @OneToMany(()=>MealEntity ,(MealEntity:MealEntity)=>MealEntity.id)
-    MealEntity: MealEntity
+  @OneToMany(() => MealEntity, (MealEntity: MealEntity) => MealEntity.id)
+  MealEntity: MealEntity
 }      

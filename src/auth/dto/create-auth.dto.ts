@@ -1,4 +1,5 @@
-import { IsNotEmpty, IsString, Length } from "class-validator";
+import { IsEnum, IsNotEmpty, IsString, Length } from "class-validator";
+import { UserRole } from "../user-role.enum";
 
 export class CreateAuthDto{
     @IsString()
@@ -17,5 +18,10 @@ export class CreateAuthDto{
     @IsNotEmpty()
     @Length(9,9)
     phoneNumber:string;
+
+
+    @IsEnum(UserRole)
+    @IsNotEmpty()
+    userRole:UserRole;
 
 }

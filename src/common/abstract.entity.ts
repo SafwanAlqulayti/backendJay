@@ -1,15 +1,20 @@
-import { uuid } from "aws-sdk/clients/customerprofiles";
+import { UUID } from "aws-sdk/clients/inspector";
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class AbstractEntity {
-    @PrimaryGeneratedColumn()
-    id:uuid;
+    @PrimaryGeneratedColumn('uuid')
+    id:UUID;
 
     @CreateDateColumn({nullable:true})
-    created: Date ;
+    createdAt: Date ;
 
     @UpdateDateColumn({nullable:true})
     updatedAt:Date;
 
+    @Column({nullable:true,
+        default:false
+    
+    })
+    IsDeleted : boolean; 
 }

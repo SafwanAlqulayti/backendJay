@@ -5,6 +5,7 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtPayload } from './jwt-payload.interface';
 import { uuid } from 'aws-sdk/clients/customerprofiles';
+import { SignInDto } from './dto/signIn-auth.dto';
 
 @Injectable()
 export class AuthService {
@@ -19,7 +20,7 @@ export class AuthService {
   }
 
   async signIn(
-    CreateAdminDto: CreateAuthDto,): Promise<{ accessToken: string }> {
+    CreateAdminDto: SignInDto,): Promise<{ accessToken: string }> {
     const User = await this.UserRepository.signIn(CreateAdminDto);
     if (User.email === null) {
       throw new UnauthorizedException('Invalid credentials');

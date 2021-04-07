@@ -2,6 +2,9 @@ import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common'
 import { OrderCategoryService } from './order-category.service';
 import { CreateOrderCategoryDto } from './dto/create-order-category.dto';
 import { UpdateOrderCategoryDto } from './dto/update-order-category.dto';
+import { GetUser } from 'src/auth/getUser.decorator';
+import { DeleteCategoryDto } from 'src/category/dto/deleteCategory.dto';
+import { DeleteOrderCategoryDto } from './dto/delete-order-category.dto';
 
 @Controller('order-category')
 export class OrderCategoryController {
@@ -22,13 +25,13 @@ export class OrderCategoryController {
     return this.orderCategoryService.findOne(+id);
   }
 
-  @Put(':id')
-  update(@Param('id') id: string, @Body() updateOrderCategoryDto: UpdateOrderCategoryDto) {
-    return this.orderCategoryService.update(+id, updateOrderCategoryDto);
+  @Put()
+  update(@Body() updateOrderCategoryDto: UpdateOrderCategoryDto,@GetUser() user) {
+    return this.orderCategoryService.update(updateOrderCategoryDto,user);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.orderCategoryService.remove(+id);
+  @Delete(':mealId')
+  delete(@Param('mealId') deleteCategoryDto:DeleteOrderCategoryDto,@GetUser() user) {
+    return this.orderCategoryService.delete(deleteCategoryDto,user);
   }
 }
