@@ -65,5 +65,6 @@ export class OrderCategoryDetailService {
       .set({ IsDeleted: true })
       .where({ id: id }).execute();
     return true;
-  }
+  } ///
+  
 }
