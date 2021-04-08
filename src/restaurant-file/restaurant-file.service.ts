@@ -76,11 +76,11 @@ export class RestaurantFileService {
     });
   }
 
-  async makeBucket(data: BucketDto, userI) {
-    let user = await this._authService.findOne({ id: userI.id });
-    if (!user) {
-      throw new UnauthorizedException();
-    }
+  async makeBucket(data: BucketDto, ) {//userI
+    // let user = await this._authService.findOne({ id: userI.id });
+    // if (!user) {
+    //   throw new UnauthorizedException();
+    // }
     return new Promise((resolve, reject) => {
       return this.s3.createBucket(data, (err) => {
         if (err) {
