@@ -13,14 +13,18 @@ import { OrderCategoryModule } from './order-category/order-category.module';
 import { OrderCategoryDetailModule } from './order-category-detail/order-category-detail.module';
 import { MinioModulee } from './minio/minio.module';
 import * as config from "../src/config/typeOrm.config"
+import { UserRepository } from './auth/auth.repository';
 
 
 
 @Module({
-  imports: [ConfigModule.forRoot({
+  imports: [   
+    ConfigModule.forRoot({
     envFilePath: '.development.env',
   }),
-    AuthModule,TypeOrmModule.forRoot(typeOrm), RestaurantModule, RestaurantFileModule, MealModule, CategoryModule, OrderCategoryModule, OrderCategoryDetailModule, MinioModulee],
+    AuthModule,
+    TypeOrmModule.forRoot(typeOrm), RestaurantModule, RestaurantFileModule, MealModule, CategoryModule, OrderCategoryModule, OrderCategoryDetailModule, MinioModulee,UserRepository
+  ],
   controllers: [AppController],
   providers: [AppService],
 

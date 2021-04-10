@@ -10,10 +10,10 @@ export const typeOrm :TypeOrmModuleOptions={
 
   type: 'postgres',
   port: 5432,
-  database: 'Jay',
+  database: 'food',
   host: 'localhost',
   username: 'postgres',
-  password: 'Mm121212',
+  password: '123456',
   entities: [__dirname + '/../**/*.entity{.ts,.js}'],
   synchronize: true,
   migrations: ['../../src/migrations/*{.ts,.js}'],
