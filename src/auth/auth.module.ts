@@ -16,7 +16,7 @@ import { JwtStrategy } from './jwt.strategy';
   JwtModule.register({
     secret: 'meshari',
     signOptions: {
-      expiresIn:36000,
+      expiresIn:360000,
     }
   }),
 ],

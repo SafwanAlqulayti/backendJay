@@ -1,11 +1,13 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { CreateMealDto } from './dto/createMealDto';
 import { MealService } from './meal.service';
 import {DeleteMealDto} from './dto/deleteMealDto'
 import { GetUser } from 'src/auth/getUser.decorator';
 import { UpdateMealDto } from './dto/updateMeal.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('meal')
+@UseGuards(AuthGuard('jwt'))
 export class MealController {
     constructor(
         private _mealService: MealService

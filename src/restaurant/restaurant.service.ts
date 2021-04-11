@@ -2,7 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from 'src/auth/auth.service';
 import { UserRole } from 'src/auth/user-role.enum';
 import { RestaurantEntity } from 'src/entities/restaurant.entity';
-import { EntityRepository } from 'typeorm';
+import { EntityRepository, FindConditions } from 'typeorm';
 import { CreateRestaurantDto } from './dto/create-restaurant.dto';
 import { DeleteRestaurantDto } from './dto/deleteRestaurantDto';
 import { UpdateRestaurantDto } from './dto/updateRestaurantDto';
@@ -78,9 +78,6 @@ export class RestaurantService {
 
   }
 
-  findOne(id) {
-    return this._restaurantRepository.findOne({ id: id })
-  }
 
   // update(id: number, updateRestaurantDto: UpdateRestaurantDto) {
   //   return `This action updates a #${id} restaurant`;
@@ -89,4 +86,8 @@ export class RestaurantService {
   remove(id: number) {
     return `This action removes a #${id} restaurant`;
   }
+
+  findOne(findData: FindConditions<RestaurantEntity>): Promise<RestaurantEntity> {
+    return this._restaurantRepository.findOne(findData);
+}
 }

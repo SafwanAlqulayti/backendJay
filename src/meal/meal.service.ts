@@ -1,7 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { UUID } from 'aws-sdk/clients/inspector';
+<<<<<<< HEAD
+import { UserInterFace } from 'src/auth/interface/userInterface';
+import { UserRole } from 'src/auth/user-role.enum';
+=======
 import { UnauthorizedException } from '@nestjs/common/exceptions/unauthorized.exception';
 import { UUID } from 'aws-sdk/clients/inspector';
 import { UserRole } from 'src/auth/user-role.enum';
+>>>>>>> 8f12d730e2ca3886072641838046fc6193c04d41
 import { CategoryService } from 'src/category/category.service';
 import { MealEntity } from 'src/entities/meal.entity';
 import { RestaurantService } from 'src/restaurant/restaurant.service';

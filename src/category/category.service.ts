@@ -15,19 +15,19 @@ export class CategoryService {
   constructor(private _categoryRepo:CategoryRepo,  private _restaurantService: RestaurantService){}
   async create(createCategoryDto: CreateCategoryDto) {
 
-    let resturant = await this._restaurantService.findOne(createCategoryDto.restaurantEntity);
+    let resturant = await this._restaurantService.findOne({id:createCategoryDto.restaurantEntity});
 
-    let category = new CategoryEntity();
+    // let category = new CategoryEntity();
 
-    category.name = createCategoryDto.name;
-    category.order = createCategoryDto.order;
-    category.Restaurant= resturant;
+    // category.name = createCategoryDto.name;
+    // category.order = createCategoryDto.order;
+    // category.Restaurant= resturant;
 
 
 
-    await this._categoryRepo.save(category)
+    // await this._categoryRepo.save(category)
 
-    return category;
+    return {}//category;
 
   }
 
