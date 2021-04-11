@@ -5,6 +5,7 @@ import {DeleteMealDto} from './dto/deleteMealDto'
 import { GetUser } from 'src/auth/getUser.decorator';
 import { UpdateMealDto } from './dto/updateMeal.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { GetMealByCategory } from './dto/getMealByCategory.dto';
 
 @Controller('meal')
 // @UseGuards(AuthGuard('jwt'))
@@ -21,9 +22,9 @@ export class MealController {
 
 
     //All meals that belongs to category id
-    @Get()
-    getAllMeals() {
-        return this._mealService.getAllMeals();
+    @Get(':categoryId')
+    getAllMeals(@Param() getMealByCategory:GetMealByCategory ) {
+        return this._mealService.getAllMeals(getMealByCategory.categoryId);
     }
 
 

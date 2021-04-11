@@ -30,8 +30,8 @@ export class MealService {
     }
 
     //All meals that belongs to category id
-    async getAllMeals() {
-        const z = await this._mealRepositroy.find({ where: { CategoryId: 1 }, relations: ["CategoryId"] })
+    async getAllMeals(id:UUID) {
+        const z = await this._mealRepositroy.find({ where: { CategoryId: id }, relations: ["CategoryId"] })
         return z
     }
 
