@@ -19,6 +19,8 @@ export class UserRepository extends Repository<UserEntity> {
     user.salt = await bcrypt.genSalt();
     user.password = await this.hashPassword(password, user.salt);
    user.user_role = createAuthDto.userRole;
+
+   console.log(user)
     try {
       await this.save(user);
     } catch (error) {
@@ -27,7 +29,7 @@ export class UserRepository extends Repository<UserEntity> {
     }
 
     
-    return user.user_name;
+    return {userName:userName};
   }
   private async hashPassword(password: string, salt: string): Promise<string> {
     return bcrypt.hash(password, salt);

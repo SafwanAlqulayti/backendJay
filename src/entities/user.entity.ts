@@ -7,8 +7,8 @@ import { Order } from "./order.entity";
 import { RestaurantEntity } from "./restaurant.entity";
 
 @Entity()
-// @Unique(['email'])
-// @Unique(['phoneNumber'])
+@Unique(['email'])
+@Unique(['phone_number'])
 export class UserEntity extends AbstractEntity {
 
     @Column({ nullable: true })
