@@ -1,4 +1,3 @@
-// import { User } from "src/auth/entities/user.entity";
 import { RestaurantEntity } from "../entities/restaurant.entity";
 import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { UserEntity } from "./user.entity";

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { UnauthorizedException } from '@nestjs/common/exceptions/unauthorized.exception';
 import { UUID } from 'aws-sdk/clients/inspector';
+import { UnauthorizedException } from '@nestjs/common/exceptions/unauthorized.exception';
 import { UserRole } from 'src/auth/user-role.enum';
 import { CategoryService } from 'src/category/category.service';
 import { MealEntity } from 'src/entities/meal.entity';

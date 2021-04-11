@@ -3,6 +3,6 @@ import { IsUUID } from "class-validator";
 
 export class GetById {
 
-@IsUUID()
-restaurantId:UUID
+@IsUUID('all')
+restaurantId:string
 }

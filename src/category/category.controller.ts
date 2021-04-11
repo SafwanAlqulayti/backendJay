@@ -9,7 +9,7 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 
 
 @Controller('category')
-@UseGuards(AuthGuard())
+// @UseGuards(AuthGuard())
 
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
@@ -22,7 +22,7 @@ export class CategoryController {
 
   //Get all category that belongs to the resturant
   @Get(':restaurantId')
-  findAll(@Param('restaurantId') getById:GetById ) {
+  findAll(@Param() getById:GetById ) {
     return this.categoryService.findAll(getById);
   }
 

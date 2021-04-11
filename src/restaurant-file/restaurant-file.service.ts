@@ -76,11 +76,11 @@ export class RestaurantFileService {
     });
   }
 
-  async makeBucket(data: BucketDto, userI) {
-    let user = await this._authService.findOne({ id: userI.id });
-    if (!user) {
-      throw new UnauthorizedException();
-    }
+  async makeBucket(data: BucketDto, ) {//userI
+    // let user = await this._authService.findOne({ id: userI.id });
+    // if (!user) {
+    //   throw new UnauthorizedException();
+    // }
     return new Promise((resolve, reject) => {
       return this.s3.createBucket(data, (err) => {
         if (err) {
@@ -106,7 +106,7 @@ export class RestaurantFileService {
 //     return new Promise((resolve, reject) => {
 //       this.s3.deleteObject(data, function (err) {
 //         if (err) {
-//           console.log('Unable to remove object', err)
+//           ('Unable to remove object', err)
 //           return reject(err)
 //         }
 //         return resolve({

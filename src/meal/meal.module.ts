@@ -7,7 +7,8 @@ import { RestaurantModule } from 'src/restaurant/restaurant.module';
 import { CategoryModule } from 'src/category/category.module';
 
 @Module({
-  imports:[RestaurantModule,CategoryModule , 
+  imports:[RestaurantModule,CategoryModule ,
+    RestaurantModule, 
     TypeOrmModule.forFeature([MealRepository])],
   providers: [MealService],
   controllers: [MealController],

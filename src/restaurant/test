@@ -96,13 +96,13 @@ export class KeyclockController {
 
   @Post('create')
   create(@Body() createKeyclockDto) {
-    console.log(createKeyclockDto)
+    (createKeyclockDto)
     return this.keyclockService.create(createKeyclockDto);
   }
 
   @Patch(':id')
   deleteSaso(@Body() IamUpdateUserDto){
-    console.log(IamUpdateUserDto);
+    (IamUpdateUserDto);
     return {}
   }
 

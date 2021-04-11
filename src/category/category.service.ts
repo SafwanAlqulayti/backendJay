@@ -6,6 +6,7 @@ import { RestaurantService } from 'src/restaurant/restaurant.service';
 import { EntityRepository } from 'typeorm';
 import { CategoryRepo } from './category.repository';
 import { CreateCategoryDto } from './dto/create-category.dto';
+import { GetById } from './dto/getById.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 
 @Injectable()
@@ -15,26 +16,27 @@ export class CategoryService {
   constructor(private _categoryRepo:CategoryRepo,  private _restaurantService: RestaurantService){}
   async create(createCategoryDto: CreateCategoryDto) {
 
-    let resturant = await this._restaurantService.findOne(createCategoryDto.restaurantEntity);
+    let resturant = await this._restaurantService.findOne({id:createCategoryDto.restaurantEntity});
 
-    let category = new CategoryEntity();
+    // let category = new CategoryEntity();
 
-    category.name = createCategoryDto.name;
-    category.order = createCategoryDto.order;
-    category.Restaurant= resturant;
+    // category.name = createCategoryDto.name;
+    // category.order = createCategoryDto.order;
+    // category.Restaurant= resturant;
 
 
 
-    await this._categoryRepo.save(category)
+    // await this._categoryRepo.save(category)
 
-    return category;
+    return {}//category;
 
   }
 
 
   //Get all category that belongs to the resturant
-  async findAll(getById) {
-    let resturant = await this._restaurantService.findOne(getById);
+  async findAll(getById:GetById) {
+    let resturant = await this._restaurantService.findOne({id:getById.restaurantId});
+    console.log(resturant)
     return this._categoryRepo.find({ where: { Restaurant: resturant.id }, relations: ["Restaurant"] })
   }
 

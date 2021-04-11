@@ -24,7 +24,7 @@ export class UserRepository extends Repository<UserEntity> {
     try {
       await this.save(user);
     } catch (error) {
-      console.log(error);
+      (error);
       throw new BadRequestException();
     }
 
