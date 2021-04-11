@@ -20,5 +20,6 @@ var Minio = require('minio')
     MinioClientController
   ],
   providers: [MinioClientService]
+  
 })
 export class MinioModulee {}
