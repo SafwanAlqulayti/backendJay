@@ -29,8 +29,8 @@ export class OrderCategoryDetailService {
   }
 
   //Find all order-category-detil That belongs to orderCategory id
-  async findAll(id) {
-    let orderCategory = await this._orderCategoryService.findById(1);
+  async findAll(id:UUID) {
+    let orderCategory = await this._orderCategoryService.findById(id);
     return this._orderCategoryRepository.find({ where: { OrderCategory: orderCategory.id }, relations: ["OrderCategory"] })
   }
 

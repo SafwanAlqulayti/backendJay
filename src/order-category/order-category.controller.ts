@@ -5,6 +5,7 @@ import { UpdateOrderCategoryDto } from './dto/update-order-category.dto';
 import { GetUser } from 'src/auth/getUser.decorator';
 import { DeleteCategoryDto } from 'src/category/dto/deleteCategory.dto';
 import { DeleteOrderCategoryDto } from './dto/delete-order-category.dto';
+import { GetByIdDto } from './dto/get-by-id.dto';
 
 @Controller('order-category')
 export class OrderCategoryController {
@@ -15,15 +16,21 @@ export class OrderCategoryController {
     return this.orderCategoryService.create(createOrderCategoryDto);
   }
 
-  @Get()
-  findAll() {
-    return this.orderCategoryService.findAll();
+
+  //find all order category that belongs to meal
+  @Get(':mealId')
+  findAll(@Param() getByIdDto:GetByIdDto) {
+    return this.orderCategoryService.findOne(getByIdDto.mealId);
+
+  
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.orderCategoryService.findOne(+id);
-  }
+
+
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.orderCategoryService.findOne(+id);
+  // }
 
   @Put()
   update(@Body() updateOrderCategoryDto: UpdateOrderCategoryDto,@GetUser() user) {

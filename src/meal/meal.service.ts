@@ -4,7 +4,6 @@ import { UnauthorizedException } from '@nestjs/common/exceptions/unauthorized.ex
 import { UserRole } from 'src/auth/user-role.enum';
 import { CategoryService } from 'src/category/category.service';
 import { MealEntity } from 'src/entities/meal.entity';
-import { RestaurantService } from 'src/restaurant/restaurant.service';
 import { CreateMealDto } from './dto/createMealDto';
 import { UpdateMealDto } from './dto/updateMeal.dto';
 import { MealRepository } from './mealRepository';

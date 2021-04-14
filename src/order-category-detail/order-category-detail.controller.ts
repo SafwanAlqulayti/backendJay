@@ -4,6 +4,7 @@ import { CreateOrderCategoryDetailDto } from './dto/create-order-category-detail
 import { UpdateOrderCategoryDetailDto } from './dto/update-order-category-detail.dto';
 import { DeleteOrderCategoryDetailDto } from './dto/delete-order-category-detail.dto';
 import { GetUser } from 'src/auth/getUser.decorator';
+import { GetByIdOrderCategoryDto } from './dto/get-by-id.dto';
 
 @Controller('order-category-detail')
 export class OrderCategoryDetailController {
@@ -14,9 +15,11 @@ export class OrderCategoryDetailController {
     return this.orderCategoryDetailService.create(createOrderCategoryDetailDto);
   }
 
-  @Get()
-  findAll() {
-    return this.orderCategoryDetailService.findAll(1);
+
+  
+  @Get(':orderCategoryId')
+  findAll(@Param()getByIdOrderCategoryDto:GetByIdOrderCategoryDto ) {
+    return this.orderCategoryDetailService.findAll(getByIdOrderCategoryDto.orderCategoryId);
   }
 
   // @Get(':id')

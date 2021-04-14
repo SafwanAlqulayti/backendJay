@@ -12,7 +12,6 @@ import { CategoryModule } from './category/category.module';
 import { OrderCategoryModule } from './order-category/order-category.module';
 import { OrderCategoryDetailModule } from './order-category-detail/order-category-detail.module';
 import { MinioModulee } from './minio/minio.module';
-import * as config from "../src/config/typeOrm.config"
 import { UserRepository } from './auth/auth.repository';
 
 

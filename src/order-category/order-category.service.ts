@@ -1,4 +1,5 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { UUID } from 'aws-sdk/clients/inspector';
 import { UserRole } from 'src/auth/user-role.enum';
 import { DeleteCategoryDto } from 'src/category/dto/deleteCategory.dto';
 import { OrderCategory } from 'src/entities/order-category.entity';
@@ -24,12 +25,14 @@ export class OrderCategoryService {
 
   }
 
-  findAll() {
+  // findAll(id:UUID) {
 
-    return;
-  }
+  //   console.log(id)
 
-  async findOne(id: number) {
+  //   return;
+  // }
+
+  async findOne(id: UUID) {
     let meal = await this.MealService.findMeal(id);
 
     return this._orderCategoryRepository.find({ where: { MealEntity: meal.id }, relations: ["MealEntity"] })
