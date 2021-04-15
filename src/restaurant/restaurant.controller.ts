@@ -8,19 +8,22 @@ import { DeleteRestaurantDto } from './dto/deleteRestaurantDto';
 import { FileInterceptor } from '@nestjs/platform-express';
 // import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
 
+
 @Controller('restaurant')
-// @UseGuards(AuthGuard())// we can use  it in one handler , now we cant access unless we have token
+@UseGuards(AuthGuard())// we can use  it in one handler , now we cant access unless we have token
 
 export class RestaurantController {
   constructor(private readonly restaurantService: RestaurantService) { }
 
 
   @Post()
-  create(@Body() createRestaurantDto: CreateRestaurantDto,
+  @UseInterceptors(FileInterceptor('file'))
+  create(@Body() createRestaurantDto:CreateRestaurantDto,
+  @UploadedFile() file,
     @GetUser() user
   ) {
-    console.log(user)
-    return this.restaurantService.create(createRestaurantDto, user);
+    console.log(createRestaurantDto)
+    return this.restaurantService.create(createRestaurantDto, user,file);
   }
 
   @Post('sava-image')

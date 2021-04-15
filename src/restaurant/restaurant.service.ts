@@ -9,6 +9,7 @@ import { UpdateRestaurantDto } from './dto/updateRestaurantDto';
 import { RestaurantRepository } from './restaurantRepository';
 import { getConnection } from "typeorm";
 import { UUID } from 'aws-sdk/clients/inspector';
+import { MinioClientService } from 'src/minio/minio.service';
 
 // import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
 
@@ -17,18 +18,21 @@ import { UUID } from 'aws-sdk/clients/inspector';
 export class RestaurantService {
   constructor(
     private _restaurantRepository: RestaurantRepository,
-    private _authService: AuthService
+    private _authService: AuthService,
+    private _minio:MinioClientService
   ) { }
 
-  async create(createRestaurantDto: CreateRestaurantDto, user) {
+  async   create(createRestaurantDto:CreateRestaurantDto, user ,file) {
+   let url = await this._minio.putOpject(createRestaurantDto.Bucket ,file)
+console.log(createRestaurantDto)
     // let user = await this._authService.findOne(5)
     let resturant = new RestaurantEntity()
-    resturant.kind = createRestaurantDto.kind
-    resturant.name = createRestaurantDto.name
+    resturant.kind = 'createRestaurantDto.kind'
+    resturant.name = 'createRestaurantDto.name'
     resturant.rate = createRestaurantDto.rate
     resturant.latitude = createRestaurantDto.latitude
     resturant.longitude = createRestaurantDto.longitude
-    resturant.image = createRestaurantDto.image;
+   resturant.image = url;
     resturant.userId = user.id
     await this._restaurantRepository.save(resturant)
     return resturant

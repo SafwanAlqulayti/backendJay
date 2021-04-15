@@ -3,8 +3,8 @@ import { IsNotEmpty, IsString, IsUUID } from "class-validator";
 export class CreateRestaurantDto {
 
 
-    @IsUUID()
-    id:string
+    // @IsUUID()
+    // id:string
 
     @IsNotEmpty()
     @IsString()
@@ -29,12 +29,14 @@ export class CreateRestaurantDto {
     longitude:string;
 
 
+    // @IsNotEmpty()
+    // @IsString()
+    // image:string;
+
+
     @IsNotEmpty()
     @IsString()
-    image:string;
-    
-
-
+    Bucket:string
 
 
 }

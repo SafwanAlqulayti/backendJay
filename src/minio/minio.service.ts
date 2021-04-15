@@ -26,7 +26,7 @@ export class MinioClientService {
  
  async putOpject(opject, data): Promise<any> {
  let key = await new Date().getTime().toString();
- let params = { Bucket: data.Bucket, Key: key, Body: opject.buffer };
+ let params = { Bucket: 'safwan20000', Key: key, Body: opject.buffer };
  return await this.uploud(params)
  }
  
@@ -43,7 +43,7 @@ export class MinioClientService {
  }
  }
  return resolve({
- message: `opject has been uploaded file link ${fileUrl}`,
+ message: `${fileUrl}`,
  success: true
  });
  }
