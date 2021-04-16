@@ -11,6 +11,7 @@ import { getConnection } from "typeorm";
 import { UUID } from 'aws-sdk/clients/inspector';
 import { MinioClientService } from 'src/minio/minio.service';
 import { AddResturantMainImageDto } from './dto/addRestauranMainImage';
+import { FindRestauranDto } from './dto/findRestaurantDto';
 
 // import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
 
@@ -59,10 +60,10 @@ export class RestaurantService {
   }
 
 
-  async getRestaurant(id) {
-    let restaurant = await this._restaurantRepository.findOne(id)
-    return restaurant;
-  }
+  // async getRestaurant(findRestauranDto:FindRestauranDto) {
+  //   let restaurant = await this._restaurantRepository.findOne({id:findRestauranDto.restaurantId})
+  //   return restaurant;
+  // }
 
   async delete(user, deleteRestaurantDto: DeleteRestaurantDto) {
 
@@ -89,6 +90,10 @@ export class RestaurantService {
 
   }
 
+  async getRestauranMainImage(findRestauranDto:FindRestauranDto){
+    let restaurant = await this._restaurantRepository.findOne({id:findRestauranDto.restaurantId})
+    return restaurant.image
+  }
 
   // update(id: number, updateRestaurantDto: UpdateRestaurantDto) {
   //   return `This action updates a #${id} restaurant`;

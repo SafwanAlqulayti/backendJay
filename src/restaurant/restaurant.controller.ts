@@ -7,6 +7,7 @@ import { UpdateRestaurantDto } from './dto/updateRestaurantDto';
 import { DeleteRestaurantDto } from './dto/deleteRestaurantDto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AddResturantMainImageDto } from './dto/addRestauranMainImage';
+import { FindRestauranDto } from './dto/findRestaurantDto';
 // import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
 
 @Controller('restaurant')
@@ -59,9 +60,9 @@ export class RestaurantController {
   }
 
 
-  @Get(':id')
-  getRestaurant(@Param() id:string){
-    return this.restaurantService.getRestaurant(id);
+  @Get('main-image/:restaurantId')
+  getRestaurant(@Param() id:FindRestauranDto){
+    return this.restaurantService.getRestauranMainImage(id);
   }
 
   @Get('user')

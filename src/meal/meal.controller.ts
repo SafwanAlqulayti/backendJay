@@ -7,6 +7,7 @@ import { UpdateMealDto } from './dto/updateMeal.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { GetMealByCategory } from './dto/getMealByCategory.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { FindMealDto } from './dto/findMealDto';
 
 @Controller('meal')
 // @UseGuards(AuthGuard('jwt'))
@@ -39,5 +40,10 @@ export class MealController {
     @Put(':MealId')
     update(@Param('MealId') updateMealDto:UpdateMealDto,@GetUser() user){
         return this._mealService.update(updateMealDto,user)
+    }
+
+    @Get('meal-image/:mealId')
+    findMealImage(@Param() id:FindMealDto){
+        return this._mealService.findMealImage(id)
     }
 }

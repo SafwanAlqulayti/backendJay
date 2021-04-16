@@ -9,6 +9,8 @@ import { UpdateMealDto } from './dto/updateMeal.dto';
 import { MealRepository } from './mealRepository';
 import { MinioClientService } from 'src/minio/minio.service';
 import { RestaurantService } from 'src/restaurant/restaurant.service';
+import { FindConditions } from 'typeorm';
+import { FindMealDto } from './dto/findMealDto';
 
 @Injectable()
 export class MealService {
@@ -48,7 +50,10 @@ export class MealService {
     async findMeal(id) {
         return await this._mealRepositroy.findOne(id);
     }
-
+    async findMealImage(findMealDto:FindMealDto) {
+        let meal = await this.findOne({id:findMealDto.mealId})
+        return meal.image
+    }
 
     async delete(id: UUID, user) {
 
@@ -81,4 +86,11 @@ export class MealService {
         return meal
 
     }
+    async findOne(findData: FindConditions<MealEntity>): Promise<MealEntity> {
+        let meal = await this._mealRepositroy.findOne(findData);
+        if(!meal){
+          throw new BadRequestException('restauran is not exist')
+        }
+        return meal
+      }
 }
