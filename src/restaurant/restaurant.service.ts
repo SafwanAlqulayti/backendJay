@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from 'src/auth/auth.service';
 import { UserRole } from 'src/auth/user-role.enum';
 import { RestaurantEntity } from 'src/entities/restaurant.entity';
@@ -9,6 +9,8 @@ import { UpdateRestaurantDto } from './dto/updateRestaurantDto';
 import { RestaurantRepository } from './restaurantRepository';
 import { getConnection } from "typeorm";
 import { UUID } from 'aws-sdk/clients/inspector';
+import { MinioClientService } from 'src/minio/minio.service';
+import { AddResturantMainImageDto } from './dto/addRestauranMainImage';
 
 // import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
 
@@ -17,7 +19,8 @@ import { UUID } from 'aws-sdk/clients/inspector';
 export class RestaurantService {
   constructor(
     private _restaurantRepository: RestaurantRepository,
-    private _authService: AuthService
+    private _authService: AuthService,
+    private _minioService: MinioClientService
   ) { }
 
   async create(createRestaurantDto: CreateRestaurantDto, user) {
@@ -34,12 +37,19 @@ export class RestaurantService {
     return resturant
   }
 
+  async addResturantMainImage(file, addResturantMainImageDto: AddResturantMainImageDto) {
+    let restaurant = await this._restaurantRepository.findOne({ id: addResturantMainImageDto.restaurantId })
+    let result = await this._minioService.putOpject(file, addResturantMainImageDto.bucket, restaurant.id)
+    restaurant.image = result.url
+    return this._restaurantRepository.save(restaurant)
+  }
+
   async update(user, updateRestaurantDto: UpdateRestaurantDto) {
     // let restaurant = await this._restaurantRepository.findOne({ userId: user.id, id: updateRestaurantDto.id })
 
     if (!user.user_role.includes(UserRole.ADMIN)) {
       throw new UnauthorizedException()
-    } 
+    }
     let restaurant = await this.findById(updateRestaurantDto.id)
     restaurant.name = updateRestaurantDto.name
     restaurant.kind = updateRestaurantDto.kind
@@ -88,11 +98,15 @@ export class RestaurantService {
     return `This action removes a #${id} restaurant`;
   }
 
-  findOne(findData: FindConditions<RestaurantEntity>): Promise<RestaurantEntity> {
-    return this._restaurantRepository.findOne(findData);
-}
+ async findOne(findData: FindConditions<RestaurantEntity>): Promise<RestaurantEntity> {
+    let restaurant = await this._restaurantRepository.findOne(findData);
+    if(!restaurant){
+      throw new BadRequestException('restauran is not exist')
+    }
+    return restaurant
+  }
 
-findById(id:UUID): Promise<RestaurantEntity> {
-  return this._restaurantRepository.findOne(id);
-}
+  findById(id: UUID): Promise<RestaurantEntity> {
+    return this._restaurantRepository.findOne(id);
+  }
 }

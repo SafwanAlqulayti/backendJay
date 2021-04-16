@@ -6,6 +6,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { UpdateRestaurantDto } from './dto/updateRestaurantDto';
 import { DeleteRestaurantDto } from './dto/deleteRestaurantDto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { AddResturantMainImageDto } from './dto/addRestauranMainImage';
 // import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
 
 @Controller('restaurant')
@@ -23,15 +24,18 @@ export class RestaurantController {
     return this.restaurantService.create(createRestaurantDto, user);
   }
 
-  @Post('sava-image')
-  @UseInterceptors(
-    FileInterceptor("photo",{
-      dest:"./Upload"
-    })
-    )
-  saveImage(@UploadedFile()file){
-    (file);
+  @Post('upload-main-image')
+  @UseInterceptors(FileInterceptor('file'))
+  uploudFile(@UploadedFile() file, @Body() data:AddResturantMainImageDto) {
+  return this.restaurantService.addResturantMainImage(file, data)
   }
+  // @Post('sava-image')
+  // @UseInterceptors(
+  //   FileInterceptor("file"),
+  //   )
+  // saveImage(@UploadedFile()file){
+  //   (file);
+  // }
   // update(@Param('id') id: string, @Body()
   @Get('all-restaurant')
   getAllRestaurant(){

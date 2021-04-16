@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { UUID } from 'aws-sdk/clients/inspector';
 import { UserRole } from 'src/auth/user-role.enum';
 import { CategoryEntity } from 'src/entities/category.entity';
@@ -41,8 +41,11 @@ export class CategoryService {
   }
 
  async findOne(id: UUID) {
-
-    return await this._categoryRepo.findOne(id) 
+  let category = await this._categoryRepo.findOne(id) 
+  if(!category){
+    throw new BadRequestException('Category is not exist')
+  }
+    return category
   }
 
   async update(updateCategoryDto: UpdateCategoryDto ,user) {
