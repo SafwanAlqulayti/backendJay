@@ -60,10 +60,10 @@ export class RestaurantService {
   }
 
 
-  // async getRestaurant(findRestauranDto:FindRestauranDto) {
-  //   let restaurant = await this._restaurantRepository.findOne({id:findRestauranDto.restaurantId})
-  //   return restaurant;
-  // }
+  async getRestaurant(findRestauranDto:FindRestauranDto) {
+    let restaurant = await this._restaurantRepository.findOne({id:findRestauranDto.restaurantId})
+    return restaurant;
+  }
 
   async delete(user, deleteRestaurantDto: DeleteRestaurantDto) {
 
