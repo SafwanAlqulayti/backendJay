@@ -13,6 +13,8 @@ import { OrderCategoryModule } from './order-category/order-category.module';
 import { OrderCategoryDetailModule } from './order-category-detail/order-category-detail.module';
 import { MinioModulee } from './minio/minio.module';
 import { UserRepository } from './auth/auth.repository';
+import messagebird from 'messagebird'
+
 
 
 

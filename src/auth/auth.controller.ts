@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body, Put, Param, Delete, ValidationPipe, UsePipes } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
+import { PhoneNumberDto } from './dto/phone-number-validation.dto';
 import {SignInDto} from './dto/signIn-auth.dto'
 
 @Controller('auth')
@@ -17,6 +18,12 @@ export class AuthController {
   signIn(@Body() createAuthDto: SignInDto) {
     return this.authService.signIn(createAuthDto);
   } 
+
+  @Post('/checkOTP')
+  checkOTP(@Body() phoneNumberDto:PhoneNumberDto){
+   return this.authService.checkOTP(phoneNumberDto);
+  }
+
 
   @Get() 
   findAll() {

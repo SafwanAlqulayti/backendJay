@@ -65,7 +65,7 @@ export class CategoryService {
 
     const queryBuilder = await this._categoryRepo.createQueryBuilder()
       .update(CategoryEntity)
-      .set({ IsDeleted: true })
+      .set({ IsActive: true })
       .where({ id: id}).execute();
     return true;    
   }

@@ -16,5 +16,5 @@ export class AbstractEntity {
         default:false
     
     })
-    IsDeleted : boolean; 
+    IsActive : boolean; 
 }

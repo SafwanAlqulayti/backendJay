@@ -68,7 +68,7 @@ console.log(createRestaurantDto)
 
     const queryBuilder = await this._restaurantRepository.createQueryBuilder()
       .update(RestaurantEntity)
-      .set({ IsDeleted: true })
+      .set({ IsActive: true })
       .where({ id: deleteRestaurantDto.id }).execute();
     return true;
   }

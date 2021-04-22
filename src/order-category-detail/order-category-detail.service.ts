@@ -62,7 +62,7 @@ export class OrderCategoryDetailService {
 
     const queryBuilder = await this._orderCategoryRepository.createQueryBuilder()
       .update(OrderCategoryDetail)
-      .set({ IsDeleted: true })
+      .set({ IsActive: true })
       .where({ id: id }).execute();
     return true;
   } ///

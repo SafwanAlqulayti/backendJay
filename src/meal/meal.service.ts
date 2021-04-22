@@ -49,7 +49,7 @@ export class MealService {
 
         const queryBuilder = await this._mealRepositroy.createQueryBuilder()
             .update(MealEntity)
-            .set({ IsDeleted: true })
+            .set({ IsActive: true })
             .where({ id: id }).execute();
         return true;
 

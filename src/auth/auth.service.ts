@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UserRepository } from './auth.repository';
 import { JwtService } from '@nestjs/jwt';
@@ -6,6 +6,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { JwtPayload } from './jwt-payload.interface';
 import { uuid } from 'aws-sdk/clients/customerprofiles';
 import { SignInDto } from './dto/signIn-auth.dto';
+import { PhoneNumberDto } from './dto/phone-number-validation.dto';
+
+
+
 
 @Injectable()
 export class AuthService {
@@ -13,7 +17,7 @@ export class AuthService {
     @InjectRepository(UserRepository)
     private UserRepository: UserRepository,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
   async signUp(createAuthDto: CreateAuthDto) {
     return this.UserRepository.signUp(createAuthDto);
@@ -21,11 +25,17 @@ export class AuthService {
 
   async signIn(
     CreateAdminDto: SignInDto,): Promise<{ accessToken: string }> {
+
+     
     const User = await this.UserRepository.signIn(CreateAdminDto);
+
+    if(User.IsActive == false){
+      throw new BadRequestException('Please sign up')
+    }
     if (User.email === null) {
       throw new UnauthorizedException('Invalid credentials');
     }
-    const payload: JwtPayload = { email: User.email, username: User.user_name };
+    const payload: JwtPayload = { email: User.email, username: User.userName };
     const accessToken = await this.jwtService.sign(payload);
     return { accessToken };
   }
@@ -34,8 +44,8 @@ export class AuthService {
     return `This action returns all auth`;
   }
 
-  findOne(id) {
-    return this.UserRepository.findOne({id:id})
+  async findOne(id) {
+    return await this.UserRepository.findOne({ id: id })
   }
 
   // update(id: number, updateAuthDto: UpdateAuthDto) {
@@ -45,4 +55,26 @@ export class AuthService {
   remove(id: number) {
     return `This action removes a #${id} auth`;
   }
+
+
+
+
+  async checkOTP(phoneNumberDto:PhoneNumberDto){
+
+   const user = await this.findOne(phoneNumberDto.userId);
+
+   console.log(user)
+
+    if(user.verifyCode != phoneNumberDto.code){
+       throw new BadRequestException('Plese try again');
+    }else{
+      user.IsActive = true;
+      this.UserRepository.save(user);
+      return {message:true}
+    }
+
+  }
+
+
+ 
 }

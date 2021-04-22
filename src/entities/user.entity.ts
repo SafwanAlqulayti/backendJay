@@ -7,15 +7,15 @@ import { Order } from "./order.entity";
 import { RestaurantEntity } from "./restaurant.entity";
 
 @Entity()
-@Unique(['email'])
-@Unique(['phone_number'])
+// @Unique(['email'])
+// @Unique(['phoneNumber'])
 export class UserEntity extends AbstractEntity {
 
     @Column({ nullable: true })
     email: string;
 
     @Column({ nullable: true })
-    user_name: string;
+    userName: string;
 
     @Column({ nullable: true })
     password: string;
@@ -24,11 +24,15 @@ export class UserEntity extends AbstractEntity {
     salt: string;
 
     @Column({ nullable: true })
-    phone_number: string;
+    phoneNumber: string;
 
     @Column({ nullable: true })
-    user_role: UserRole;
+    userRole: UserRole;
 
+
+    @Column({ nullable: true })
+    verifyCode: string;
+    
 
     @OneToMany(type => Order, Order => Order.User)
     Order: Order[];

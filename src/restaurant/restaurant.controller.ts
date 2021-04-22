@@ -10,7 +10,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 
 
 @Controller('restaurant')
-@UseGuards(AuthGuard())// we can use  it in one handler , now we cant access unless we have token
+// @UseGuards(AuthGuard())// we can use  it in one handler , now we cant access unless we have token
 
 export class RestaurantController {
   constructor(private readonly restaurantService: RestaurantService) { }
