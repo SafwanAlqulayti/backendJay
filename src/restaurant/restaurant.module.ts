@@ -7,12 +7,13 @@ import { AuthModule } from 'src/auth/auth.module';
 import { MinioModulee } from 'src/minio/minio.module';
 
 @Module({
-  imports:[AuthModule,
+  imports: [
+    AuthModule,
     MinioModulee,
     TypeOrmModule.forFeature([RestaurantRepository]),
   ],
   controllers: [RestaurantController],
   providers: [RestaurantService],
-  exports:[RestaurantService]
+  exports: [RestaurantService],
 })
 export class RestaurantModule {}

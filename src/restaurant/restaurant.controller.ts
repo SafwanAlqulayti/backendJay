@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, UseGuards, UseInterceptors, UploadedFile } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Put,
+  Param,
+  Delete,
+  UseGuards,
+  UseInterceptors,
+  UploadedFile,
+} from '@nestjs/common';
 import { RestaurantService } from './restaurant.service';
 import { CreateRestaurantDto } from './dto/create-restaurant.dto';
 import { GetUser } from 'src/auth/getUser.decorator';
@@ -10,28 +21,26 @@ import { AddResturantMainImageDto } from './dto/addRestauranMainImage';
 import { FindRestauranDto } from './dto/findRestaurantDto';
 // import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
 
-
 @Controller('restaurant')
 // @UseGuards(AuthGuard())// we can use  it in one handler , now we cant access unless we have token
-
 export class RestaurantController {
-  constructor(private readonly restaurantService: RestaurantService) { }
-
+  constructor(private readonly restaurantService: RestaurantService) {}
 
   @Post()
   @UseInterceptors(FileInterceptor('file'))
-  create(@Body() createRestaurantDto:CreateRestaurantDto,
-  @UploadedFile() file,
-    @GetUser() user
+  create(
+    @Body() createRestaurantDto: CreateRestaurantDto,
+    @UploadedFile() file,
+    @GetUser() user,
   ) {
-    console.log(createRestaurantDto)
-    return this.restaurantService.create(createRestaurantDto, user,file);
+    console.log(createRestaurantDto);
+    return this.restaurantService.create(createRestaurantDto, user, file);
   }
 
   @Post('upload-main-image')
   @UseInterceptors(FileInterceptor('file'))
-  uploudFile(@UploadedFile() file, @Body() data:AddResturantMainImageDto) {
-  return this.restaurantService.addResturantMainImage(file, data)
+  uploudFile(@UploadedFile() file, @Body() data: AddResturantMainImageDto) {
+    return this.restaurantService.addResturantMainImage(file, data);
   }
   // @Post('sava-image')
   // @UseInterceptors(
@@ -42,38 +51,36 @@ export class RestaurantController {
   // }
   // update(@Param('id') id: string, @Body()
   @Get('all-restaurant')
-  getAllRestaurant(){
+  getAllRestaurant() {
     return this.restaurantService.getAllRestaurant();
   }
 
-
   @Put()
-  updateRestaurant(@Body() updateRestaurantDto: UpdateRestaurantDto,
-    @GetUser() user
+  updateRestaurant(
+    @Body() updateRestaurantDto: UpdateRestaurantDto,
+    @GetUser() user,
   ) {
-    return this.restaurantService.update(user, updateRestaurantDto)
+    return this.restaurantService.update(user, updateRestaurantDto);
   }
 
   @Delete(':id')
-  deleteRestaurant(@Param() deleteRestaurantDto: DeleteRestaurantDto,
-    @GetUser() user
+  deleteRestaurant(
+    @Param() deleteRestaurantDto: DeleteRestaurantDto,
+    @GetUser() user,
   ) {
-    console.log(deleteRestaurantDto)
-    return this.restaurantService.delete(user, deleteRestaurantDto)
+    console.log(deleteRestaurantDto);
+    return this.restaurantService.delete(user, deleteRestaurantDto);
   }
 
-
   @Get('main-image/:restaurantId')
-  getRestaurant(@Param() id:FindRestauranDto){
+  getRestaurant(@Param() id: FindRestauranDto) {
     return this.restaurantService.getRestauranMainImage(id);
   }
 
   @Get('user')
-  findAll(@GetUser() user
-  ) {
+  findAll(@GetUser() user) {
     return this.restaurantService.findAll(user);
   }
-
 
   // @Get(':id')
   // findOne(@Param('id') id: string) {
