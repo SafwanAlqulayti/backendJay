@@ -17,15 +17,17 @@ export class UserRepository extends Repository<UserEntity> {
 
     let findUser = await this.findOne({ email: createAuthDto.email })
 
+    if(findUser){
     if(findUser.IsActive == true){
       throw new BadRequestException('You are already have an account');
     }
+  }
 
     if (findUser) {
       findUser.verifyCode = (Math.floor(1000 + Math.random() * 9000)).toString()
+      await this.save(findUser);
       await this.otpPhoneNumber(findUser.phoneNumber, findUser.verifyCode);
-      await this.save(findUser)
-
+      
     } else {
       console.log(findUser);
       const { email, userName, phoneNumber, password } = createAuthDto;
@@ -47,7 +49,7 @@ export class UserRepository extends Repository<UserEntity> {
         throw new BadRequestException();
       }
       await this.otpPhoneNumber(user.phoneNumber, user.verifyCode);
-      return { userName: userName };
+      return { userName: userName,userId : user.id };
     }
   }
   private async hashPassword(password: string, salt: string): Promise<string> {

@@ -4,7 +4,6 @@ import { UserRepository } from './auth.repository';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtPayload } from './jwt-payload.interface';
-import { uuid } from 'aws-sdk/clients/customerprofiles';
 import { SignInDto } from './dto/signIn-auth.dto';
 import { PhoneNumberDto } from './dto/phone-number-validation.dto';
 
@@ -61,7 +60,8 @@ export class AuthService {
 
   async checkOTP(phoneNumberDto:PhoneNumberDto){
 
-   const user = await this.findOne(phoneNumberDto.userId);
+   let user = await this.UserRepository.findOne({ email: phoneNumberDto.email })
+
 
    console.log(user)
 
