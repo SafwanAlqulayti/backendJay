@@ -3,7 +3,6 @@ import { EntityRepository, Repository } from 'typeorm';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import * as bcrypt from 'bcryptjs';
 import { UserEntity } from '../entities/user.entity';
-import { UserRole } from './user-role.enum';
 import { SignInDto } from './dto/signIn-auth.dto';
 const readline = require('readline');
 var TeleSignSDK = require('telesignsdk');

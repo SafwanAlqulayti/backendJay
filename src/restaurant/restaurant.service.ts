@@ -27,8 +27,8 @@ export class RestaurantService {
 console.log(createRestaurantDto)
     // let user = await this._authService.findOne(5)
     let resturant = new RestaurantEntity()
-    resturant.kind = 'createRestaurantDto.kind'
-    resturant.name = 'createRestaurantDto.name'
+    resturant.kind = createRestaurantDto.kind
+    resturant.name = createRestaurantDto.name
     resturant.rate = createRestaurantDto.rate
     resturant.latitude = createRestaurantDto.latitude
     resturant.longitude = createRestaurantDto.longitude
