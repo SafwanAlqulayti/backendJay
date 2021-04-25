@@ -11,10 +11,10 @@ export class CreateMealDto {
 
     @IsNotEmpty()
     @IsString()
-    image:string
+    restaurantId:string
 
     @IsUUID()
-    categoryId
+    categoryId:string;
 
     @IsOptional()
     isAvilable:boolean

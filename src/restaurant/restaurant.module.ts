@@ -6,7 +6,6 @@ import { RestaurantRepository } from './restaurantRepository';
 import { AuthModule } from 'src/auth/auth.module';
 import { MinioModulee } from 'src/minio/minio.module';
 
-
 @Module({
   imports:[AuthModule,
     MinioModulee,

@@ -16,8 +16,8 @@ export class MinioClientController {
  
  @Post('upload-opject')
  @UseInterceptors(FileInterceptor('file'))
- uploudFile(@UploadedFile() file, @Body() bucket) {
- return this._minioClientService.putOpject(file, bucket)
+ uploudFile(@UploadedFile() file, @Body('Bucket') bucket) {
+ return this._minioClientService.putOpject(file, bucket , 1)
  }
  
  @Get('download/:bucket/:id')
