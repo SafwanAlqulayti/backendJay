@@ -33,7 +33,6 @@ export class RestaurantController {
     @UploadedFile() file,
     @GetUser() user,
   ) {
-    console.log(createRestaurantDto);
     return this.restaurantService.create(createRestaurantDto, user, file);
   }
 

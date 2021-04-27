@@ -22,7 +22,7 @@ export class MinioClientService {
     });
   }
 
-  async putOpject(opject, bucket: string, resturantId): Promise<any> {
+  async putOpject( bucket: string,opject,resturantId): Promise<any> {
     let key = resturantId;
     let params = { Bucket: bucket, Key: key, Body: opject.buffer };
     return await this.uploud(params);

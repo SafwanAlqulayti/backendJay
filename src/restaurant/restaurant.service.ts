@@ -29,18 +29,22 @@ export class RestaurantService {
   ) {}
 
   async create(createRestaurantDto: CreateRestaurantDto, user, file) {
-    //  let url = await this._minioService.putOpject(createRestaurantDto.Bucket ,file)
-    // let user = await this._authService.findOne(5)
     let resturant = new RestaurantEntity();
     resturant.kind = createRestaurantDto.kind;
     resturant.name = createRestaurantDto.name;
     resturant.rate = createRestaurantDto.rate;
     resturant.latitude = createRestaurantDto.latitude;
     resturant.longitude = createRestaurantDto.longitude;
-    resturant.image = 'url';
+    resturant.image = '';
     resturant.userId = user.id;
-
     await this._restaurantRepository.save(resturant);
+
+    let url = await this._minioService.putOpject(createRestaurantDto.Bucket ,file,resturant.id)
+
+    resturant.image = url;  
+    await this._restaurantRepository.save(resturant);
+
+
     return resturant;
   }
 
