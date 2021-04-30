@@ -9,10 +9,6 @@ export class CreateMealDto {
     @IsString()
     price:string;
 
-    @IsNotEmpty()
-    @IsString()
-    restaurantId:string
-
     @IsUUID()
     categoryId:string;
 

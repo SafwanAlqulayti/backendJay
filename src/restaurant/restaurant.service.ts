@@ -39,9 +39,11 @@ export class RestaurantService {
     resturant.userId = user.id;
     await this._restaurantRepository.save(resturant);
 
-    let url = await this._minioService.putOpject(createRestaurantDto.Bucket ,file,resturant.id)
+    let result = await this._minioService.putOpject(createRestaurantDto.Bucket ,file,resturant.id)
 
-    resturant.image = url;  
+    console.log(result);
+
+    resturant.image = result.url;  
     await this._restaurantRepository.save(resturant);
 
 
@@ -107,8 +109,8 @@ export class RestaurantService {
     });
   }
 
-  getAllRestaurant() {
-    return this._restaurantRepository.find();
+ async getAllRestaurant() {
+    return await this._restaurantRepository.find();
   }
 
   async getRestauranMainImage(findRestauranDto: FindRestauranDto) {

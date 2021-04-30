@@ -8,9 +8,9 @@ var Minio = require('minio')
   imports:[ 
     S3Module.forRoot({
       config: {
-        accessKeyId: 'Q3AM3UQ867SPQQA43P2F',
-        secretAccessKey: 'zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG',
-        endpoint: 'play.min.io',//'http://127.0.0.1:9000',
+        accessKeyId: 'minioadmin',
+        secretAccessKey: 'minioadmin',
+        endpoint: 'http://localhost:9000',//'http://127.0.0.1:9000',
         s3ForcePathStyle: true,
         signatureVersion: 'v4',
       },

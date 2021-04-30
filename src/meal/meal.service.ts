@@ -24,8 +24,12 @@ export class MealService {
     ) { }
     async create(file,createMealDto: CreateMealDto) {
         const category = await this._categoryService.findOne(createMealDto.categoryId)
-        let resturant = await this._restaurantService.findOne({id:createMealDto.restaurantId})
-        let result = await this._minioService.putOpject(file ,resturant.name,createMealDto.restaurantId + createMealDto.name )
+
+        console.log(category);
+        let resturant = await this._restaurantService.findOne({id:category.Restaurant.id})
+
+        
+        let result = await this._minioService.putOpject(file ,resturant.name,resturant.id + createMealDto.name )
         if(result.success === false){
             throw new BadRequestException('Image did not uploaded')
         }
