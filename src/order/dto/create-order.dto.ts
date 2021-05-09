@@ -11,4 +11,6 @@ export class CreateOrderDto {
     @IsNotEmpty()
     @IsUUID()
     userId:string;
+
+    mealsIds:[string];
 }

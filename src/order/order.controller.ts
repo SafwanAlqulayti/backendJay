@@ -13,8 +13,8 @@ export class OrderController {
     return this.orderService.create(createOrderDto);
   }
 
-  @Get()
-  findOne(@Body() id: HistroyOrderDto) {
+  @Get(':userId')
+  findOne(@Param() id: HistroyOrderDto) {
     return this.orderService.historyOrder(id);
   }
 

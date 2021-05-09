@@ -1,8 +1,9 @@
 import { RestaurantEntity } from "../entities/restaurant.entity";
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { UserEntity } from "./user.entity";
 import { OrderStatus } from "src/constants/order-status";
 import { AbstractEntity } from "src/common/abstract.entity";
+import { MealEntity } from "./meal.entity";
 
 
 
@@ -23,9 +24,12 @@ export class Order extends AbstractEntity {
 
     @ManyToOne(tyoe => RestaurantEntity, Restaurant => Restaurant.Order)
     @JoinColumn()
-    Restaurant: RestaurantEntity
+    restaurant: RestaurantEntity
 
     @ManyToOne(tyoe => UserEntity, User => User.Order)
     @JoinColumn()
-    User: UserEntity
+    user: UserEntity;
+
+    @ManyToMany(() => MealEntity, (mealEntity:MealEntity) => mealEntity.orders)
+    meals:MealEntity[];
 }

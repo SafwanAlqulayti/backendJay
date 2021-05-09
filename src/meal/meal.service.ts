@@ -93,4 +93,13 @@ export class MealService {
         }
         return meal
       }
+      async addMealToOrder(meals:[string]): Promise<MealEntity[]> {
+        let mealsIds = await this._mealRepositroy.createQueryBuilder('meal')
+        .where("id IN (:...list)",{list:meals})
+        .getMany()
+        if(mealsIds.length > 0){
+            return mealsIds
+        }
+        throw new BadRequestException('You need to have at least one meal')
+    }
 }

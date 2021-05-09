@@ -7,39 +7,45 @@ import { UpdateOrderDto } from './dto/update-order.dto';
 import { OrderRepository } from './order.repository';
 import { OrderStatus } from "src/constants/order-status";
 import { HistroyOrderDto } from './dto/history.order.dto';
+import { MealEntity } from 'src/entities/meal.entity';
+import { MealService } from 'src/meal/meal.service';
 
 @Injectable()
 export class OrderService {
   constructor(
-    private _orderRepo:OrderRepository,
-    private _authService:AuthService,
-    private _estaurantService:RestaurantService
-  ){}
+    private _orderRepo: OrderRepository,
+    private _authService: AuthService,
+    private _estaurantService: RestaurantService,
+    private _mealService:MealService
+  ) { }
 
- async create(createOrderDto: CreateOrderDto):Promise<Order> {
+  async create(createOrderDto: CreateOrderDto): Promise<Order> {
+    let meals = await this._mealService.addMealToOrder(createOrderDto.mealsIds)
     let user = await this._authService.findOne(createOrderDto.userId)
-    if(!user){
+    if (!user) {
       throw new BadRequestException()
     }
-    let restaurant = await this._estaurantService.findOne({id:createOrderDto.restaurantId})
+    let restaurant = await this._estaurantService.findOne({ id: createOrderDto.restaurantId })//check restauran staus befoure order
     let order = new Order();
     order.price = createOrderDto.price;
-     user
-    restaurant
-    order.status = OrderStatus.OPENED
-
+    order.user = user,
+    order.restaurant = restaurant,
+    order.status = OrderStatus.OPENED,
+    order.meals = meals
+    console.log('start///////////////');
+    console.log(order)
     return this._orderRepo.save(order)
   }
-  
-async historyOrder(histroyOrderDto:HistroyOrderDto){
-  let orders = await this._orderRepo.find({
-    where:{User:histroyOrderDto.userId ,status:OrderStatus.COMPLATED},relations:['Restaurant'] 
-  })
-  if(orders.length > 1){
-    return {message:"no order for this user yet"}
+
+  async historyOrder(histroyOrderDto: HistroyOrderDto) {
+    let orders = await this._orderRepo.find({
+      where: { user: histroyOrderDto.userId, status: OrderStatus.COMPLATED }, relations: ['restaurant','meals']
+    })
+    if (orders.length < 1) {
+      return { message: "no order for this user yet" }
+    }
+    return orders
   }
-  return orders
-}
 }
 
 // let orders = await this._orderRepo.createQueryBuilder('order')
