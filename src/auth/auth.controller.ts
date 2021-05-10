@@ -2,30 +2,42 @@ import { Controller, Get, Post, Body, Put, Param, Delete, ValidationPipe, UsePip
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { PhoneNumberDto } from './dto/phone-number-validation.dto';
-import {SignInDto} from './dto/signIn-auth.dto'
+import { SendOTP } from './dto/send-OTP.dto';
+import { SignInDto } from './dto/signIn-auth.dto'
 
 @Controller('auth')
 @UsePipes(ValidationPipe)
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @Post('/signUp')
-  signUp(@Body() createAuthDto: CreateAuthDto):Promise<any>{
+  signUp(@Body() createAuthDto: CreateAuthDto): Promise<any> {
     return this.authService.signUp(createAuthDto);
   }
 
   @Post('/signIn')
   signIn(@Body() createAuthDto: SignInDto) {
     return this.authService.signIn(createAuthDto);
-  } 
+  }
 
   @Post('/checkOTP')
-  checkOTP(@Body() phoneNumberDto:PhoneNumberDto){
-   return this.authService.checkOTP(phoneNumberDto);
+  checkOTP(@Body() phoneNumberDto: PhoneNumberDto) {
+    return this.authService.checkOTP(phoneNumberDto);
+  }
+
+  @Post('send-otp')
+  sendOTP(@Body() sendOTP: SendOTP) {
+    return this.authService.sendOTP(sendOTP)
+  }
+
+  @Post('/checkOTP-by-email')
+  checkOTPByEmail(@Body() phoneNumberDto: PhoneNumberDto) {
+    return this.authService.checkOTPByEmail(phoneNumberDto.email, phoneNumberDto.code)
   }
 
 
-  @Get() 
+
+  @Get()
   findAll() {
     return this.authService.findAll();
   }
