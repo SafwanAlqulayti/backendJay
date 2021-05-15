@@ -15,4 +15,6 @@ export class CreateMealDto {
     @IsOptional()
     isAvilable:boolean
 
+    Bucket:string;
+
 }

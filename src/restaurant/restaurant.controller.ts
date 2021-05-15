@@ -81,6 +81,12 @@ export class RestaurantController {
     return this.restaurantService.findAll(user);
   }
 
+  @Get(':restaurantId')
+  findResturant(@Param() findRestauranDto:FindRestauranDto){
+    return this.restaurantService.getRestaurant(findRestauranDto)
+
+  }
+
   // @Get(':id')
   // findOne(@Param('id') id: string) {
   //   return this.restaurantService.findOne(+id);

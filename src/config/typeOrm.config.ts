@@ -8,7 +8,7 @@ export const typeOrm: TypeOrmModuleOptions = {
   database: 'Jay',
   host: process.env.DB_HOST,
   username:  'postgres',
-  password: 'postgres',
+  password: 'Mm121212',
   entities: [__dirname + '/../**/*.entity{.ts,.js}'],
   synchronize: true,
   migrations: ['../../src/migrations/*{.ts,.js}'],
