@@ -34,7 +34,7 @@ export class UserEntity extends AbstractEntity {
     verifyCode: string;
     
 
-    @OneToMany(type => Order, Order => Order.User)
+    @OneToMany(type => Order, Order => Order.user)
     Order: Order[];
 
 

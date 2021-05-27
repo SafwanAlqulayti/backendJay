@@ -39,7 +39,7 @@ export class RestaurantEntity extends AbstractEntity {
   userId:UserEntity
 
 
-  @OneToMany(type=>Order,Order=>Order.Restaurant)
+  @OneToMany(type=>Order,Order=>Order.restaurant)
   Order:Order[]
 
   @OneToMany(type=>CategoryEntity , categoryEntity=>categoryEntity.Restaurant)
