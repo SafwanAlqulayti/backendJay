@@ -14,6 +14,9 @@ export class OrderCategory extends AbstractEntity {
 
     @Column({nullable:true})
     order:string;
+
+    @Column({nullable:false})
+    isCheckBox:boolean;
   
 
     @ManyToOne(()=> MealEntity ,(MealEntity:MealEntity)=>MealEntity.id)

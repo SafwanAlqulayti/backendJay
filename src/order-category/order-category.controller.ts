@@ -18,11 +18,15 @@ export class OrderCategoryController {
 
 
   //find all order category that belongs to meal
-  @Get(':mealId')
-  findAll(@Param() getByIdDto:GetByIdDto) {
-    return this.orderCategoryService.findOne(getByIdDto.mealId);
+  @Get('checkBox/:mealId')
+  findAllCleckBox(@Param() getByIdDto:GetByIdDto) {
+    return this.orderCategoryService.findOne(getByIdDto.mealId,true);
+  }
 
-  
+
+  @Get('redioButton/:mealId')
+  findAllRedioButton(@Param() getByIdDto:GetByIdDto) {
+    return this.orderCategoryService.findOne(getByIdDto.mealId,false);
   }
 
 
