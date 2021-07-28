@@ -43,6 +43,7 @@ export class RestaurantFileService {
     let restaurantFile = new RestaurantFileEntity();
     restaurantFile.restaurants.push(resturant);
     restaurantFile.bucket = createRestaurantFileDto.bucket;
+    restaurantFile.mainCourse = createRestaurantFileDto.mainCourse ? true :false
 
     await this._restauranFileRepository.save(restaurantFile);
     return await this.uploud(params);

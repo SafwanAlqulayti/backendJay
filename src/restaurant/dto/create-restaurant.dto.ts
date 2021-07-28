@@ -9,7 +9,7 @@ export class CreateRestaurantDto {
     @IsNotEmpty()
     @IsString()
     name:string;
-
+    
     @IsNotEmpty()
     @IsString()
     kind:string;

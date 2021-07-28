@@ -5,12 +5,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { RestaurantRepository } from './restaurantRepository';
 import { AuthModule } from 'src/auth/auth.module';
 import { MinioModulee } from 'src/minio/minio.module';
+import { SharedModule } from 'src/shared/shared.module';
 
 
 @Module({
   imports:[AuthModule,
     MinioModulee,
     TypeOrmModule.forFeature([RestaurantRepository]),
+    SharedModule
   ],
   controllers: [RestaurantController],
   providers: [RestaurantService],

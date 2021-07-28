@@ -9,7 +9,6 @@ export class CreateAuthDto{
     @IsString()
     @IsNotEmpty()
     email: string;
-
     @IsString()
     @IsNotEmpty()
     userName: string;

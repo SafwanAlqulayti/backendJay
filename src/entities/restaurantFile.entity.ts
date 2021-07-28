@@ -12,10 +12,10 @@ export class RestaurantFileEntity {
     offers:string;
     @Column({nullable:true})
     photos:string;
-
+    @Column({nullable:true})
+    mainCourse:boolean;
     @Column({nullable:true})
     bucket:string;
-
     @OneToMany(()=>RestaurantEntity ,(restaurantEntity:RestaurantEntity)=> restaurantEntity.id)
     restaurants:RestaurantEntity[];
     

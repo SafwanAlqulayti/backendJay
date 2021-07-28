@@ -16,11 +16,11 @@ export class UserRepository extends Repository<UserEntity> {
   async signUp(createAuthDto: CreateAuthDto) {
 
     let findUser = await this.findOne({ email: createAuthDto.email })
-
+    if(findUser){
     if(findUser.IsActive == true){
       throw new BadRequestException('You are already have an account');
     }
-
+  }
     if (findUser) {
       findUser.verifyCode = (Math.floor(1000 + Math.random() * 9000)).toString()
       await this.otpPhoneNumber(findUser.phoneNumber, findUser.verifyCode);

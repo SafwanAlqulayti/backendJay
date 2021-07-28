@@ -13,6 +13,7 @@ import { OrderCategoryModule } from './order-category/order-category.module';
 import { OrderCategoryDetailModule } from './order-category-detail/order-category-detail.module';
 import { MinioModulee } from './minio/minio.module';
 import { UserRepository } from './auth/auth.repository';
+import { SharedModule } from './shared/shared.module';
 import messagebird from 'messagebird'
 
 
@@ -24,7 +25,7 @@ import messagebird from 'messagebird'
     envFilePath: '.development.env',
   }),
     AuthModule,
-    TypeOrmModule.forRoot(typeOrm), RestaurantModule, RestaurantFileModule, MealModule, CategoryModule, OrderCategoryModule, OrderCategoryDetailModule, MinioModulee,UserRepository
+    TypeOrmModule.forRoot(typeOrm), RestaurantModule, RestaurantFileModule, MealModule, CategoryModule, OrderCategoryModule, OrderCategoryDetailModule, MinioModulee,UserRepository, SharedModule
   ],
   controllers: [AppController],
   providers: [AppService],

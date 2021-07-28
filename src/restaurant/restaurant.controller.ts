@@ -6,11 +6,13 @@ import { AuthGuard } from '@nestjs/passport';
 import { UpdateRestaurantDto } from './dto/updateRestaurantDto';
 import { DeleteRestaurantDto } from './dto/deleteRestaurantDto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { UserLatLongDto } from './dto/userLatLongDto';
+import { Query } from '@nestjs/common';
 // import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
 
 
 @Controller('restaurant')
-// @UseGuards(AuthGuard())// we can use  it in one handler , now we cant access unless we have token
+ @UseGuards(AuthGuard())// we can use  it in one handler , now we cant access unless we have token
 
 export class RestaurantController {
   constructor(private readonly restaurantService: RestaurantService) { }
@@ -18,27 +20,30 @@ export class RestaurantController {
 
   @Post()
   @UseInterceptors(FileInterceptor('file'))
-  create(@Body() createRestaurantDto:CreateRestaurantDto,
-  @UploadedFile() file,
+  create(@Body() createRestaurantDto: CreateRestaurantDto,
+    @UploadedFile() file,
     @GetUser() user
   ) {
-    console.log(createRestaurantDto)
-    return this.restaurantService.create(createRestaurantDto, user,file);
+    console.log()
+    return this.restaurantService.create(createRestaurantDto, user, file);
   }
 
   @Post('sava-image')
   @UseInterceptors(
-    FileInterceptor("photo",{
-      dest:"./Upload"
+    FileInterceptor("photo", {
+      dest: "./Upload"
     })
-    )
-  saveImage(@UploadedFile()file){
+  )
+  saveImage(@UploadedFile() file) {
     (file);
   }
   // update(@Param('id') id: string, @Body()
   @Get('all-restaurant')
-  getAllRestaurant(){
-    return this.restaurantService.getAllRestaurant();
+  getAllRestaurant(
+    @GetUser() user,
+    @Query() query:UserLatLongDto,
+  ) {
+    return this.restaurantService.getAllRestaurant(user ,query );
   }
 
 
@@ -59,7 +64,7 @@ export class RestaurantController {
 
 
   @Get(':id')
-  getRestaurant(@Param() id:string){
+  getRestaurant(@Param() id: string) {
     return this.restaurantService.getRestaurant(id);
   }
 
