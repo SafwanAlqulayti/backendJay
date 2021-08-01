@@ -24,7 +24,7 @@ export class RestaurantController {
     @UploadedFile() file,
     @GetUser() user
   ) {
-    console.log()
+    console.log('test')
     return this.restaurantService.create(createRestaurantDto, user, file);
   }
 
