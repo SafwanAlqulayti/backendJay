@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { UUID } from 'aws-sdk/clients/inspector';
 import { UnauthorizedException } from '@nestjs/common/exceptions/unauthorized.exception';
 import { UserRole } from 'src/auth/user-role.enum';
@@ -7,21 +7,40 @@ import { MealEntity } from 'src/entities/meal.entity';
 import { CreateMealDto } from './dto/createMealDto';
 import { UpdateMealDto } from './dto/updateMeal.dto';
 import { MealRepository } from './mealRepository';
+import { MinioClientService } from 'src/minio/minio.service';
+import { RestaurantService } from 'src/restaurant/restaurant.service';
+import { FindConditions } from 'typeorm';
+import { FindMealDto } from './dto/findMealDto';
 
 @Injectable()
 export class MealService {
     constructor(
         private _mealRepositroy: MealRepository,
         private _categoryService: CategoryService,
+        private _minioService: MinioClientService,
+        private _restaurantService: RestaurantService
+
 
     ) { }
-    async create(createMealDto: CreateMealDto) {
+    async create(file,createMealDto: CreateMealDto) {
         const category = await this._categoryService.findOne(createMealDto.categoryId)
+        const categoryWithResturant = await this._categoryService.findWithRelation(createMealDto.categoryId)
+
+
+
+        let resturant = await this._restaurantService.findOne({id:categoryWithResturant[0].Restaurant.id})
+
+        let randomId = (Math.floor(1000 + Math.random() * 9000)).toString()
+
+        let result = await this._minioService.putOpject(createMealDto.Bucket,file ,randomId)
+        if(result.success === false){
+            throw new BadRequestException('Image did not uploaded')
+        }
         let meal = new MealEntity()
         meal.name = createMealDto.name
         meal.price = createMealDto.price
         meal.isAvilable = createMealDto.isAvilable
-        meal.image = createMealDto.image
+        meal.image = result.url
         meal.CategoryId = category
         // meal.restaurantId = resturant
         await this._mealRepositroy.save(meal)
@@ -37,7 +56,10 @@ export class MealService {
     async findMeal(id) {
         return await this._mealRepositroy.findOne(id);
     }
-
+    async findMealImage(findMealDto:FindMealDto) {
+        let meal = await this.findOne({id:findMealDto.mealId})
+        return meal.image
+    }
 
     async delete(id: UUID, user) {
 
@@ -70,5 +92,20 @@ export class MealService {
         return meal
 
     }
+    async findOne(findData: FindConditions<MealEntity>): Promise<MealEntity> {
+        let meal = await this._mealRepositroy.findOne(findData);
+        if(!meal){
+          throw new BadRequestException('restauran is not exist')
+        }
+        return meal
+      }
+      async addMealToOrder(meals:[string]): Promise<MealEntity[]> {
+        let mealsIds = await this._mealRepositroy.createQueryBuilder('meal')
+        .where("id IN (:...list)",{list:meals})
+        .getMany()
+        if(mealsIds.length > 0){
+            return mealsIds
+        }
+        throw new BadRequestException('You need to have at least one meal')
+    }
 }
-` `

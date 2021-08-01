@@ -1,26 +1,61 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { AuthService } from 'src/auth/auth.service';
+import { Order } from 'src/entities/order.entity';
+import { RestaurantService } from 'src/restaurant/restaurant.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
+import { OrderRepository } from './order.repository';
+import { OrderStatus } from "src/constants/order-status";
+import { HistroyOrderDto } from './dto/history.order.dto';
+import { MealEntity } from 'src/entities/meal.entity';
+import { MealService } from 'src/meal/meal.service';
 
 @Injectable()
 export class OrderService {
-  create(createOrderDto: CreateOrderDto) {
-    return 'This action adds a new order';
+  constructor(
+    private _orderRepo: OrderRepository,
+    private _authService: AuthService,
+    private _estaurantService: RestaurantService,
+    private _mealService:MealService
+  ) { }
+
+  async create(createOrderDto: CreateOrderDto): Promise<Order> {
+    let meals = await this._mealService.addMealToOrder(createOrderDto.mealsIds)
+    let user = await this._authService.findOne(createOrderDto.userId)
+    if (!user) {
+      throw new BadRequestException()
+    }
+    let restaurant = await this._estaurantService.findOne({ id: createOrderDto.restaurantId })//check restauran staus befoure order
+    let order = new Order();
+    order.price = createOrderDto.price;
+    order.user = user,
+    order.restaurant = restaurant,
+    order.status = OrderStatus.OPENED,
+    order.meals = meals
+    console.log('start///////////////');
+    console.log(order)
+    return this._orderRepo.save(order)
   }
 
-  findAll() {
-    return `This action returns all order`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} order`;
-  }
-
-  update(id: number, updateOrderDto: UpdateOrderDto) {
-    return `This action updates a #${id} order`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} order`;
+  async historyOrder(histroyOrderDto: HistroyOrderDto) {
+    let orders = await this._orderRepo.find({
+      where: { user: histroyOrderDto.userId, status: OrderStatus.COMPLATED }, relations: ['restaurant','meals']
+    })
+    if (orders.length < 1) {
+      return { message: "no order for this user yet" }
+    }
+    return orders
   }
 }
+
+// let orders = await this._orderRepo.createQueryBuilder('order')
+// // .leftJoin('order.Restaurant' , 'Restaurant')
+//  //.select(['r.image'])
+// .leftJoin(RestaurantEntity, 'r', 'r.id = :user',{user:histroyOrderDto.userId})
+// //.where('request.id = :id', { id: requestId })
+// .where({User:histroyOrderDto.userId})
+//  .getMany()
+//  // if(orders.length > 0){
+//  //   return {message:"no order for this user yet"}
+//  // }
+//  return orders

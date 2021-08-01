@@ -34,7 +34,7 @@ export class UserEntity extends AbstractEntity {
     verifyCode: string;
     
 
-    @OneToMany(type => Order, Order => Order.User)
+    @OneToMany(type => Order, Order => Order.user)
     Order: Order[];
 
 
@@ -50,8 +50,6 @@ export class UserEntity extends AbstractEntity {
 
     async validateLogin(password: string): Promise<boolean> {
         const hash = await bcrypt.hash(password, this.salt);
-
-
         return hash === this.password
 
     }

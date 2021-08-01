@@ -3,7 +3,6 @@ import { EntityRepository, Repository } from 'typeorm';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import * as bcrypt from 'bcryptjs';
 import { UserEntity } from '../entities/user.entity';
-import { UserRole } from './user-role.enum';
 import { SignInDto } from './dto/signIn-auth.dto';
 const readline = require('readline');
 var TeleSignSDK = require('telesignsdk');
@@ -16,16 +15,24 @@ export class UserRepository extends Repository<UserEntity> {
   async signUp(createAuthDto: CreateAuthDto) {
 
     let findUser = await this.findOne({ email: createAuthDto.email })
+<<<<<<< HEAD
+=======
+
+>>>>>>> d5819696a379c902cda118b82a6abea0add8e2ab
     if(findUser){
     if(findUser.IsActive == true){
       throw new BadRequestException('You are already have an account');
     }
   }
+<<<<<<< HEAD
+=======
+
+>>>>>>> d5819696a379c902cda118b82a6abea0add8e2ab
     if (findUser) {
       findUser.verifyCode = (Math.floor(1000 + Math.random() * 9000)).toString()
+      await this.save(findUser);
       await this.otpPhoneNumber(findUser.phoneNumber, findUser.verifyCode);
-      await this.save(findUser)
-
+      
     } else {
       console.log(findUser);
       const { email, userName, phoneNumber, password } = createAuthDto;
@@ -47,7 +54,7 @@ export class UserRepository extends Repository<UserEntity> {
         throw new BadRequestException();
       }
       await this.otpPhoneNumber(user.phoneNumber, user.verifyCode);
-      return { userName: userName };
+      return { userName: userName,userId : user.id };
     }
   }
   private async hashPassword(password: string, salt: string): Promise<string> {

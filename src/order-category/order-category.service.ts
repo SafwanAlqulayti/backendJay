@@ -32,10 +32,15 @@ export class OrderCategoryService {
   //   return;
   // }
 
-  async findOne(id: UUID) {
+  async findOne(id: UUID ,checkBox :boolean) {
     let meal = await this.MealService.findMeal(id);
 
-    return this._orderCategoryRepository.find({ where: { MealEntity: meal.id }, relations: ["MealEntity"] })
+    if(checkBox){
+      return this._orderCategoryRepository.find({ where: { MealEntity: meal.id,isCheckBox:true}, relations: ["MealEntity"] })
+    }else{
+      return this._orderCategoryRepository.find({ where: { MealEntity: meal.id,isCheckBox:false}, relations: ["MealEntity"] })
+    }
+
 
   }
 

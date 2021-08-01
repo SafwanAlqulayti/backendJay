@@ -1,7 +1,8 @@
 import { AbstractEntity } from "src/common/abstract.entity";
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne } from "typeorm";
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne } from "typeorm";
 import { CategoryEntity } from "./category.entity";
 import { OrderCategory } from "./order-category.entity";
+import { Order } from "./order.entity";
 import { RestaurantEntity } from "./restaurant.entity";
 
 @Entity('meal')
@@ -36,4 +37,21 @@ export class MealEntity extends AbstractEntity {
 
     @OneToMany(() => OrderCategory, (OrderCategory: OrderCategory) => OrderCategory.id)
     OrderId: OrderCategory
+
+    @ManyToMany(() => Order, (order:Order) => order.id )
+
+    @ManyToMany(() =>  Order, (order:Order) => order.meals )
+    @JoinTable({
+        name: 'meal_order',
+        joinColumn: {
+            name: 'meal',
+            referencedColumnName: 'id',
+        },
+        inverseJoinColumn: {
+            name: 'order',
+            referencedColumnName: 'id',
+        },
+    })
+   @JoinColumn({ name: 'orderEntity' })
+    orders: Order[];
 }

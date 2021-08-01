@@ -9,14 +9,12 @@ export class CreateMealDto {
     @IsString()
     price:string;
 
-    @IsNotEmpty()
-    @IsString()
-    image:string
-
     @IsUUID()
-    categoryId
+    categoryId:string;
 
     @IsOptional()
     isAvilable:boolean
+
+    Bucket:string;
 
 }

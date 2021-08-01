@@ -7,15 +7,15 @@ import { AuthModule } from 'src/auth/auth.module';
 import { MinioModulee } from 'src/minio/minio.module';
 import { SharedModule } from 'src/shared/shared.module';
 
-
 @Module({
-  imports:[AuthModule,
+  imports: [
+    AuthModule,
     MinioModulee,
     TypeOrmModule.forFeature([RestaurantRepository]),
     SharedModule
   ],
   controllers: [RestaurantController],
   providers: [RestaurantService],
-  exports:[RestaurantService]
+  exports: [RestaurantService],
 })
 export class RestaurantModule {}

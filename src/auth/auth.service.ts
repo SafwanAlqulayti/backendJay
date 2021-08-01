@@ -4,9 +4,11 @@ import { UserRepository } from './auth.repository';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtPayload } from './jwt-payload.interface';
-import { uuid } from 'aws-sdk/clients/customerprofiles';
 import { SignInDto } from './dto/signIn-auth.dto';
 import { PhoneNumberDto } from './dto/phone-number-validation.dto';
+import { SendOTP } from './dto/send-OTP.dto';
+const phone = require('phone');
+
 
 
 
@@ -26,16 +28,16 @@ export class AuthService {
   async signIn(
     CreateAdminDto: SignInDto,): Promise<{ accessToken: string }> {
 
-     
+
     const User = await this.UserRepository.signIn(CreateAdminDto);
 
-    if(User.IsActive == false){
+    if (User.IsActive == false) {
       throw new BadRequestException('Please sign up')
     }
     if (User.email === null) {
       throw new UnauthorizedException('Invalid credentials');
     }
-    const payload: JwtPayload = { email: User.email, username: User.userName };
+    const payload: JwtPayload = { email: User.email, id: User.id, role: User.userRole };
     const accessToken = await this.jwtService.sign(payload);
     return { accessToken };
   }
@@ -59,22 +61,48 @@ export class AuthService {
 
 
 
-  async checkOTP(phoneNumberDto:PhoneNumberDto){
+  async checkOTP(phoneNumberDto: PhoneNumberDto) {
 
-   const user = await this.findOne(phoneNumberDto.userId);
+    let user = await this.UserRepository.findOne({ email: phoneNumberDto.email })
 
-   console.log(user)
-
-    if(user.verifyCode != phoneNumberDto.code){
-       throw new BadRequestException('Plese try again');
-    }else{
+    if (user.verifyCode != phoneNumberDto.code) {
+      throw new BadRequestException('Plese try again');
+    } else {
       user.IsActive = true;
       this.UserRepository.save(user);
-      return {message:true}
+      return { message: true }
     }
 
   }
 
+ async checkOTPByEmail(email, code){
+    let user = await this.UserRepository.findOne({ email: email })
 
- 
+    if (user.verifyCode != code) {
+      throw new BadRequestException('Plese try again');
+    } else {
+      return { message: true }
+    }
+
+  }
+
+  async sendOTP(sendOTP: SendOTP) {
+   let phoneNumber = phone(sendOTP.phoneNumber, 'SAU')[0];
+
+    let user = await this.UserRepository.findOne({ phoneNumber: phoneNumber })
+
+    if(!user){
+      throw new BadRequestException('Please Sign Up');
+    }
+    user.verifyCode = (Math.floor(1000 + Math.random() * 9000)).toString();
+
+    await this.UserRepository.save(user);
+
+    this.UserRepository.otpPhoneNumber(phoneNumber, user.verifyCode);
+
+    return {message:'success',email:user.email}
+  }
+
+
+
 }

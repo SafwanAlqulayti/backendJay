@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { UUID } from 'aws-sdk/clients/inspector';
 import { UserRole } from 'src/auth/user-role.enum';
 import { CategoryEntity } from 'src/entities/category.entity';
@@ -18,17 +18,17 @@ export class CategoryService {
 
     let resturant = await this._restaurantService.findOne({id:createCategoryDto.restaurantEntity});
 
-    // let category = new CategoryEntity();
+    let category = new CategoryEntity();
 
-    // category.name = createCategoryDto.name;
-    // category.order = createCategoryDto.order;
-    // category.Restaurant= resturant;
+    category.name = createCategoryDto.name;
+    category.order = createCategoryDto.order;
+    category.Restaurant= resturant;
 
 
 
-    // await this._categoryRepo.save(category)
+    await this._categoryRepo.save(category)
 
-    return {}//category;
+    return category;
 
   }
 
@@ -41,8 +41,20 @@ export class CategoryService {
   }
 
  async findOne(id: UUID) {
+  let category = await this._categoryRepo.findOne(id) 
+  if(!category){
+    throw new BadRequestException('Category is not exist')
+  }
+    return category
+  }
 
-    return await this._categoryRepo.findOne(id) 
+  //get the resturant that belongs to spicific category
+  async findWithRelation(categoryId){
+
+   let category =  await this._categoryRepo.find({where : {id : categoryId},relations:["Restaurant"]})
+
+   return category
+
   }
 
   async update(updateCategoryDto: UpdateCategoryDto ,user) {
