@@ -12,14 +12,12 @@ export class CategoryEntity extends AbstractEntity {
   name: string;
 
   @Column({ nullable: true })
-  order: string;
+  categoryOrder: string;
 
-
-  @ManyToOne(type => RestaurantEntity, Restaurant => Restaurant.categoryEntity)
+  @ManyToOne(type => RestaurantEntity, Restaurant => Restaurant.id)
   @JoinColumn()
   Restaurant: RestaurantEntity
-
-
+Î
   @OneToMany(() => MealEntity, (MealEntity: MealEntity) => MealEntity.id)
   MealEntity: MealEntity
 }      

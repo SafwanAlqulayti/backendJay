@@ -24,11 +24,11 @@ import { FindRestauranDto } from './dto/findRestaurantDto';
 // import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
 
 @Controller('restaurant')
- @UseGuards(AuthGuard())// we can use  it in one handler , now we cant access unless we have token
+@UseGuards(AuthGuard())// we can use  it in one handler , now we cant access unless we have token
 
 //  @UseGuards(AuthGuard())// we can use  it in one handler , now we cant access unless we have token
 export class RestaurantController {
-  constructor(private readonly restaurantService: RestaurantService) {}
+  constructor(private readonly restaurantService: RestaurantService) { }
 
   @Post()
   @UseInterceptors(FileInterceptor('file'))
@@ -56,9 +56,9 @@ export class RestaurantController {
   @Get('all-restaurant')
   getAllRestaurant(
     @GetUser() user,
-    @Query() query:UserLatLongDto,
+    @Query() query: UserLatLongDto,
   ) {
-    return this.restaurantService.getAllRestaurant(user ,query );
+    return this.restaurantService.getAllRestaurant(user, query);
   }
 
   @Put()
@@ -89,7 +89,7 @@ export class RestaurantController {
   }
 
   @Get(':restaurantId')
-  findResturant(@Param() findRestauranDto:FindRestauranDto){
+  findResturant(@Param() findRestauranDto: FindRestauranDto) {
     return this.restaurantService.getRestaurant(findRestauranDto)
 
   }

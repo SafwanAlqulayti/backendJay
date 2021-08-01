@@ -21,21 +21,17 @@ import { OrderModule } from './order/order.module';
 
 
 @Module({
-  imports: [   
+  imports: [
     ConfigModule.forRoot({
-    envFilePath: '.development.env',
-  }),
+      envFilePath: '.development.env',
+    }),
     AuthModule,
-<<<<<<< HEAD
-    TypeOrmModule.forRoot(typeOrm), RestaurantModule, RestaurantFileModule, MealModule, CategoryModule, OrderCategoryModule, OrderCategoryDetailModule, MinioModulee,UserRepository, SharedModule
-=======
-    TypeOrmModule.forRoot(typeOrm),
-     RestaurantModule, RestaurantFileModule, MealModule, CategoryModule, OrderCategoryModule, OrderCategoryDetailModule, MinioModulee,UserRepository,
-     OrderModule
->>>>>>> d5819696a379c902cda118b82a6abea0add8e2ab
+    TypeOrmModule.forRoot(typeOrm), RestaurantModule, RestaurantFileModule, MealModule, CategoryModule, OrderCategoryModule, OrderCategoryDetailModule, MinioModulee, UserRepository, SharedModule,
+    RestaurantModule, RestaurantFileModule, MealModule, CategoryModule, OrderCategoryModule, OrderCategoryDetailModule, MinioModulee, UserRepository,
+    OrderModule
   ],
   controllers: [AppController],
   providers: [AppService],
 
 })
-export class AppModule {}
+export class AppModule { }

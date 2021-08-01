@@ -15,19 +15,12 @@ export class UserRepository extends Repository<UserEntity> {
   async signUp(createAuthDto: CreateAuthDto) {
 
     let findUser = await this.findOne({ email: createAuthDto.email })
-<<<<<<< HEAD
-=======
 
->>>>>>> d5819696a379c902cda118b82a6abea0add8e2ab
-    if(findUser){
+  //  if(findUser){
     if(findUser.IsActive == true){
       throw new BadRequestException('You are already have an account');
     }
-  }
-<<<<<<< HEAD
-=======
-
->>>>>>> d5819696a379c902cda118b82a6abea0add8e2ab
+  //}
     if (findUser) {
       findUser.verifyCode = (Math.floor(1000 + Math.random() * 9000)).toString()
       await this.save(findUser);

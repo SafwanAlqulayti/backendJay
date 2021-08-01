@@ -21,7 +21,7 @@ export class CategoryService {
     let category = new CategoryEntity();
 
     category.name = createCategoryDto.name;
-    category.order = createCategoryDto.order;
+    category.categoryOrder = createCategoryDto.order;
     category.Restaurant= resturant;
 
 
@@ -35,9 +35,9 @@ export class CategoryService {
 
   //Get all category that belongs to the resturant
   async findAll(getById:GetById) {
-    let resturant = await this._restaurantService.findOne({id:getById.restaurantId});
-    console.log(resturant)
-    return this._categoryRepo.find({ where: { Restaurant: resturant.id }, relations: ["Restaurant"] })
+    //let resturant = await this._restaurantService.findOne({id:getById.restaurantId});
+   // console.log(resturant)
+    return this._categoryRepo.find({ where: { Restaurant: '7578ead2-64f8-45ee-878d-2dba9eea6e86' }, relations: ["Restaurant"] ,order:{categoryOrder:'ASC'}})
   }
 
  async findOne(id: UUID) {
@@ -64,7 +64,7 @@ export class CategoryService {
     } 
     let category = await this.findOne(updateCategoryDto.categoryId)
     category.name = updateCategoryDto.name
-    category.order = updateCategoryDto.order
+    category.categoryOrder = updateCategoryDto.order
     await this._categoryRepo.save(category)
 
     return category
