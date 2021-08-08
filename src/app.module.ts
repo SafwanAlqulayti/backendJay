@@ -16,6 +16,9 @@ import { UserRepository } from './auth/auth.repository';
 import { SharedModule } from './shared/shared.module';
 import messagebird from 'messagebird'
 import { OrderModule } from './order/order.module';
+import { MiddlewareConsumer } from '@nestjs/common';
+import { AppLoggerMiddleware } from './middleware/loggerMiddleware';
+import { BranchModule } from './branch/branch.module';
 
 
 
@@ -28,10 +31,15 @@ import { OrderModule } from './order/order.module';
     AuthModule,
     TypeOrmModule.forRoot(typeOrm), RestaurantModule, RestaurantFileModule, MealModule, CategoryModule, OrderCategoryModule, OrderCategoryDetailModule, MinioModulee, UserRepository, SharedModule,
     RestaurantModule, RestaurantFileModule, MealModule, CategoryModule, OrderCategoryModule, OrderCategoryDetailModule, MinioModulee, UserRepository,
-    OrderModule
+    OrderModule,
+    BranchModule
   ],
   controllers: [AppController],
   providers: [AppService],
 
 })
-export class AppModule { }
+export class AppModule {
+  configure(consumer: MiddlewareConsumer): void {
+    consumer.apply(AppLoggerMiddleware).forRoutes('*');
+  }
+ }

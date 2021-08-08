@@ -28,7 +28,6 @@ export class RestaurantEntity extends AbstractEntity {
   @Column({nullable:true})
   image: string;
 
-
   // @OneToOne(type=>User,CASHIER=>CASHIER.Restaurant)
  // CASHIER:User;
 
@@ -38,15 +37,11 @@ export class RestaurantEntity extends AbstractEntity {
   @ManyToOne(()=>UserEntity ,(userEntity:UserEntity)=> userEntity.id)
   userId:UserEntity
 
-
   @OneToMany(type=>Order,Order=>Order.restaurant)
   Order:Order[]
 
   @OneToMany(type=>CategoryEntity , categoryEntity=>categoryEntity.Restaurant)
   categoryEntity:CategoryEntity[]
-
-
-
 
   @OneToOne(type=>RestaurantCashire,RestaurantCashire=>RestaurantCashire.Restaurant)
   RestaurantCashire:RestaurantCashire

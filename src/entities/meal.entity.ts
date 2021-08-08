@@ -31,7 +31,6 @@ export class MealEntity extends AbstractEntity {
 
 
     @ManyToOne(() => CategoryEntity, (CategoryEntity: CategoryEntity) => CategoryEntity.id)
-    @JoinColumn()
     CategoryId: CategoryEntity
 
 

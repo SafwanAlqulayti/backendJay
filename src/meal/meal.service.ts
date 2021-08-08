@@ -11,6 +11,7 @@ import { MinioClientService } from 'src/minio/minio.service';
 import { RestaurantService } from 'src/restaurant/restaurant.service';
 import { FindConditions } from 'typeorm';
 import { FindMealDto } from './dto/findMealDto';
+import { CategoryEntity } from 'src/entities/category.entity';
 
 @Injectable()
 export class MealService {
@@ -53,9 +54,17 @@ export class MealService {
         return z
     }
 
-    async findMeal(id) {
-        return await this._mealRepositroy.findOne(id);
+    async findMeal(mealId) {
+        return this._mealRepositroy.createQueryBuilder('meal')
+        .select(['meal.id','meal.image','meal.price','RestaurantEntity.id','RestaurantEntity.name','RestaurantEntity.rate','CategoryEntity.id'])
+        .leftJoin('meal.CategoryId', 'CategoryEntity')
+        .leftJoin('CategoryEntity.Restaurant', 'RestaurantEntity')
+
+        .where({id:mealId})
+        .getOne()
+       // return  this._mealRepositroy.findOne({id:mealId});
     }
+    
     async findMealImage(findMealDto:FindMealDto) {
         let meal = await this.findOne({id:findMealDto.mealId})
         return meal.image

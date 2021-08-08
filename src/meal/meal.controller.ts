@@ -16,6 +16,11 @@ export class MealController {
         private _mealService: MealService
     ) { }
 
+    @Get('/:mealId')
+    getMealById(@Param() findMealDto:FindMealDto){
+        return this._mealService.findMeal(findMealDto.mealId)
+    }
+
     @Post()
     @UseInterceptors(FileInterceptor('file'))
     create(
@@ -30,12 +35,10 @@ export class MealController {
         return this._mealService.getAllMeals(getMealByCategory.categoryId);
     }
 
-
     @Delete(':MealId')
     delete(@Param('MealId')deleteMealDto:DeleteMealDto, @GetUser() user ){
         return this._mealService.delete(deleteMealDto.MealId,user)
-    }
-
+    }1
 
     @Put(':MealId')
     update(@Param('MealId') updateMealDto:UpdateMealDto,@GetUser() user){
@@ -46,4 +49,6 @@ export class MealController {
     findMealImage(@Param() id:FindMealDto){
         return this._mealService.findMealImage(id)
     }
+
+
 }
