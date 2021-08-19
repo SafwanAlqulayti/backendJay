@@ -1,6 +1,6 @@
 
 import { AbstractEntity } from 'src/common/abstract.entity';
-import { Column, Entity, ManyToOne, OneToMany, OneToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne } from 'typeorm';
 import { CategoryEntity } from './category.entity';
 import { Order } from './order.entity';
 import { RestaurantCashire } from './restaurant-cashire.entity';
@@ -20,17 +20,17 @@ export class RestaurantEntity extends AbstractEntity {
   @ManyToOne(() => UserEntity, (userEntity: UserEntity) => userEntity.id)
   userId: UserEntity
 
-  @OneToMany(() => RestaurantBranchEntity, (restaurantBranchEntity: RestaurantBranchEntity) => restaurantBranchEntity.restaurant)
-  restaurantBranches: RestaurantBranchEntity[]
+ 
 
   @OneToOne(type => RestaurantCashire, RestaurantCashire => RestaurantCashire.Restaurant)
   RestaurantCashire: RestaurantCashire
+
+
+
+
+  @OneToMany(type=>RestaurantBranchEntity , RestaurantBranchEntity=>RestaurantBranchEntity.restaurant)
+  RestaurantBranchEntity:RestaurantBranchEntity[]
 }
-
-
-
-  // @OneToMany(type=>CategoryEntity , categoryEntity=>categoryEntity.Restaurant)
-  // categoryEntity:CategoryEntity[]
     // @OneToOne(type=>User,CASHIER=>CASHIER.Restaurant)
  // CASHIER:User;
 

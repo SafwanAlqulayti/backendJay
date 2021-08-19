@@ -116,13 +116,14 @@ export class RestaurantService {
 
   async getAllRestaurant(user: UserLatLongDto, query: UserLatLongDto) {
     let restaurnats = await this._restaurantRepository.createQueryBuilder("restaurant")
-      .innerJoinAndSelect("restaurant.restaurantBranches", "RestaurantBranchEntity")
+      .innerJoinAndSelect("restaurant.RestaurantBranchEntity", "RestaurantBranchEntity")
       .getMany();
-
+ 
     if (query.long && query.lat) {
-      restaurnats.map(async (restaurant: RestaurantEntity & { restaurantBranches?: any[] }) => {
-        restaurant.restaurantBranches.map(async (restaurantBranch: RestaurantBranchEntity & { distance: number }) => {
+      restaurnats.map(async (restaurant: RestaurantEntity ) => {
+        restaurant.RestaurantBranchEntity.map(async (restaurantBranch: RestaurantBranchEntity & { distance: number }) => {
           restaurantBranch.distance = await this._geoLocationService.getDistanceFromLatLonInKm(query.lat, query.long, restaurantBranch.latitude, restaurantBranch.longitude)
+          console.log( restaurantBranch.distance)
         })
         await this.sortByKey(restaurnats, 'distance')
 

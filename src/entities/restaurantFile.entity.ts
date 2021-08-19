@@ -1,5 +1,5 @@
 import { Json } from "aws-sdk/clients/robomaker";
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { RestaurantEntity } from "./restaurant.entity";
 import { RestaurantBranchEntity } from "./restaurantBranch.entity";
 
@@ -17,7 +17,8 @@ export class RestaurantFileEntity {
     mainCourse:boolean;
     @Column({nullable:true})
     bucket:string;
-    // @OneToMany(()=>RestaurantBranchEntity ,(restaurantBranchEntity:RestaurantBranchEntity)=> restaurantBranchEntity.id)
-    // restaurantBranches:RestaurantBranchEntity[];
+    @OneToMany(()=>RestaurantBranchEntity ,(restaurantBranchEntity:RestaurantBranchEntity)=> restaurantBranchEntity.id)
+    @JoinColumn({name:"restaurantBranches"})
+    restaurantBranches:RestaurantBranchEntity[];
     
 }

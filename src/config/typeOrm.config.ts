@@ -45,11 +45,11 @@ import { env } from 'node:process';
 // const dbConfig = config.get('db');
 export const typeOrm: TypeOrmModuleOptions = {
   type: 'postgres',
-  port: Number(process.env.DB_PORT),
-  database: 'jay-new',
-  host: process.env.DB_HOST,
-  username:  'postgres',//process.env.DB_USERNAME,
-  password:'postgres', //process.env.DB_PASSWORD,
+  port: 5432,
+  database: 'jay-test',
+  host: "127.0.0.1",
+  username:  'postgres',
+  password: '123456',
   entities: [__dirname + '/../**/*.entity{.ts,.js}'],
   synchronize: true,
   migrations: ['../../src/migrations/*{.ts,.js}'],

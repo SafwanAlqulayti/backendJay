@@ -41,7 +41,7 @@ export class RestaurantController {
   }
 
   @Post('upload-main-image')
-  @UseInterceptors(FileInterceptor('file'))
+  //@UseInterceptors(FileInterceptor('file'))
   uploudFile(@UploadedFile() file, @Body() data: AddResturantMainImageDto) {
     return this.restaurantService.addResturantMainImage(file, data);
   }
