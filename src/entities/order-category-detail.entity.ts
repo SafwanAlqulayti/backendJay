@@ -12,11 +12,8 @@ export class OrderCategoryDetail extends AbstractEntity {
     @Column({nullable:true})
     price:string;
 
-  
-
     @ManyToOne(()=> OrderCategory ,(OrderCategory:OrderCategory)=>OrderCategory.id)
     @JoinColumn()
     OrderCategory:OrderCategory
-
     
 }

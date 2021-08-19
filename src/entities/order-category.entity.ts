@@ -21,6 +21,6 @@ export class OrderCategory extends AbstractEntity {
     @JoinColumn()
     MealEntity:MealEntity
 
-    @OneToMany(()=> OrderCategoryDetail ,(OrderCategoryDetail:OrderCategoryDetail)=>OrderCategoryDetail.id)
+    @OneToMany(()=> OrderCategoryDetail ,(OrderCategoryDetail:OrderCategoryDetail)=>OrderCategoryDetail.OrderCategory)
     OrderCategoryDetail:OrderCategoryDetail
 }

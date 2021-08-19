@@ -34,10 +34,10 @@ export class MealEntity extends AbstractEntity {
     CategoryId: CategoryEntity
 
 
-    @OneToMany(() => OrderCategory, (OrderCategory: OrderCategory) => OrderCategory.id)
+    @OneToMany(() => OrderCategory, (OrderCategory: OrderCategory) => OrderCategory.order)
     OrderId: OrderCategory
 
-    @ManyToMany(() => Order, (order:Order) => order.id )
+//    @ManyToMany(() => Order, (order:Order) => order.id )
 
     @ManyToMany(() =>  Order, (order:Order) => order.meals )
     @JoinTable({

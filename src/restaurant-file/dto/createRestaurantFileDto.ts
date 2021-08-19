@@ -12,4 +12,8 @@ export class CreateRestaurantFileDto{
     @IsOptional()
     @IsBoolean()
     mainCourse?:boolean;
+
+    @IsNotEmpty()
+    @IsString()
+    restaurantBranchId?:string;
 }

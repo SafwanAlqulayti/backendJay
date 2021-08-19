@@ -1,3 +1,44 @@
+// import { TypeOrmModuleOptions } from '@nestjs/typeorm'
+// import * as config from 'config';
+// import { env } from 'node:process';
+// // const dbConfig = config.get('db');
+// export const typeOrm: TypeOrmModuleOptions = {
+//   type: 'postgres',
+//   port: Number(process.env.DB_PORT),
+//   database: 'Jay',
+//   host: process.env.DB_HOST,
+//   username:  'postgres',
+//   password: 'Mm121212',
+//   entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+//   synchronize: true,
+//   migrations: ['../../src/migrations/*{.ts,.js}'],
+//   logging:true,
+//   cli: {
+//     migrationsDir: '../../src/migrations'
+//   },
+// }
+
+// import { TypeOrmModuleOptions } from '@nestjs/typeorm'
+// import * as config from 'config';
+// import { env } from 'node:process';
+// // const dbConfig = config.get('db');
+// export const typeOrm: TypeOrmModuleOptions = {
+//   type: 'postgres',
+//   port: Number(process.env.DB_PORT),
+//   database: 'Jay',
+//   host: process.env.DB_HOST,
+//   username:  'postgres',
+//   password: 'Mm121212',
+//   entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+//   synchronize: true,
+//   migrations: ['../../src/migrations/*{.ts,.js}'],
+//   logging:true,
+//   cli: {
+//     migrationsDir: '../../src/migrations'
+//   },
+// }
+// //
+
 import { TypeOrmModuleOptions } from '@nestjs/typeorm'
 import * as config from 'config';
 import { env } from 'node:process';
@@ -5,10 +46,10 @@ import { env } from 'node:process';
 export const typeOrm: TypeOrmModuleOptions = {
   type: 'postgres',
   port: Number(process.env.DB_PORT),
-  database: 'Jay',
+  database: 'jay-new',
   host: process.env.DB_HOST,
-  username:  'postgres',
-  password: 'Mm121212',
+  username:  'postgres',//process.env.DB_USERNAME,
+  password:'postgres', //process.env.DB_PASSWORD,
   entities: [__dirname + '/../**/*.entity{.ts,.js}'],
   synchronize: true,
   migrations: ['../../src/migrations/*{.ts,.js}'],
@@ -17,3 +58,4 @@ export const typeOrm: TypeOrmModuleOptions = {
     migrationsDir: '../../src/migrations'
   },
 }
+

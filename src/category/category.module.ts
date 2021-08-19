@@ -5,10 +5,14 @@ import { AuthModule } from 'src/auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {CategoryRepo} from './category.repository'
 import { RestaurantModule } from 'src/restaurant/restaurant.module';
+import { RestaurantBranchEntity } from 'src/entities/restaurantBranch.entity';
+import { RestaurantRestaurantBranchModule } from 'src/branch/branch.module';
 
 @Module({
 
-  imports:[AuthModule,RestaurantModule , TypeOrmModule.forFeature([CategoryRepo])],
+  imports:[AuthModule,RestaurantModule , TypeOrmModule.forFeature([CategoryRepo]),
+RestaurantRestaurantBranchModule
+],
   controllers: [CategoryController],
   providers: [CategoryService],
   exports:[CategoryService]

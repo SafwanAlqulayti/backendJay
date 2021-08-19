@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { UUID } from 'aws-sdk/clients/inspector';
 import { UserRole } from 'src/auth/user-role.enum';
+import { BranchService } from 'src/branch/branch.service';
 import { CategoryEntity } from 'src/entities/category.entity';
 import { RestaurantService } from 'src/restaurant/restaurant.service';
 import { EntityRepository } from 'typeorm';
@@ -13,16 +14,18 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 @EntityRepository(CategoryEntity)
 export class CategoryService {
 
-  constructor(private _categoryRepo:CategoryRepo,  private _restaurantService: RestaurantService){}
+  constructor(private _categoryRepo:CategoryRepo,  private _restaurantService: RestaurantService,
+    private _restaurantBranchService:BranchService
+    ){}
   async create(createCategoryDto: CreateCategoryDto) {
 
-    let resturant = await this._restaurantService.findOne({id:createCategoryDto.restaurantEntity});
+    let resturant = await this._restaurantBranchService.findOne(createCategoryDto.restaurantBranchId);
 
     let category = new CategoryEntity();
 
     category.name = createCategoryDto.name;
     category.categoryOrder = createCategoryDto.order;
-    category.Restaurant= resturant;
+    category.restaurantsBranches= resturant;
 
 
 

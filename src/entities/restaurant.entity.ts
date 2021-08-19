@@ -4,45 +4,35 @@ import { Column, Entity, ManyToOne, OneToMany, OneToOne } from 'typeorm';
 import { CategoryEntity } from './category.entity';
 import { Order } from './order.entity';
 import { RestaurantCashire } from './restaurant-cashire.entity';
+import { RestaurantBranchEntity } from './restaurantBranch.entity';
 import { RestaurantFileEntity } from './restaurantFile.entity';
-import {  UserEntity } from './user.entity';
+import { UserEntity } from './user.entity';
 
 @Entity()
 export class RestaurantEntity extends AbstractEntity {
 
-  @Column({nullable:false})
+  @Column({ nullable: false })
   name: string;
 
-  @Column({nullable:false})
+  @Column({ nullable: false })
   kind: string;
 
-  @Column({nullable:true})
-  rate: string;
+  @ManyToOne(() => UserEntity, (userEntity: UserEntity) => userEntity.id)
+  userId: UserEntity
 
-  @Column({nullable:true})
-  latitude: string;
+  @OneToMany(() => RestaurantBranchEntity, (restaurantBranchEntity: RestaurantBranchEntity) => restaurantBranchEntity.restaurant)
+  restaurantBranches: RestaurantBranchEntity[]
 
-  @Column({nullable:true})
-  longitude: string;
+  @OneToOne(type => RestaurantCashire, RestaurantCashire => RestaurantCashire.Restaurant)
+  RestaurantCashire: RestaurantCashire
+}
 
-  @Column({nullable:true})
-  image: string;
 
-  // @OneToOne(type=>User,CASHIER=>CASHIER.Restaurant)
+
+  // @OneToMany(type=>CategoryEntity , categoryEntity=>categoryEntity.Restaurant)
+  // categoryEntity:CategoryEntity[]
+    // @OneToOne(type=>User,CASHIER=>CASHIER.Restaurant)
  // CASHIER:User;
 
-  @ManyToOne(()=>RestaurantFileEntity ,(restaurantFile:RestaurantFileEntity)=> restaurantFile.id)
-  restaurantFile:RestaurantFileEntity;
-
-  @ManyToOne(()=>UserEntity ,(userEntity:UserEntity)=> userEntity.id)
-  userId:UserEntity
-
-  @OneToMany(type=>Order,Order=>Order.restaurant)
-  Order:Order[]
-
-  @OneToMany(type=>CategoryEntity , categoryEntity=>categoryEntity.Restaurant)
-  categoryEntity:CategoryEntity[]
-
-  @OneToOne(type=>RestaurantCashire,RestaurantCashire=>RestaurantCashire.Restaurant)
-  RestaurantCashire:RestaurantCashire
-}
+  // @ManyToOne(()=>RestaurantFileEntity ,(restaurantFile:RestaurantFileEntity)=> restaurantFile)
+  // restaurantFile:RestaurantFileEntity;

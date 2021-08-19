@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { RestauranFileRepository } from './restauranFileRepository';
 import { AuthModule } from 'src/auth/auth.module';
 import { RestaurantModule } from 'src/restaurant/restaurant.module';
+import { RestaurantRestaurantBranchModule } from 'src/branch/branch.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { RestaurantModule } from 'src/restaurant/restaurant.module';
     //   secretKey: process.env.MINIO_SECRETKEY
     //   }),  
     TypeOrmModule.forFeature([RestauranFileRepository]),
+    RestaurantRestaurantBranchModule
   ],
   providers: [RestaurantFileService],
   controllers: [RestaurantFileController],

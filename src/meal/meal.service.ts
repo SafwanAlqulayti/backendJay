@@ -12,6 +12,7 @@ import { RestaurantService } from 'src/restaurant/restaurant.service';
 import { FindConditions } from 'typeorm';
 import { FindMealDto } from './dto/findMealDto';
 import { CategoryEntity } from 'src/entities/category.entity';
+import { BranchService } from 'src/branch/branch.service';
 
 @Injectable()
 export class MealService {
@@ -19,7 +20,7 @@ export class MealService {
         private _mealRepositroy: MealRepository,
         private _categoryService: CategoryService,
         private _minioService: MinioClientService,
-        private _restaurantService: RestaurantService
+        private _restaurantBranchService: BranchService
 
 
     ) { }
@@ -29,7 +30,7 @@ export class MealService {
 
 
 
-        let resturant = await this._restaurantService.findOne({id:categoryWithResturant[0].Restaurant.id})
+        //let resturant = await this._restaurantBranchService.findOne({id:categoryWithResturant[0].Restaurant.id})
 
         let randomId = (Math.floor(1000 + Math.random() * 9000)).toString()
 

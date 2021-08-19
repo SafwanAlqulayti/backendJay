@@ -4,6 +4,7 @@ import { UserEntity } from "./user.entity";
 import { OrderStatus } from "src/constants/order-status";
 import { AbstractEntity } from "src/common/abstract.entity";
 import { MealEntity } from "./meal.entity";
+import { RestaurantBranchEntity } from "./restaurantBranch.entity";
 
 
 
@@ -22,9 +23,9 @@ export class Order extends AbstractEntity {
     })
     status: OrderStatus;
 
-    @ManyToOne(tyoe => RestaurantEntity, Restaurant => Restaurant.Order)
+    @ManyToOne(tyoe => RestaurantBranchEntity, RestaurantBranchEntity => RestaurantBranchEntity.Order)
     @JoinColumn()
-    restaurant: RestaurantEntity
+    restaurantBranch: RestaurantBranchEntity
 
     @ManyToOne(tyoe => UserEntity, User => User.Order)
     @JoinColumn()

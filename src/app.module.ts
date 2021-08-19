@@ -18,10 +18,7 @@ import messagebird from 'messagebird'
 import { OrderModule } from './order/order.module';
 import { MiddlewareConsumer } from '@nestjs/common';
 import { AppLoggerMiddleware } from './middleware/loggerMiddleware';
-import { BranchModule } from './branch/branch.module';
-
-
-
+import { RestaurantRestaurantBranchModule } from './branch/branch.module';
 
 @Module({
   imports: [
@@ -32,7 +29,7 @@ import { BranchModule } from './branch/branch.module';
     TypeOrmModule.forRoot(typeOrm), RestaurantModule, RestaurantFileModule, MealModule, CategoryModule, OrderCategoryModule, OrderCategoryDetailModule, MinioModulee, UserRepository, SharedModule,
     RestaurantModule, RestaurantFileModule, MealModule, CategoryModule, OrderCategoryModule, OrderCategoryDetailModule, MinioModulee, UserRepository,
     OrderModule,
-    BranchModule
+    RestaurantRestaurantBranchModule
   ],
   controllers: [AppController],
   providers: [AppService],
