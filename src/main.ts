@@ -12,7 +12,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.use(morgan('tiny'));
   app.enableCors()
-  await app.listen(3000)
+  await app.listen(3001)
 
   console.log('port:3000')
 }
