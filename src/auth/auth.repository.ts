@@ -21,7 +21,6 @@ export class UserRepository extends Repository<UserEntity> {
       throw new BadRequestException('You are already have an account');
     }
   }
-
     if (findUser) {
       findUser.verifyCode = (Math.floor(1000 + Math.random() * 9000)).toString()
       await this.save(findUser);
@@ -58,7 +57,7 @@ export class UserRepository extends Repository<UserEntity> {
   async signIn(createAuthDto: SignInDto) {
     const { email, password } = createAuthDto;
     const UserEntity = await this.findOne({ email: email });
-
+    console.log('here')
     if (UserEntity) {
       let x = await UserEntity.validateLogin(password);
       if (x) {

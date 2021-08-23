@@ -9,14 +9,17 @@ import { OrderStatus } from "src/constants/order-status";
 import { HistroyOrderDto } from './dto/history.order.dto';
 import { MealEntity } from 'src/entities/meal.entity';
 import { MealService } from 'src/meal/meal.service';
+import { BranchService } from 'src/branch/branch.service';
+import { OrderDetailDto } from './dto/orderDto';
 
 @Injectable()
 export class OrderService {
   constructor(
     private _orderRepo: OrderRepository,
     private _authService: AuthService,
-    private _estaurantService: RestaurantService,
-    private _mealService:MealService
+    private _restaurantService: RestaurantService,
+    private _mealService:MealService,
+    private _restaurantBranchService:BranchService
   ) { }
 
   async create(createOrderDto: CreateOrderDto): Promise<Order> {
@@ -25,13 +28,15 @@ export class OrderService {
     if (!user) {
       throw new BadRequestException()
     }
-    let restaurant = await this._estaurantService.findOne({ id: createOrderDto.restaurantId })//check restauran staus befoure order
+    let restaurantBranch = await this._restaurantBranchService.findOne(createOrderDto.restaurantBranchId)
+    //let restaurant = await this._restaurantService.findOne({ id: createOrderDto.restaurantId })//check restauran staus befoure order
     let order = new Order();
     order.price = createOrderDto.price;
     order.user = user,
-    order.restaurant = restaurant,
+    order.restaurantBranch = restaurantBranch,
     order.status = OrderStatus.OPENED,
     order.meals = meals
+    order.restaurantBranch = restaurantBranch
     console.log('start///////////////');
     console.log(order)
     return this._orderRepo.save(order)
@@ -39,12 +44,16 @@ export class OrderService {
 
   async historyOrder(histroyOrderDto: HistroyOrderDto) {
     let orders = await this._orderRepo.find({
-      where: { user: histroyOrderDto.userId, status: OrderStatus.COMPLATED }, relations: ['restaurant','meals']
+      where: { user: histroyOrderDto.userId, status: OrderStatus.COMPLATED }, relations: ['restaurantBranch','meals']
     })
     if (orders.length < 1) {
       return { message: "no order for this user yet" }
     }
     return orders
+  }
+
+  async orderDetail(orderDetailDto:OrderDetailDto){
+    return await this._orderRepo.findOne({where:{id:orderDetailDto.orderId},relations:['meals']})
   }
 }
 

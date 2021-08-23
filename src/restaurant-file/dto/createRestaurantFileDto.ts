@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { IsBoolean, IsNotEmpty, IsOptional, IsString } from "class-validator";
 
 export class CreateRestaurantFileDto{
     @IsNotEmpty()
@@ -8,4 +8,12 @@ export class CreateRestaurantFileDto{
     @IsNotEmpty()
     @IsString()
     restaurantId:string;
+
+    @IsOptional()
+    @IsBoolean()
+    mainCourse?:boolean;
+
+    @IsNotEmpty()
+    @IsString()
+    restaurantBranchId?:string;
 }

@@ -3,6 +3,7 @@ import { AbstractEntity } from 'src/common/abstract.entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne } from 'typeorm';
 import { MealEntity } from './meal.entity';
 import { RestaurantEntity } from './restaurant.entity';
+import { RestaurantBranchEntity } from './restaurantBranch.entity';
 
 
 @Entity()
@@ -12,14 +13,13 @@ export class CategoryEntity extends AbstractEntity {
   name: string;
 
   @Column({ nullable: true })
-  order: string;
+  categoryOrder: string;
 
-
-  @ManyToOne(type => RestaurantEntity, Restaurant => Restaurant.categoryEntity)
+  @ManyToOne(type => RestaurantBranchEntity, restaurantBranchEntity => restaurantBranchEntity.categories)
   @JoinColumn()
-  Restaurant: RestaurantEntity
-
+  restaurantsBranches: RestaurantBranchEntity
 
   @OneToMany(() => MealEntity, (MealEntity: MealEntity) => MealEntity.id)
+  @JoinColumn({name:'mealId'})
   MealEntity: MealEntity
 }      

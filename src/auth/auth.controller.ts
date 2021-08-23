@@ -11,7 +11,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) { }
 
   @Post('/signUp')
-  signUp(@Body() createAuthDto: CreateAuthDto): Promise<any> {
+  createUserAndSendOTPMassege(@Body() createAuthDto: CreateAuthDto): Promise<any> {
     return this.authService.signUp(createAuthDto);
   }
 

@@ -3,6 +3,7 @@ import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { HistroyOrderDto } from './dto/history.order.dto';
+import { OrderDetailDto } from './dto/orderDto';
 
 @Controller('order')
 export class OrderController {
@@ -18,5 +19,8 @@ export class OrderController {
     return this.orderService.historyOrder(id);
   }
 
- 
+  @Get('detail/:orderId')
+  getOrderDetail(@Param() orderDetailDto:OrderDetailDto){
+    return this.orderService.orderDetail(orderDetailDto)
+  }  
 }

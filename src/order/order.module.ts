@@ -6,12 +6,14 @@ import { OrderRepository } from './order.repository';
 import { AuthModule } from 'src/auth/auth.module';
 import { RestaurantModule } from 'src/restaurant/restaurant.module';
 import { MealModule } from 'src/meal/meal.module';
+import { RestaurantRestaurantBranchModule } from 'src/branch/branch.module';
 
 @Module({
   imports:[TypeOrmModule.forFeature([OrderRepository]),
   AuthModule,
   RestaurantModule,
-  MealModule
+  MealModule,
+  RestaurantRestaurantBranchModule
 ],
   controllers: [OrderController],
   providers: [OrderService]

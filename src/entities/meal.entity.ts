@@ -31,14 +31,13 @@ export class MealEntity extends AbstractEntity {
 
 
     @ManyToOne(() => CategoryEntity, (CategoryEntity: CategoryEntity) => CategoryEntity.id)
-    @JoinColumn()
     CategoryId: CategoryEntity
 
 
-    @OneToMany(() => OrderCategory, (OrderCategory: OrderCategory) => OrderCategory.id)
+    @OneToMany(() => OrderCategory, (OrderCategory: OrderCategory) => OrderCategory.order)
     OrderId: OrderCategory
 
-    @ManyToMany(() => Order, (order:Order) => order.id )
+//    @ManyToMany(() => Order, (order:Order) => order.id )
 
     @ManyToMany(() =>  Order, (order:Order) => order.meals )
     @JoinTable({

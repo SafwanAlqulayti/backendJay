@@ -6,7 +6,7 @@ export class CreateOrderDto {
 
     @IsNotEmpty()
     @IsUUID()
-    restaurantId:string;
+    restaurantBranchId:string;
 
     @IsNotEmpty()
     @IsUUID()

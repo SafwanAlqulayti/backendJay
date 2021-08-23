@@ -14,8 +14,12 @@ import { RestaurantRepository } from './restaurantRepository';
 import { getConnection } from 'typeorm';
 import { UUID } from 'aws-sdk/clients/inspector';
 import { MinioClientService } from 'src/minio/minio.service';
+import { GeoLocationService } from 'src/shared/services/location';
+import { UserEntity } from 'src/entities/user.entity';
+import { UserLatLongDto } from './dto/userLatLongDto';
 import { AddResturantMainImageDto } from './dto/addRestauranMainImage';
 import { FindRestauranDto } from './dto/findRestaurantDto';
+import { RestaurantBranchEntity } from 'src/entities/restaurantBranch.entity';
 
 // import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
 
@@ -26,24 +30,25 @@ export class RestaurantService {
     private _restaurantRepository: RestaurantRepository,
     private _authService: AuthService,
     private _minioService: MinioClientService,
-  ) {}
+    private _geoLocationService: GeoLocationService
+  ) { }
 
   async create(createRestaurantDto: CreateRestaurantDto, user, file) {
     let resturant = new RestaurantEntity();
     resturant.kind = createRestaurantDto.kind;
     resturant.name = createRestaurantDto.name;
-    resturant.rate = createRestaurantDto.rate;
-    resturant.latitude = createRestaurantDto.latitude;
-    resturant.longitude = createRestaurantDto.longitude;
-    resturant.image = '';
+    // resturant.rate = createRestaurantDto.rate;
+    // resturant.latitude = createRestaurantDto.latitude;
+    // resturant.longitude = createRestaurantDto.longitude;
+    // resturant.image = '';
     resturant.userId = user.id;
     await this._restaurantRepository.save(resturant);
 
-    let result = await this._minioService.putOpject(createRestaurantDto.Bucket ,file,resturant.id)
+    let result = await this._minioService.putOpject(createRestaurantDto.Bucket, file, resturant.id)
 
     console.log(result);
 
-    resturant.image = result.url;  
+    //resturant.image = result.url;  
     await this._restaurantRepository.save(resturant);
 
 
@@ -63,7 +68,7 @@ export class RestaurantService {
       addResturantMainImageDto.bucket,
       restaurant.id,
     );
-    restaurant.image = result.url;
+    //restaurant.image = result.url;
     return this._restaurantRepository.save(restaurant);
   }
 
@@ -109,15 +114,28 @@ export class RestaurantService {
     });
   }
 
- async getAllRestaurant() {
-    return await this._restaurantRepository.find();
-  }
+  async getAllRestaurant(user: UserLatLongDto, query: UserLatLongDto) {
+    let restaurnats = await this._restaurantRepository.createQueryBuilder("restaurant")
+      .innerJoinAndSelect("restaurant.RestaurantBranchEntity", "RestaurantBranchEntity")
+      .getMany();
+ 
+    if (query.long && query.lat) {
+      restaurnats.map(async (restaurant: RestaurantEntity ) => {
+        restaurant.RestaurantBranchEntity.map(async (restaurantBranch: RestaurantBranchEntity & { distance: number }) => {
+          restaurantBranch.distance = await this._geoLocationService.getDistanceFromLatLonInKm(query.lat, query.long, restaurantBranch.latitude, restaurantBranch.longitude)
+          console.log( restaurantBranch.distance)
+        })
+        await this.sortByKey(restaurnats, 'distance')
 
-  async getRestauranMainImage(findRestauranDto: FindRestauranDto) {
-    let restaurant = await this._restaurantRepository.findOne({
-      id: findRestauranDto.restaurantId,
+      });
+    }
+    return restaurnats
+  }
+  sortByKey(array, key) {
+    return array.sort(function (a, b) {
+      var x = a[key]; var y = b[key];
+      return ((x < y) ? -1 : ((x > y) ? 1 : 0));
     });
-    return restaurant.image;
   }
 
   // update(id: number, updateRestaurantDto: UpdateRestaurantDto) {
@@ -128,7 +146,10 @@ export class RestaurantService {
     return `This action removes a #${id} restaurant`;
   }
 
-  async findOne(
+  findOne(findData: FindConditions<RestaurantEntity>): Promise<RestaurantEntity> {
+    return this._restaurantRepository.findOne(findData);
+  }
+  async findOne1(
     findData: FindConditions<RestaurantEntity>,
   ): Promise<RestaurantEntity> {
     let restaurant = await this._restaurantRepository.findOne(findData);

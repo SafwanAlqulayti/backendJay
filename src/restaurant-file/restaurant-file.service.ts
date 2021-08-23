@@ -3,9 +3,11 @@ import { S3 } from 'aws-sdk';
 import { InjectS3 } from 'nestjs-s3';
 import { userInfo } from 'node:os';
 import { AuthService } from 'src/auth/auth.service';
+import { BranchService } from 'src/branch/branch.service';
 import { RestaurantEntity } from 'src/entities/restaurant.entity';
 import { RestaurantFileEntity } from 'src/entities/restaurantFile.entity';
 import { RestaurantService } from 'src/restaurant/restaurant.service';
+import { In } from 'typeorm';
 import { BucketDto } from './dto/bucketDto';
 import { CreateRestaurantFileDto } from './dto/createRestaurantFileDto';
 import { RestauranFileRepository } from './restauranFileRepository';
@@ -17,7 +19,10 @@ export class RestaurantFileService {
     @InjectS3() private readonly s3: S3,
     private _restauranFileRepository: RestauranFileRepository,
     private _authService: AuthService,
+    private _restaurantBranchService: BranchService,
     private _restaurantService: RestaurantService,
+
+    
   ) {}
   //   async upload(file){
   //       let test = new RestaurantFileEntity
@@ -30,9 +35,7 @@ export class RestaurantFileService {
   public bucket = process.env.MINIO_BUCKET;
 
   async putOpject(file, createRestaurantFileDto: CreateRestaurantFileDto) {
-    let resturant = await this._restaurantService.findOne({
-      id: createRestaurantFileDto.restaurantId,
-    });
+    let resturant = await this._restaurantBranchService.findOne(createRestaurantFileDto.restaurantBranchId)
     let key = await new Date().getTime().toString();
     let params = {
       Bucket: createRestaurantFileDto.bucket,
@@ -41,8 +44,9 @@ export class RestaurantFileService {
     };
 
     let restaurantFile = new RestaurantFileEntity();
-    restaurantFile.restaurants.push(resturant);
+    // restaurantFile.restaurantBranches.push(resturant);
     restaurantFile.bucket = createRestaurantFileDto.bucket;
+    restaurantFile.mainCourse = createRestaurantFileDto.mainCourse ? true :false
 
     await this._restauranFileRepository.save(restaurantFile);
     return await this.uploud(params);

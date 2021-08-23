@@ -6,11 +6,15 @@ import { MealRepository } from './mealRepository';
 import { RestaurantModule } from 'src/restaurant/restaurant.module';
 import { CategoryModule } from 'src/category/category.module';
 import { MinioModulee } from 'src/minio/minio.module';
+import { RestaurantBranchEntity } from 'src/entities/restaurantBranch.entity';
+import { RestaurantRestaurantBranchModule } from 'src/branch/branch.module';
 
 @Module({
   imports:[RestaurantModule,CategoryModule ,
     MinioModulee,
-    RestaurantModule, 
+    RestaurantModule,
+    RestaurantBranchEntity, 
+    RestaurantRestaurantBranchModule,
     TypeOrmModule.forFeature([MealRepository])],
   providers: [MealService],
   controllers: [MealController],

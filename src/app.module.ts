@@ -13,24 +13,30 @@ import { OrderCategoryModule } from './order-category/order-category.module';
 import { OrderCategoryDetailModule } from './order-category-detail/order-category-detail.module';
 import { MinioModulee } from './minio/minio.module';
 import { UserRepository } from './auth/auth.repository';
+import { SharedModule } from './shared/shared.module';
 import messagebird from 'messagebird'
 import { OrderModule } from './order/order.module';
-
-
-
+import { MiddlewareConsumer } from '@nestjs/common';
+import { AppLoggerMiddleware } from './middleware/loggerMiddleware';
+import { RestaurantRestaurantBranchModule } from './branch/branch.module';
 
 @Module({
-  imports: [   
+  imports: [
     ConfigModule.forRoot({
-    envFilePath: '.development.env',
-  }),
+      envFilePath: '.development.env',
+    }),
     AuthModule,
-    TypeOrmModule.forRoot(typeOrm),
-     RestaurantModule, RestaurantFileModule, MealModule, CategoryModule, OrderCategoryModule, OrderCategoryDetailModule, MinioModulee,UserRepository,
-     OrderModule
+    TypeOrmModule.forRoot(typeOrm), RestaurantModule, RestaurantFileModule, MealModule, CategoryModule, OrderCategoryModule, OrderCategoryDetailModule, MinioModulee, UserRepository, SharedModule,
+    RestaurantModule, RestaurantFileModule, MealModule, CategoryModule, OrderCategoryModule, OrderCategoryDetailModule, MinioModulee, UserRepository,
+    OrderModule,
+    RestaurantRestaurantBranchModule
   ],
   controllers: [AppController],
   providers: [AppService],
 
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer): void {
+    consumer.apply(AppLoggerMiddleware).forRoutes('*');
+  }
+ }

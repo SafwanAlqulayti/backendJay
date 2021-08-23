@@ -11,6 +11,8 @@ import { MinioClientService } from 'src/minio/minio.service';
 import { RestaurantService } from 'src/restaurant/restaurant.service';
 import { FindConditions } from 'typeorm';
 import { FindMealDto } from './dto/findMealDto';
+import { CategoryEntity } from 'src/entities/category.entity';
+import { BranchService } from 'src/branch/branch.service';
 
 @Injectable()
 export class MealService {
@@ -18,7 +20,7 @@ export class MealService {
         private _mealRepositroy: MealRepository,
         private _categoryService: CategoryService,
         private _minioService: MinioClientService,
-        private _restaurantService: RestaurantService
+        private _restaurantBranchService: BranchService
 
 
     ) { }
@@ -28,7 +30,7 @@ export class MealService {
 
 
 
-        let resturant = await this._restaurantService.findOne({id:categoryWithResturant[0].Restaurant.id})
+        //let resturant = await this._restaurantBranchService.findOne({id:categoryWithResturant[0].Restaurant.id})
 
         let randomId = (Math.floor(1000 + Math.random() * 9000)).toString()
 
@@ -53,9 +55,17 @@ export class MealService {
         return z
     }
 
-    async findMeal(id) {
-        return await this._mealRepositroy.findOne(id);
+    async findMeal(mealId) {
+        return this._mealRepositroy.createQueryBuilder('meal')
+        .select(['meal.id','meal.image','meal.price','RestaurantEntity.id','RestaurantEntity.name','RestaurantEntity.rate','CategoryEntity.id'])
+        .leftJoin('meal.CategoryId', 'CategoryEntity')
+        .leftJoin('CategoryEntity.Restaurant', 'RestaurantEntity')
+
+        .where({id:mealId})
+        .getOne()
+       // return  this._mealRepositroy.findOne({id:mealId});
     }
+    
     async findMealImage(findMealDto:FindMealDto) {
         let meal = await this.findOne({id:findMealDto.mealId})
         return meal.image

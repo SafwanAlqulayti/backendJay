@@ -10,21 +10,17 @@ export class OrderCategory extends AbstractEntity {
 
     @Column({nullable:true})
     name:string;
-
-
+    
     @Column({nullable:true})
     order:string;
-  
+
+    @Column({nullable:false})
+    isCheckBox:boolean;
 
     @ManyToOne(()=> MealEntity ,(MealEntity:MealEntity)=>MealEntity.id)
     @JoinColumn()
     MealEntity:MealEntity
 
-
-    @OneToMany(()=> OrderCategoryDetail ,(OrderCategoryDetail:OrderCategoryDetail)=>OrderCategoryDetail.id)
+    @OneToMany(()=> OrderCategoryDetail ,(OrderCategoryDetail:OrderCategoryDetail)=>OrderCategoryDetail.OrderCategory)
     OrderCategoryDetail:OrderCategoryDetail
-
-
-
-    
 }
