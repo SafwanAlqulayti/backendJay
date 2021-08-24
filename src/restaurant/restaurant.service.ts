@@ -19,8 +19,10 @@ import { UserEntity } from 'src/entities/user.entity';
 import { UserLatLongDto } from './dto/userLatLongDto';
 import { AddResturantMainImageDto } from './dto/addRestauranMainImage';
 import { FindRestauranDto } from './dto/findRestaurantDto';
-import { RestaurantBranchEntity } from 'src/entities/restaurantBranch.entity';
-import { off } from 'node:process';
+import { sortBy } from 'sort-by-typescript';
+import { firstBy } from "thenby";
+var arraySort = require('array-sort');
+
 
 // import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
 
@@ -115,50 +117,55 @@ export class RestaurantService {
     });
   }
 
-  async getAllRestaurant(user: UserLatLongDto, query: UserLatLongDto):Promise<RestaurantEntity[]> {
-    // return all restaurants to update isClosed based on current time
-    if(query.name){
-      return this._restaurantRepository.createQueryBuilder('restaurant')
-      .where('restaurant.name LIKE :name',{name:`%${query.name}%`})
+  async queryByName(query) {
+    return this._restaurantRepository.createQueryBuilder('restaurant')
+      .where('restaurant.name LIKE :name', { name: `%${query.name}%` })
       .getMany()
-    }
-    let restaurnats = await this._restaurantRepository.createQueryBuilder("restaurant")
-      // .innerJoinAndSelect("restaurant.RestaurantBranchEntity", "RestaurantBranchEntity")
-     .getMany();
-
-      let hour:number = this.checkOpenedRestaurant()
-      let openedRestaurantIds: string[] = []
-      // get the restaurant wich are opend
-      restaurnats.forEach(async (restaurant:RestaurantEntity)=>{
-        if(restaurant.openHour < hour && restaurant.closeHour > hour){
-          openedRestaurantIds.push(restaurant.id)
-        }
-      })
-
-      // git the distance based in the user current long and lat
-    if (query.long && query.lat) {
-      restaurnats.map(async (restaurant: RestaurantEntity & { distance: number }) => {
-        //restaurant.RestaurantBranchEntity.map(async (restaurantBranch: RestaurantBranchEntity & { distance: number }) => {
-        restaurant.distance = await this._geoLocationService.getDistanceFromLatLonInKm(query.lat, query.long, restaurant.latitude, restaurant.longitude)
-      })
-      console.log(restaurnats)
-    }
-
-    // update the restaurant isClose flag
-    await this._restaurantRepository.createQueryBuilder()
-    .update(RestaurantEntity)
-    .where({id:In(openedRestaurantIds)})
-    .set({
-      isClosed:false
-    })
-    .execute()
-    //remove all closed restaurants
-    restaurnats.filter(restaurant => restaurant.isClosed !== true);
-    //sort restaurant by their distance
-    return await this.sortByKey(restaurnats, 'distance')
   }
 
-  sortByKey(array, distance ) {
+  async getAllRestaurant(user: UserLatLongDto, query: UserLatLongDto): Promise<RestaurantEntity[]> {
+    // return all restaurants to update isClosed based on current time
+    if (query.name) {
+      return this.queryByName(query.name)
+    }
+
+    let openedRestaurant: any = await this._restaurantRepository.find({ isClosed: false })
+    // git the distance based in the user current long and lat
+    if (query.long && query.lat) {
+      openedRestaurant.map(async (restaurant: RestaurantEntity & { distance: number }) => {
+        restaurant.distance = await this._geoLocationService.getDistanceFromLatLonInKm(query.lat, query.long, restaurant.latitude, restaurant.longitude)
+      })
+    }
+    // closed restaurants
+    let closedRestaurants = await this._restaurantRepository.find({ isClosed: true })
+    //sort restaurant by their distance
+    await openedRestaurant.sort(firstBy("distance", { direction: "asc" }));
+    openedRestaurant = await openedRestaurant.concat(closedRestaurants)
+    return openedRestaurant
+  }
+
+  async updateRestaurantStatus() {
+    let allRestaurant: any = await this._restaurantRepository.createQueryBuilder("restaurant")
+      .getMany();
+
+    let hour: number = this.checkOpenedRestaurant()
+    let openedRestaurantIds: string[] = []
+    // get restaurants ids which are opend
+    allRestaurant.forEach(async (restaurant: RestaurantEntity) => {
+      if (restaurant.openHour < hour && restaurant.closeHour > hour) {
+        openedRestaurantIds.push(restaurant.id)
+      }
+    })
+    return this._restaurantRepository.createQueryBuilder()
+      .update(RestaurantEntity)
+      .where({ id: In(openedRestaurantIds) })
+      .set({
+        isClosed: true
+      })
+      .execute()
+  }
+
+  sortByKey(array, distance) {
     return array.sort(function (a, b) {
       var x = a[distance]; var y = b[distance];
       return ((x < y) ? -1 : ((x > y) ? 1 : 0));
@@ -190,15 +197,16 @@ export class RestaurantService {
     return this._restaurantRepository.findOne(id);
   }
 
-  checkOpenedRestaurant(){
+  checkOpenedRestaurant() {
     var d = new Date();
     var local = d.getTime();
-    console.log('local',local)
+    console.log('local', local)
     var offset = d.getTimezoneOffset() * (60 * 1000);
-    console.log('offset',offset)
+    console.log('offset', offset)
     var utc = new Date(local + offset);
-    console.log('utc',utc)
-    var riyadh = new Date(utc.getTime() + (3 * 60 * 60 * 1000));    console.log(offset);
+    console.log('utc', utc)
+    var riyadh = new Date(utc.getTime() + (3 * 60 * 60 * 1000)); console.log(offset);
+    console.log(riyadh.getHours())
     return riyadh.getHours()
 
   }
