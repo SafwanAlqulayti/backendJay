@@ -23,9 +23,9 @@ export class Order extends AbstractEntity {
     })
     status: OrderStatus;
 
-    @ManyToOne(tyoe => RestaurantBranchEntity, RestaurantBranchEntity => RestaurantBranchEntity.Order)
+    @ManyToOne(tyoe => RestaurantEntity, restaurantEntity => restaurantEntity.Order)
     @JoinColumn()
-    restaurantBranch: RestaurantBranchEntity
+    restaurant: RestaurantEntity
 
     @ManyToOne(tyoe => UserEntity, User => User.Order)
     @JoinColumn()

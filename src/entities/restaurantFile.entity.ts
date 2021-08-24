@@ -17,8 +17,8 @@ export class RestaurantFileEntity {
     mainCourse:boolean;
     @Column({nullable:true})
     bucket:string;
-    @OneToMany(()=>RestaurantBranchEntity ,(restaurantBranchEntity:RestaurantBranchEntity)=> restaurantBranchEntity.id)
-    @JoinColumn({name:"restaurantBranches"})
-    restaurantBranches:RestaurantBranchEntity[];
+    @OneToMany(()=>RestaurantEntity ,(RestaurantEntity:RestaurantEntity)=> RestaurantEntity.id)
+    @JoinColumn({name:"RestaurantEntity"})
+    RestaurantEntity:RestaurantBranchEntity[];
     
 }

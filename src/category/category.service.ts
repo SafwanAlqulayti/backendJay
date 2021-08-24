@@ -25,7 +25,7 @@ export class CategoryService {
 
     category.name = createCategoryDto.name;
     category.categoryOrder = createCategoryDto.order;
-    category.restaurantsBranches= resturant;
+    category.RestaurantEntity= resturant;
 
 
 

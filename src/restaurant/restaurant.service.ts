@@ -6,7 +6,7 @@ import {
 import { AuthService } from 'src/auth/auth.service';
 import { UserRole } from 'src/auth/user-role.enum';
 import { RestaurantEntity } from 'src/entities/restaurant.entity';
-import { EntityRepository, FindConditions } from 'typeorm';
+import { EntityRepository, FindConditions, In } from 'typeorm';
 import { CreateRestaurantDto } from './dto/create-restaurant.dto';
 import { DeleteRestaurantDto } from './dto/deleteRestaurantDto';
 import { UpdateRestaurantDto } from './dto/updateRestaurantDto';
@@ -20,6 +20,7 @@ import { UserLatLongDto } from './dto/userLatLongDto';
 import { AddResturantMainImageDto } from './dto/addRestauranMainImage';
 import { FindRestauranDto } from './dto/findRestaurantDto';
 import { RestaurantBranchEntity } from 'src/entities/restaurantBranch.entity';
+import { off } from 'node:process';
 
 // import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
 
@@ -114,26 +115,47 @@ export class RestaurantService {
     });
   }
 
-  async getAllRestaurant(user: UserLatLongDto, query: UserLatLongDto) {
+  async getAllRestaurant(user: UserLatLongDto, query: UserLatLongDto):Promise<RestaurantEntity[]> {
+    // return all restaurants to update isClosed based on current time
     let restaurnats = await this._restaurantRepository.createQueryBuilder("restaurant")
-      .innerJoinAndSelect("restaurant.RestaurantBranchEntity", "RestaurantBranchEntity")
+      // .innerJoinAndSelect("restaurant.RestaurantBranchEntity", "RestaurantBranchEntity")
       .getMany();
- 
-    if (query.long && query.lat) {
-      restaurnats.map(async (restaurant: RestaurantEntity ) => {
-        restaurant.RestaurantBranchEntity.map(async (restaurantBranch: RestaurantBranchEntity & { distance: number }) => {
-          restaurantBranch.distance = await this._geoLocationService.getDistanceFromLatLonInKm(query.lat, query.long, restaurantBranch.latitude, restaurantBranch.longitude)
-          console.log( restaurantBranch.distance)
-        })
-        await this.sortByKey(restaurnats, 'distance')
 
-      });
+      let hour:number = this.checkOpenedRestaurant()
+      let openedRestaurantIds: string[] = []
+      // get the restaurant wich are opend
+      restaurnats.forEach(async (restaurant:RestaurantEntity)=>{
+        if(restaurant.openHour < hour && restaurant.closeHour > hour){
+          openedRestaurantIds.push(restaurant.id)
+        }
+      })
+
+      // git the distance based in the user current long and lat
+    if (query.long && query.lat) {
+      restaurnats.map(async (restaurant: RestaurantEntity & { distance: number }) => {
+        //restaurant.RestaurantBranchEntity.map(async (restaurantBranch: RestaurantBranchEntity & { distance: number }) => {
+        restaurant.distance = await this._geoLocationService.getDistanceFromLatLonInKm(query.lat, query.long, restaurant.latitude, restaurant.longitude)
+      })
+      console.log(restaurnats)
     }
-    return restaurnats
+
+    // update the restaurant isClose flag
+    await this._restaurantRepository.createQueryBuilder()
+    .update(RestaurantEntity)
+    .where({id:In(openedRestaurantIds)})
+    .set({
+      isClosed:false
+    })
+    .execute()
+    //remove all closed restaurants
+    restaurnats.filter(restaurant => restaurant.isClosed !== true);
+    //sort restaurant by their distance
+    return await this.sortByKey(restaurnats, 'distance')
   }
-  sortByKey(array, key) {
+
+  sortByKey(array, distance ) {
     return array.sort(function (a, b) {
-      var x = a[key]; var y = b[key];
+      var x = a[distance]; var y = b[distance];
       return ((x < y) ? -1 : ((x > y) ? 1 : 0));
     });
   }
@@ -161,5 +183,18 @@ export class RestaurantService {
 
   findById(id: UUID): Promise<RestaurantEntity> {
     return this._restaurantRepository.findOne(id);
+  }
+
+  checkOpenedRestaurant(){
+    var d = new Date();
+    var local = d.getTime();
+    console.log('local',local)
+    var offset = d.getTimezoneOffset() * (60 * 1000);
+    console.log('offset',offset)
+    var utc = new Date(local + offset);
+    console.log('utc',utc)
+    var riyadh = new Date(utc.getTime() + (3 * 60 * 60 * 1000));    console.log(offset);
+    return riyadh.getHours()
+
   }
 }

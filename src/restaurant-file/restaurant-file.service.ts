@@ -35,7 +35,7 @@ export class RestaurantFileService {
   public bucket = process.env.MINIO_BUCKET;
 
   async putOpject(file, createRestaurantFileDto: CreateRestaurantFileDto) {
-    let resturant = await this._restaurantBranchService.findOne(createRestaurantFileDto.restaurantBranchId)
+    let resturant = await this._restaurantService.findOne({id:createRestaurantFileDto.restaurantId})
     let key = await new Date().getTime().toString();
     let params = {
       Bucket: createRestaurantFileDto.bucket,

@@ -28,15 +28,15 @@ export class OrderService {
     if (!user) {
       throw new BadRequestException()
     }
-    let restaurantBranch = await this._restaurantBranchService.findOne(createOrderDto.restaurantBranchId)
-    //let restaurant = await this._restaurantService.findOne({ id: createOrderDto.restaurantId })//check restauran staus befoure order
+    //let restaurantBranch = await this._restaurantBranchService.findOne(createOrderDto.restaurantId)
+    let restaurant = await this._restaurantService.findOne({ id: createOrderDto.restaurantId })//check restauran staus befoure order
     let order = new Order();
     order.price = createOrderDto.price;
     order.user = user,
-    order.restaurantBranch = restaurantBranch,
+    order.restaurant = restaurant,
     order.status = OrderStatus.OPENED,
     order.meals = meals
-    order.restaurantBranch = restaurantBranch
+    order.restaurant = restaurant
     console.log('start///////////////');
     console.log(order)
     return this._orderRepo.save(order)
@@ -44,7 +44,7 @@ export class OrderService {
 
   async historyOrder(histroyOrderDto: HistroyOrderDto) {
     let orders = await this._orderRepo.find({
-      where: { user: histroyOrderDto.userId, status: OrderStatus.COMPLATED }, relations: ['restaurantBranch','meals']
+      where: { user: histroyOrderDto.userId, status: OrderStatus.COMPLATED }, relations: ['restaurant','meals']
     })
     if (orders.length < 1) {
       return { message: "no order for this user yet" }

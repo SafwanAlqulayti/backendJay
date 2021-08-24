@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsUUID } from "class-validator";
+import { IsNotEmpty, IsNumber, IsString, IsUUID } from "class-validator";
 
 export class CreateRestaurantDto {
 
@@ -38,5 +38,11 @@ export class CreateRestaurantDto {
     @IsString()
     Bucket:string
 
+    @IsNotEmpty()
+    @IsNumber()
+    openHour:number
 
+    @IsNotEmpty()
+    @IsNumber()
+    closeHour:number
 }
