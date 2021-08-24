@@ -6,7 +6,7 @@ import {
 import { AuthService } from 'src/auth/auth.service';
 import { UserRole } from 'src/auth/user-role.enum';
 import { RestaurantEntity } from 'src/entities/restaurant.entity';
-import { EntityRepository, FindConditions, In } from 'typeorm';
+import { EntityRepository, FindConditions, In, Like } from 'typeorm';
 import { CreateRestaurantDto } from './dto/create-restaurant.dto';
 import { DeleteRestaurantDto } from './dto/deleteRestaurantDto';
 import { UpdateRestaurantDto } from './dto/updateRestaurantDto';
@@ -117,9 +117,14 @@ export class RestaurantService {
 
   async getAllRestaurant(user: UserLatLongDto, query: UserLatLongDto):Promise<RestaurantEntity[]> {
     // return all restaurants to update isClosed based on current time
+    if(query.name){
+      return this._restaurantRepository.createQueryBuilder('restaurant')
+      .where('restaurant.name LIKE :name',{name:`%${query.name}%`})
+      .getMany()
+    }
     let restaurnats = await this._restaurantRepository.createQueryBuilder("restaurant")
       // .innerJoinAndSelect("restaurant.RestaurantBranchEntity", "RestaurantBranchEntity")
-      .getMany();
+     .getMany();
 
       let hour:number = this.checkOpenedRestaurant()
       let openedRestaurantIds: string[] = []
