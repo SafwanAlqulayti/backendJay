@@ -19,7 +19,6 @@ import { UserEntity } from 'src/entities/user.entity';
 import { UserLatLongDto } from './dto/userLatLongDto';
 import { AddResturantMainImageDto } from './dto/addRestauranMainImage';
 import { FindRestauranDto } from './dto/findRestaurantDto';
-import { sortBy } from 'sort-by-typescript';
 import { firstBy } from "thenby";
 var arraySort = require('array-sort');
 

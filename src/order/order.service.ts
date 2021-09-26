@@ -11,6 +11,7 @@ import { MealEntity } from 'src/entities/meal.entity';
 import { MealService } from 'src/meal/meal.service';
 import { BranchService } from 'src/branch/branch.service';
 import { OrderDetailDto } from './dto/orderDto';
+import { RestataurantOrdersDto } from './dto/restaurantOrdersDto';
 
 @Injectable()
 export class OrderService {
@@ -54,6 +55,10 @@ export class OrderService {
 
   async orderDetail(orderDetailDto:OrderDetailDto){
     return await this._orderRepo.findOne({where:{id:orderDetailDto.orderId},relations:['meals']})
+  }
+
+  async restaurantOrders(restataurantOrdersDto:RestataurantOrdersDto){
+    return this._orderRepo.find({where:{restaurant:restataurantOrdersDto.restaurantId},relations:["restaurant"]})
   }
 }
 
