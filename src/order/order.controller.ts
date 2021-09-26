@@ -4,6 +4,7 @@ import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { HistroyOrderDto } from './dto/history.order.dto';
 import { OrderDetailDto } from './dto/orderDto';
+import { RestataurantOrdersDto } from './dto/restaurantOrdersDto';
 
 @Controller('order')
 export class OrderController {
@@ -23,4 +24,9 @@ export class OrderController {
   getOrderDetail(@Param() orderDetailDto:OrderDetailDto){
     return this.orderService.orderDetail(orderDetailDto)
   }  
+  
+  @Get('related/:restaurantId')
+  relatedOrders(@Param() restataurantOrdersDto:RestataurantOrdersDto){
+    return this.orderService.restaurantOrders(restataurantOrdersDto)
+  }
 }
