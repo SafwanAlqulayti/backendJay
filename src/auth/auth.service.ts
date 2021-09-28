@@ -1,3 +1,4 @@
+   
 import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UserRepository } from './auth.repository';
@@ -26,20 +27,16 @@ export class AuthService {
   }
 
   async signIn(
-    CreateAdminDto: SignInDto,): Promise<{ accessToken: string }> { 
-      console.log('service')
-   // const User = await this.UserRepository.signIn(CreateAdminDto);
-    const User = await this.UserRepository.findOne({ email: CreateAdminDto.email });
-    if(User){  
+    CreateAdminDto: SignInDto,): Promise<{ accessToken: string }> {
+
+
+    const User = await this.UserRepository.signIn(CreateAdminDto);
+
     if (User.IsActive == false) {
       throw new BadRequestException('Please sign up')
     }
     if (User.email === null) {
       throw new UnauthorizedException('Invalid credentials');
-    }
-  }else{
-      throw new UnauthorizedException('Invalid credentials');
-
     }
     const payload: JwtPayload = { email: User.email, id: User.id, role: User.userRole };
     const accessToken = await this.jwtService.sign(payload);

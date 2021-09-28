@@ -30,7 +30,7 @@ export class MealController {
         return this._mealService.create(file ,createMealDto)
     }
     //All meals that belongs to category id
-    @Get(':categoryId')
+    @Get(':categoryId/category')
     getAllMeals(@Param() getMealByCategory:GetMealByCategory ) {
         return this._mealService.getAllMeals(getMealByCategory.categoryId);
     }

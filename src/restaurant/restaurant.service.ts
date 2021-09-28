@@ -37,21 +37,26 @@ export class RestaurantService {
 
   async create(createRestaurantDto: CreateRestaurantDto, user, file) {
     let resturant = new RestaurantEntity();
+    let userLogged = await this._authService.findOne(user.id)
     resturant.kind = createRestaurantDto.kind;
     resturant.name = createRestaurantDto.name;
-    // resturant.rate = createRestaurantDto.rate;
-    // resturant.latitude = createRestaurantDto.latitude;
-    // resturant.longitude = createRestaurantDto.longitude;
-    // resturant.image = '';
-    resturant.userId = user.id;
+    resturant.rate = createRestaurantDto.rate;
+    resturant.latitude = createRestaurantDto.latitude;
+    resturant.longitude = createRestaurantDto.longitude;
+    resturant.image = '';
+    resturant.userId = user.id
     await this._restaurantRepository.save(resturant);
+    console.log('before image')
+    let mainCourseImage = await this._minioService.putOpject(createRestaurantDto.Bucket, file, resturant.id)
+    let restauranImage = await this._minioService.putOpject(createRestaurantDto.Bucket, file, resturant.id)
 
-    let result = await this._minioService.putOpject(createRestaurantDto.Bucket, file, resturant.id)
+    console.log('after image')
 
-    console.log(result);
-
+    resturant.mainCourseImage = mainCourseImage.url
+    resturant.image = restauranImage.url
     //resturant.image = result.url;  
     await this._restaurantRepository.save(resturant);
+    console.log('after insert')
 
 
     return resturant;
@@ -71,6 +76,7 @@ export class RestaurantService {
       restaurant.id,
     );
     //restaurant.image = result.url;
+    restaurant.mainCourseImage = result.url
     return this._restaurantRepository.save(restaurant);
   }
 

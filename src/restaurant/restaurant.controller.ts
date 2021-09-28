@@ -26,7 +26,7 @@ import { FindRestauranDto } from './dto/findRestaurantDto';
 @Controller('restaurant')
 //@UseGuards(AuthGuard())// we can use  it in one handler , now we cant access unless we have token
 
-//  @UseGuards(AuthGuard())// we can use  it in one handler , now we cant access unless we have token
+ @UseGuards(AuthGuard())// we can use  it in one handler , now we cant access unless we have token
 export class RestaurantController {
   constructor(private readonly restaurantService: RestaurantService) { }
 
@@ -35,6 +35,9 @@ export class RestaurantController {
   create(
     @Body() createRestaurantDto: CreateRestaurantDto,
     @UploadedFile() file,
+    //@UploadedFile() resturantImage,
+
+    
     @GetUser() user,
   ) {
     return this.restaurantService.create(createRestaurantDto, user, file);

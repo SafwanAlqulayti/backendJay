@@ -46,7 +46,7 @@ import { env } from 'node:process';
 export const typeOrm: TypeOrmModuleOptions = {
   type: 'postgres',
   port: 5432,
-  database: 'jay-new',
+  database: 'jay-last',
   host: "127.0.0.1",
   username:  'postgres',
   password: 'postgres',

@@ -51,6 +51,7 @@ export class MealService {
 
     //All meals that belongs to category id
     async getAllMeals(id:UUID) {
+        console.log('Start /////////////////////');
         const z = await this._mealRepositroy.find({ where: { CategoryId: id }, relations: ["CategoryId"] })
         return z
     }
@@ -59,7 +60,7 @@ export class MealService {
         return this._mealRepositroy.createQueryBuilder('meal')
         .select(['meal.id','meal.image','meal.price','RestaurantEntity.id','RestaurantEntity.name','RestaurantEntity.rate','CategoryEntity.id'])
         .leftJoin('meal.CategoryId', 'CategoryEntity')
-        .leftJoin('CategoryEntity.Restaurant', 'RestaurantEntity')
+        .leftJoin('CategoryEntity.RestaurantEntity', 'RestaurantEntity')
 
         .where({id:mealId})
         .getOne()

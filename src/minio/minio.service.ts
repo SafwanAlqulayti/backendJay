@@ -47,7 +47,6 @@ export class MinioClientService {
       });
     });
   }
-
   async downloadFile(bucket, id): Promise<any> {
     //GetObjectOutput
     let params = { Bucket: bucket, Key: id };

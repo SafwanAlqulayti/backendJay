@@ -23,6 +23,10 @@ export class RestaurantEntity extends AbstractEntity {
   @Column({ nullable: true })
   rate: string;
 
+
+  @Column({ nullable: true })
+  mainCourseImage: string;//الوجبة الشهية
+
   @Column({ nullable: true })
   latitude: string;
 

@@ -38,9 +38,9 @@ export class CategoryService {
 
   //Get all category that belongs to the resturant
   async findAll(getById:GetById) {
-    //let resturant = await this._restaurantService.findOne({id:getById.restaurantId});
-   // console.log(resturant)
-    return this._categoryRepo.find({ where: { Restaurant: '7578ead2-64f8-45ee-878d-2dba9eea6e86' }, relations: ["Restaurant"] ,order:{categoryOrder:'ASC'}})
+    let resturant = await this._restaurantService.findOne({id:getById.restaurantId});
+   console.log(resturant)
+    return this._categoryRepo.find({ where: { RestaurantEntity: resturant.id }, relations: ["RestaurantEntity"] ,order:{categoryOrder:'ASC'}})
   }
 
  async findOne(id: UUID) {
@@ -54,7 +54,7 @@ export class CategoryService {
   //get the resturant that belongs to spicific category
   async findWithRelation(categoryId){
 
-   let category =  await this._categoryRepo.find({where : {id : categoryId},relations:["Restaurant"]})
+   let category =  await this._categoryRepo.find({where : {id : categoryId},relations:["RestaurantEntity"]})
 
    return category
 

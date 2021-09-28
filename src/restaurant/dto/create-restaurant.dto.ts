@@ -39,10 +39,10 @@ export class CreateRestaurantDto {
     Bucket:string
 
     @IsNotEmpty()
-    @IsNumber()
-    openHour:number
+    @IsString()
+    openHour:string
 
     @IsNotEmpty()
-    @IsNumber()
-    closeHour:number
+    @IsString()
+    closeHour:string
 }
