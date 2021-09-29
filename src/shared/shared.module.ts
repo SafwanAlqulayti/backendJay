@@ -5,9 +5,9 @@ import { GeoLocationService } from './services/location';
 import { HttpModule } from '@nestjs/common';
 
 @Module({
-  imports:[HttpModule],
+  imports: [HttpModule],
   controllers: [SharedController],
-  providers: [SharedService,GeoLocationService],
-  exports:[GeoLocationService]
+  providers: [SharedService, GeoLocationService],
+  exports: [GeoLocationService]
 })
-export class SharedModule {}
+export class SharedModule { }
