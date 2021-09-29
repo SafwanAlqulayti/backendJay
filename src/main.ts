@@ -2,8 +2,6 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as morgan from 'morgan';
-import { env } from 'node:process';
-import * as config from 'config';
 
 console.log(`${
     process.env.DB_PASSWORD

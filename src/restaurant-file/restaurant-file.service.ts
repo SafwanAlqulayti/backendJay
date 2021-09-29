@@ -1,7 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { S3 } from 'aws-sdk';
 import { InjectS3 } from 'nestjs-s3';
-import { userInfo } from 'node:os';
 import { AuthService } from 'src/auth/auth.service';
 import { BranchService } from 'src/branch/branch.service';
 import { RestaurantEntity } from 'src/entities/restaurant.entity';
