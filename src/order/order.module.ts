@@ -1,3 +1,4 @@
+import { Order } from 'src/entities/order.entity';
 import { Module } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { OrderController } from './order.controller';
@@ -9,7 +10,7 @@ import { MealModule } from 'src/meal/meal.module';
 import { RestaurantRestaurantBranchModule } from 'src/branch/branch.module';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([OrderRepository]),
+  imports:[TypeOrmModule.forFeature([Order]),
   AuthModule,
   RestaurantModule,
   MealModule,

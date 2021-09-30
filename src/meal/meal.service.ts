@@ -1,3 +1,4 @@
+import { Repository } from 'typeorm';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { UUID } from 'aws-sdk/clients/inspector';
 import { UnauthorizedException } from '@nestjs/common/exceptions/unauthorized.exception';
@@ -13,11 +14,13 @@ import { FindConditions } from 'typeorm';
 import { FindMealDto } from './dto/findMealDto';
 import { CategoryEntity } from 'src/entities/category.entity';
 import { BranchService } from 'src/branch/branch.service';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class MealService {
+    @InjectRepository(MealEntity)
+    private readonly _mealRepositroy: Repository<MealEntity>
     constructor(
-        private _mealRepositroy: MealRepository,
         private _categoryService: CategoryService,
         private _minioService: MinioClientService,
         private _restaurantBranchService: BranchService

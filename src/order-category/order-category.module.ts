@@ -1,3 +1,4 @@
+import { OrderCategory } from 'src/entities/order-category.entity';
 import { Module } from '@nestjs/common';
 import { OrderCategoryService } from './order-category.service';
 import { OrderCategoryController } from './order-category.controller';
@@ -10,7 +11,7 @@ import { MealModule } from 'src/meal/meal.module';
 
 @Module({
   imports:[RestaurantModule,MealModule ,
-    TypeOrmModule.forFeature([OrderCategoryRepository])],
+    TypeOrmModule.forFeature([OrderCategory])],
   controllers: [OrderCategoryController],
   providers: [OrderCategoryService],
   exports : [OrderCategoryService]

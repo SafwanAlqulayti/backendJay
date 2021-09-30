@@ -1,4 +1,6 @@
+import { Repository } from 'typeorm';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { S3 } from 'aws-sdk';
 import { InjectS3 } from 'nestjs-s3';
 import { AuthService } from 'src/auth/auth.service';
@@ -14,11 +16,10 @@ import { RestauranFileRepository } from './restauranFileRepository';
 
 @Injectable()
 export class RestaurantFileService {
+  @InjectRepository(RestaurantFileEntity)
+  private readonly _restauranFileRepository: Repository<RestaurantFileEntity>
   constructor(
     @InjectS3() private readonly s3: S3,
-    private _restauranFileRepository: RestauranFileRepository,
-    private _authService: AuthService,
-    private _restaurantBranchService: BranchService,
     private _restaurantService: RestaurantService,
 
     

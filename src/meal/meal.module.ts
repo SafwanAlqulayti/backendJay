@@ -1,3 +1,4 @@
+import { MealEntity } from 'src/entities/meal.entity';
 import { Module } from '@nestjs/common';
 import { MealService } from './meal.service';
 import { MealController } from './meal.controller';
@@ -15,7 +16,7 @@ import { RestaurantRestaurantBranchModule } from 'src/branch/branch.module';
     RestaurantModule,
     RestaurantBranchEntity, 
     RestaurantRestaurantBranchModule,
-    TypeOrmModule.forFeature([MealRepository])],
+    TypeOrmModule.forFeature([MealEntity])],
   providers: [MealService],
   controllers: [MealController],
   exports:[MealService]

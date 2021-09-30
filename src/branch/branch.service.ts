@@ -1,4 +1,6 @@
+import { Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { RestaurantBranchEntity } from 'src/entities/restaurantBranch.entity';
 import { RestaurantService } from 'src/restaurant/restaurant.service';
 import { AwsContext } from 'twilio/lib/rest/accounts/v1/credential/aws';
@@ -10,8 +12,10 @@ import { RestaurantBranchRepository } from './restaurantBranch.repository';
 @Injectable()
 @EntityRepository(RestaurantBranchRepository)
 export class BranchService {
+    @InjectRepository(RestaurantBranchEntity)
+    private readonly _restaurantBranchRepository: Repository<RestaurantBranchEntity>
+
     constructor(
-        private readonly _restaurantBranchRepository: RestaurantBranchRepository,
         private _restaurantService: RestaurantService
     ) { }
 

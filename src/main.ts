@@ -10,11 +10,13 @@ console.log(`${
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule,{ cors: true });
+  console.log('start///////////////');
+  
   app.useGlobalPipes(new ValidationPipe());
   app.use(morgan('tiny'));
   app.enableCors()
   const port = process.env.PORT || 3000
-  await app.listen(port,()=>{
+  await app.listen(3000,()=>{
     (`App is listening on port ${port}`)
   })
 

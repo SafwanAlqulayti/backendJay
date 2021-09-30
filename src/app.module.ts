@@ -1,5 +1,5 @@
 import { ConfigService } from '@nestjs/config';
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -20,7 +20,7 @@ import { MiddlewareConsumer } from '@nestjs/common';
 import { AppLoggerMiddleware } from './middleware/loggerMiddleware';
 import { RestaurantRestaurantBranchModule } from './branch/branch.module';
 import { config } from 'process';
-import configService from './config/typeOrm.config';
+import { typeOrm } from './config/typeOrm.config'
 
 @Module({
   imports: [
@@ -28,10 +28,9 @@ import configService from './config/typeOrm.config';
       // load: ['shared/services/config.service'],
     }),
     SharedModule,
-    TypeOrmModule.forRoot(configService.getTypeOrmConfig()),
+    forwardRef( () => TypeOrmModule.forRoot(typeOrm)),
     AuthModule,
     RestaurantModule, RestaurantFileModule, MealModule, CategoryModule, OrderCategoryModule, OrderCategoryDetailModule, MinioModulee, UserRepository,
-    RestaurantModule, RestaurantFileModule, MealModule, CategoryModule, OrderCategoryModule, OrderCategoryDetailModule, UserRepository,
     OrderModule,
     RestaurantRestaurantBranchModule,
 

@@ -1,3 +1,5 @@
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { AuthService } from 'src/auth/auth.service';
 import { Order } from 'src/entities/order.entity';
@@ -15,8 +17,9 @@ import { RestataurantOrdersDto } from './dto/restaurantOrdersDto';
 
 @Injectable()
 export class OrderService {
+  @InjectRepository(Order)
+  private readonly _orderRepo: Repository<Order>
   constructor(
-    private _orderRepo: OrderRepository,
     private _authService: AuthService,
     private _restaurantService: RestaurantService,
     private _mealService:MealService,

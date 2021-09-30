@@ -1,4 +1,6 @@
+import { Repository } from 'typeorm';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { UUID } from 'aws-sdk/clients/inspector';
 import { UserRole } from 'src/auth/user-role.enum';
 import { DeleteCategoryDto } from 'src/category/dto/deleteCategory.dto';
@@ -13,7 +15,9 @@ import { OrderCategoryRepository } from './order-categort.repository';
 @Injectable()
 @EntityRepository(OrderCategory)
 export class OrderCategoryService {
-  constructor(private MealService: MealService, private _orderCategoryRepository: OrderCategoryRepository) { }
+  @InjectRepository(OrderCategory)
+  private readonly _orderCategoryRepository:Repository<OrderCategory>
+  constructor(private MealService: MealService) { }
   async create(createOrderCategoryDto: CreateOrderCategoryDto) {
     let meal = await this.MealService.findMeal(createOrderCategoryDto.mealId);
     let orderCategory = new OrderCategory()

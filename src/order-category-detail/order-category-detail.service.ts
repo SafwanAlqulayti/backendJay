@@ -1,3 +1,6 @@
+import { Repository } from 'typeorm';
+import { OrderCategory } from 'src/entities/order-category.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { OrderCategoryDetail } from 'src/entities/order-category-detail.entity';
 import { OrderCategoryDetailRepository } from './order-category-detail.repository';
@@ -11,8 +14,11 @@ import { UserRole } from 'src/auth/user-role.enum';
 @Injectable()
 @EntityRepository(OrderCategoryDetail)
 export class OrderCategoryDetailService {
+  @InjectRepository(OrderCategoryDetail)
+  private readonly _orderCategoryRepository: Repository<OrderCategoryDetail>
 
-  constructor(private _orderCategoryRepository: OrderCategoryDetailRepository, private _orderCategoryService: OrderCategoryService) { }
+  constructor(
+     private _orderCategoryService: OrderCategoryService) { }
   async create(createOrderCategoryDetailDto: CreateOrderCategoryDetailDto) {
 
     let category = await this._orderCategoryService.findById(1);

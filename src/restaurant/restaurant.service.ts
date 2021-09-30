@@ -1,3 +1,4 @@
+import { Repository } from 'typeorm';
 import {
   BadRequestException,
   Injectable,
@@ -20,6 +21,7 @@ import { UserLatLongDto } from './dto/userLatLongDto';
 import { AddResturantMainImageDto } from './dto/addRestauranMainImage';
 import { FindRestauranDto } from './dto/findRestaurantDto';
 import { firstBy } from "thenby";
+import { InjectRepository } from '@nestjs/typeorm';
 var arraySort = require('array-sort');
 
 
@@ -28,8 +30,10 @@ var arraySort = require('array-sort');
 @Injectable()
 @EntityRepository(RestaurantEntity)
 export class RestaurantService {
+  @InjectRepository(RestaurantEntity)
+  private readonly _restaurantRepository: Repository<RestaurantEntity>
+ 
   constructor(
-    private _restaurantRepository: RestaurantRepository,
     private _authService: AuthService,
     private _minioService: MinioClientService,
     private _geoLocationService: GeoLocationService

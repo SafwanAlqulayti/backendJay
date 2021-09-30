@@ -1,3 +1,4 @@
+import { CategoryEntity } from 'src/entities/category.entity';
 import { Module } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { CategoryController } from './category.controller';
@@ -10,7 +11,7 @@ import { RestaurantRestaurantBranchModule } from 'src/branch/branch.module';
 
 @Module({
 
-  imports:[AuthModule,RestaurantModule , TypeOrmModule.forFeature([CategoryRepo]),
+  imports:[AuthModule,RestaurantModule , TypeOrmModule.forFeature([CategoryEntity]),
 RestaurantRestaurantBranchModule
 ],
   controllers: [CategoryController],

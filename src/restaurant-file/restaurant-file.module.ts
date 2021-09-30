@@ -1,3 +1,4 @@
+import { RestaurantFileEntity } from 'src/entities/restaurantFile.entity';
 import { Module } from '@nestjs/common';
 import { RestaurantFileService } from './restaurant-file.service';
 import { RestaurantFileController } from './restaurant-file.controller';
@@ -28,7 +29,7 @@ import { RestaurantRestaurantBranchModule } from 'src/branch/branch.module';
     //   accessKey: process.env.MINIO_ACCESSKEY,
     //   secretKey: process.env.MINIO_SECRETKEY
     //   }),  
-    TypeOrmModule.forFeature([RestauranFileRepository]),
+    TypeOrmModule.forFeature([RestaurantFileEntity]),
     RestaurantRestaurantBranchModule
   ],
   providers: [RestaurantFileService],
