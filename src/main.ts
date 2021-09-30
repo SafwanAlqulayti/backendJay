@@ -16,7 +16,7 @@ async function bootstrap() {
   app.use(morgan('tiny'));
   app.enableCors()
   const port = process.env.PORT || 3000
-  await app.listen(3000,()=>{
+  await app.listen(port,()=>{
     (`App is listening on port ${port}`)
   })
 
