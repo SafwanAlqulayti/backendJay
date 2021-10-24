@@ -21,24 +21,42 @@ import { AppLoggerMiddleware } from './middleware/loggerMiddleware';
 import { RestaurantRestaurantBranchModule } from './branch/branch.module';
 import { config } from 'process';
 import { typeOrm } from './config/typeOrm.config'
-
+import * as path from 'path';
+import {
+  AcceptLanguageResolver,
+  HeaderResolver,
+  I18nJsonParser,
+  I18nModule,
+} from 'nestjs-i18n';
 @Module({
   imports: [
     ConfigModule.forRoot({
       // load: ['shared/services/config.service'],
     }),
     SharedModule,
-    forwardRef( () => TypeOrmModule.forRoot(typeOrm)),
+    forwardRef(() => TypeOrmModule.forRoot(typeOrm)),
     AuthModule,
     RestaurantModule, RestaurantFileModule, MealModule, CategoryModule, OrderCategoryModule, OrderCategoryDetailModule, MinioModulee, UserRepository,
     OrderModule,
     RestaurantRestaurantBranchModule,
-
+    I18nModule.forRootAsync({
+      useFactory: () => {
+        return {
+          fallbackLanguage: 'en',
+          parserOptions: {
+            path: path.join(__dirname, '/i18n'),
+          },
+        };
+      },
+      parser: I18nJsonParser,
+      resolvers: [new HeaderResolver(['lang']), AcceptLanguageResolver],
+    })
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers:[AppService,],
 
 })
+
 export class AppModule {
   configure(consumer: MiddlewareConsumer): void {
     consumer.apply(AppLoggerMiddleware).forRoutes('*');

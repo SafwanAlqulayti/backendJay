@@ -1,4 +1,4 @@
-   
+
 import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UserRepository } from './auth.repository';
@@ -8,18 +8,17 @@ import { JwtPayload } from './jwt-payload.interface';
 import { SignInDto } from './dto/signIn-auth.dto';
 import { PhoneNumberDto } from './dto/phone-number-validation.dto';
 import { SendOTP } from './dto/send-OTP.dto';
+import { I18nRequestScopeService } from 'nestjs-i18n';
+
 const phone = require('phone');
-
-
-
-
-
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(UserRepository)
     private UserRepository: UserRepository,
     private jwtService: JwtService,
+    private readonly _i18nService: I18nRequestScopeService
+
   ) { }
 
   async signUp(createAuthDto: CreateAuthDto) {
@@ -28,12 +27,11 @@ export class AuthService {
 
   async signIn(
     CreateAdminDto: SignInDto,): Promise<{ accessToken: string }> {
-
-
     const User = await this.UserRepository.signIn(CreateAdminDto);
+    //    if (User.IsActive == false) {
 
-    if (User.IsActive == false) {
-      throw new BadRequestException('Please sign up')
+    if (!User) {
+      throw new BadRequestException(await this._i18nService.translate('businessError.notRegister'))
     }
     if (User.email === null) {
       throw new UnauthorizedException('Invalid credentials');
@@ -76,7 +74,7 @@ export class AuthService {
 
   }
 
- async checkOTPByEmail(email, code){
+  async checkOTPByEmail(email, code) {
     let user = await this.UserRepository.findOne({ email: email })
 
     if (user.verifyCode != code) {
@@ -88,11 +86,11 @@ export class AuthService {
   }
 
   async sendOTP(sendOTP: SendOTP) {
-   let phoneNumber = phone(sendOTP.phoneNumber, 'SAU')[0];
+    let phoneNumber = phone(sendOTP.phoneNumber, 'SAU')[0];
 
     let user = await this.UserRepository.findOne({ phoneNumber: phoneNumber })
 
-    if(!user){
+    if (!user) {
       throw new BadRequestException('Please Sign Up');
     }
     user.verifyCode = (Math.floor(1000 + Math.random() * 9000)).toString();
@@ -101,7 +99,7 @@ export class AuthService {
 
     this.UserRepository.otpPhoneNumber(phoneNumber, user.verifyCode);
 
-    return {message:'success',email:user.email}
+    return { message: 'success', email: user.email }
   }
 
 
