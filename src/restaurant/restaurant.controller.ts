@@ -34,10 +34,7 @@ export class RestaurantController {
   @UseInterceptors(FileInterceptor('file'))
   create(
     @Body() createRestaurantDto: CreateRestaurantDto,
-    @UploadedFile() file,
-    //@UploadedFile() resturantImage,
-
-    
+    @UploadedFile() file,    
     @GetUser() user,
   ) {
     return this.restaurantService.create(createRestaurantDto, user, file);
@@ -86,9 +83,9 @@ export class RestaurantController {
   //   return this.restaurantService.getRestauranMainImage(id);
   // }
 
-  @Get('user')
-  findAll(@GetUser() user) {
-    return this.restaurantService.findAll(user);
+  @Get('owner')
+  getOwnerRestaurants(@GetUser() user) {
+    return this.restaurantService.getOwnerRestaurants(user);
   }
 
   @Get(':restaurantId')

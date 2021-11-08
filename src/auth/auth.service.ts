@@ -49,59 +49,40 @@ export class AuthService {
     return await this.UserRepository.findOne({ id: id })
   }
 
-  // update(id: number, updateAuthDto: UpdateAuthDto) {
-  //   return `This action updates a #${id} auth`;
-  // }
-
   remove(id: number) {
     return `This action removes a #${id} auth`;
   }
-
-
-
 
   async checkOTP(phoneNumberDto: PhoneNumberDto) {
 
     let user = await this.UserRepository.findOne({ email: phoneNumberDto.email })
 
-    if (user.verifyCode != phoneNumberDto.code) {
-      throw new BadRequestException('Plese try again');
-    } else {
-      user.IsActive = true;
-      this.UserRepository.save(user);
-      return { message: true }
-    }
+    if (user.verifyCode != phoneNumberDto.code) throw new BadRequestException('Please try again');
 
+    user.IsActive = true;
+    this.UserRepository.save(user);
+
+    return { message: true }
   }
 
   async checkOTPByEmail(email, code) {
     let user = await this.UserRepository.findOne({ email: email })
 
-    if (user.verifyCode != code) {
-      throw new BadRequestException('Plese try again');
-    } else {
-      return { message: true }
-    }
+    if (user.verifyCode != code) throw new BadRequestException('Please try again')
 
+    return { message: true }
   }
 
   async sendOTP(sendOTP: SendOTP) {
     let phoneNumber = phone(sendOTP.phoneNumber, 'SAU')[0];
-
     let user = await this.UserRepository.findOne({ phoneNumber: phoneNumber })
-
-    if (!user) {
-      throw new BadRequestException('Please Sign Up');
-    }
+    if (!user) throw new BadRequestException('Please Sign Up');
+    
     user.verifyCode = (Math.floor(1000 + Math.random() * 9000)).toString();
-
+    
     await this.UserRepository.save(user);
-
     this.UserRepository.otpPhoneNumber(phoneNumber, user.verifyCode);
 
     return { message: 'success', email: user.email }
   }
-
-
-
 }

@@ -50,18 +50,13 @@ export class RestaurantService {
     resturant.image = '';
     resturant.userId = user.id
     await this._restaurantRepository.save(resturant);
-    console.log('before image')
     let mainCourseImage = await this._minioService.putOpject(createRestaurantDto.Bucket, file, resturant.id)
     let restauranImage = await this._minioService.putOpject(createRestaurantDto.Bucket, file, resturant.id)
-
-    console.log('after image')
 
     resturant.mainCourseImage = mainCourseImage.url
     resturant.image = restauranImage.url
     //resturant.image = result.url;  
     await this._restaurantRepository.save(resturant);
-    console.log('after insert')
-
 
     return resturant;
   }
@@ -119,7 +114,7 @@ export class RestaurantService {
     return true;
   }
 
-  findAll(user) {
+  getOwnerRestaurants(user) {
     return this._restaurantRepository.find({
       where: { userId: user.id },
       relations: ['restaurantFile'],

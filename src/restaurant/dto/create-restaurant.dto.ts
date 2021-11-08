@@ -2,10 +2,6 @@ import { IsNotEmpty, IsNumber, IsString, IsUUID } from "class-validator";
 
 export class CreateRestaurantDto {
 
-
-    // @IsUUID()
-    // id:string
-
     @IsNotEmpty()
     @IsString()
     name:string;
@@ -18,21 +14,13 @@ export class CreateRestaurantDto {
     @IsString()
     rate:string;
     
-
     @IsNotEmpty()
     @IsString()
     latitude:string;
 
-
     @IsNotEmpty()
     @IsString()
     longitude:string;
-
-
-    // @IsNotEmpty()
-    // @IsString()
-    // image:string;
-
 
     @IsNotEmpty()
     @IsString()
