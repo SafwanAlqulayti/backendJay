@@ -1,3 +1,4 @@
+import { Length } from 'class-validator';
 import { Repository } from 'typeorm';
 import {
   BadRequestException,
@@ -40,35 +41,35 @@ export class RestaurantService {
   ) { }
 
   async create(createRestaurantDto: CreateRestaurantDto, user, file) {
-    let resturant = new RestaurantEntity();
-    let userLogged = await this._authService.findOne(user.id)
-    resturant.kind = createRestaurantDto.kind;
-    resturant.name = createRestaurantDto.name;
-    resturant.rate = createRestaurantDto.rate;
-    resturant.latitude = createRestaurantDto.latitude;
-    resturant.longitude = createRestaurantDto.longitude;
-    resturant.image = '';
-    resturant.userId = user.id
-    await this._restaurantRepository.save(resturant);
-    let mainCourseImage = await this._minioService.putOpject(createRestaurantDto.Bucket, file, resturant.id)
-    let restauranImage = await this._minioService.putOpject(createRestaurantDto.Bucket, file, resturant.id)
+    let restaurant = new RestaurantEntity();
+    //let userLogged = await this._authService.findOne(user.id)
+    restaurant.kind = createRestaurantDto.kind;
+    restaurant.name = createRestaurantDto.name;
+    restaurant.rate = createRestaurantDto.rate;
+    restaurant.latitude = createRestaurantDto.latitude;
+    restaurant.longitude = createRestaurantDto.longitude;
+    restaurant.image = '';
+    restaurant.userId = user.id
+    await this._restaurantRepository.save(restaurant);
+    let mainCourseImage = await this._minioService.putOpject(createRestaurantDto.Bucket, file, restaurant.id)
+    let restaurantImage = await this._minioService.putOpject(createRestaurantDto.Bucket, file, restaurant.id)
 
-    resturant.mainCourseImage = mainCourseImage.url
-    resturant.image = restauranImage.url
+    restaurant.mainCourseImage = mainCourseImage.url
+    restaurant.image = restaurantImage.url
     //resturant.image = result.url;  
-    await this._restaurantRepository.save(resturant);
+    await this._restaurantRepository.save(restaurant);
 
-    return resturant;
+    return restaurant;
   }
 
   async addResturantMainImage(
     file,
     addResturantMainImageDto: AddResturantMainImageDto,
   ) {
-    let restaurant = await this._restaurantRepository.findOne({
+    let restaurant = await this.findOne({
       id: addResturantMainImageDto.restaurantId,
     });
-    console.log(restaurant);
+
     let result = await this._minioService.putOpject(
       file,
       addResturantMainImageDto.bucket,
@@ -81,11 +82,11 @@ export class RestaurantService {
 
   async update(user, updateRestaurantDto: UpdateRestaurantDto) {
     // let restaurant = await this._restaurantRepository.findOne({ userId: user.id, id: updateRestaurantDto.id })
-
-    if (!user.user_role.includes(UserRole.ADMIN)) {
+    let userDetail = await this._authService.findOne(user.id)
+    if (!userDetail.userRole.includes(UserRole.ADMIN)) {
       throw new UnauthorizedException();
     }
-    let restaurant = await this.findById(updateRestaurantDto.id);
+    let restaurant = await this.findOne({id:updateRestaurantDto.id});
     restaurant.name = updateRestaurantDto.name;
     restaurant.kind = updateRestaurantDto.kind;
     await this._restaurantRepository.save(restaurant);
@@ -94,18 +95,19 @@ export class RestaurantService {
   }
 
   async getRestaurant(findRestauranDto: FindRestauranDto) {
-    let restaurant = await this._restaurantRepository.findOne({
-      id: findRestauranDto.restaurantId,
-    });
+    let restaurant = await this.findOne(
+     {id:findRestauranDto.restaurantId,}
+    );
     return restaurant;
   }
 
   async delete(user, deleteRestaurantDto: DeleteRestaurantDto) {
-    if (!user.user_role.includes(UserRole.ADMIN)) {
+    let userDetail = await this._authService.findOne(user.id)
+    if (userDetail.userRole !== UserRole.ADMIN ) {
       throw new UnauthorizedException();
     }
 
-    const queryBuilder = await this._restaurantRepository
+     await this._restaurantRepository
       .createQueryBuilder()
       .update(RestaurantEntity)
       .set({ IsActive: true })
@@ -180,14 +182,11 @@ export class RestaurantService {
   //   return `This action updates a #${id} restaurant`;
   // }
 
-  remove(id: number) {
-    return `This action removes a #${id} restaurant`;
-  }
+  // findOne(findData: FindConditions<RestaurantEntity>): Promise<RestaurantEntity> {
+  //   return this._restaurantRepository.findOne(findData);
+  // }
 
-  findOne(findData: FindConditions<RestaurantEntity>): Promise<RestaurantEntity> {
-    return this._restaurantRepository.findOne(findData);
-  }
-  async findOne1(
+  async findOne(
     findData: FindConditions<RestaurantEntity>,
   ): Promise<RestaurantEntity> {
     let restaurant = await this._restaurantRepository.findOne(findData);
@@ -197,9 +196,13 @@ export class RestaurantService {
     return restaurant;
   }
 
-  findById(id: UUID): Promise<RestaurantEntity> {
-    return this._restaurantRepository.findOne(id);
-  }
+  // async findById(id: UUID): Promise<RestaurantEntity> {
+  //   let restaurant = await this._restaurantRepository.findOne(id);
+  //   if(restaurant){
+  //     return restaurant
+  //   }
+  //   throw new BadRequestException('Restaurant not found')
+  // }
 
   checkOpenedRestaurant() {
     var d = new Date();

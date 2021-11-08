@@ -24,9 +24,7 @@ import { FindRestauranDto } from './dto/findRestaurantDto';
 // import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
 
 @Controller('restaurant')
-//@UseGuards(AuthGuard())// we can use  it in one handler , now we cant access unless we have token
-
- @UseGuards(AuthGuard())// we can use  it in one handler , now we cant access unless we have token
+@UseGuards(AuthGuard())// we can use  it in one handler , now we cant access unless we have token
 export class RestaurantController {
   constructor(private readonly restaurantService: RestaurantService) { }
 
@@ -34,17 +32,18 @@ export class RestaurantController {
   @UseInterceptors(FileInterceptor('file'))
   create(
     @Body() createRestaurantDto: CreateRestaurantDto,
-    @UploadedFile() file,    
+    @UploadedFile() file,
     @GetUser() user,
   ) {
     return this.restaurantService.create(createRestaurantDto, user, file);
   }
 
   @Post('upload-main-image')
-  //@UseInterceptors(FileInterceptor('file'))
-  uploudFile(@UploadedFile() file, @Body() data: AddResturantMainImageDto) {
+  @UseInterceptors(FileInterceptor('file'))
+  uploadFile(@UploadedFile() file, @Body() data: AddResturantMainImageDto) {
     return this.restaurantService.addResturantMainImage(file, data);
   }
+
   // @Post('sava-image')
   // @UseInterceptors(
   //   FileInterceptor("file"),

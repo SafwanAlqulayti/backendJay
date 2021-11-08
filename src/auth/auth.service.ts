@@ -46,11 +46,9 @@ export class AuthService {
   }
 
   async findOne(id) {
-    return await this.UserRepository.findOne({ id: id })
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+    let user = await this.UserRepository.findOne(id)
+    if (user) return user
+    throw new BadRequestException('User not found ')
   }
 
   async checkOTP(phoneNumberDto: PhoneNumberDto) {
@@ -77,9 +75,9 @@ export class AuthService {
     let phoneNumber = phone(sendOTP.phoneNumber, 'SAU')[0];
     let user = await this.UserRepository.findOne({ phoneNumber: phoneNumber })
     if (!user) throw new BadRequestException('Please Sign Up');
-    
+
     user.verifyCode = (Math.floor(1000 + Math.random() * 9000)).toString();
-    
+
     await this.UserRepository.save(user);
     this.UserRepository.otpPhoneNumber(phoneNumber, user.verifyCode);
 

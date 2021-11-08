@@ -52,8 +52,8 @@ export class AuthController {
   //   return this.authService.update(+id, updateAuthDto);
   // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.authService.remove(+id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.authService.remove(+id);
+  // }
 }
