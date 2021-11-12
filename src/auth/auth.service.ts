@@ -41,8 +41,8 @@ export class AuthService {
     return { accessToken };
   }
 
-  findAll() {// for admin only
-    return `This action returns all auth`;
+  findAll() {//TODO: for admin only
+    return this.UserRepository.find()
   }
 
   async findOne(id) {

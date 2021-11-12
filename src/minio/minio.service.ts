@@ -165,7 +165,7 @@ export class MinioClientService {
     });
   }
 
-  errorsCheck(err) {
+  async errorsCheck(err) {
     if (err.code === 'NoSuchBucket') {
       return {
         message: 'Bucket does not exists .',

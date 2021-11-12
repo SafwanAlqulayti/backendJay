@@ -57,11 +57,16 @@ export class OrderService {
   }
 
   async orderDetail(orderDetailDto:OrderDetailDto){
-    return await this._orderRepo.findOne({where:{id:orderDetailDto.orderId},relations:['meals']})
+    let order =  await this._orderRepo.findOne({where:{id:orderDetailDto.orderId},relations:['meals']})
+    if(order) return order
+    throw new BadRequestException('There is no order whit this id')
   }
 
+
   async restaurantOrders(restataurantOrdersDto:RestataurantOrdersDto){
-    return this._orderRepo.find({where:{restaurant:restataurantOrdersDto.restaurantId},relations:["restaurant"]})
+    let orders = await this._orderRepo.find({where:{restaurant:restataurantOrdersDto.restaurantId},relations:["restaurant"]})
+    if(orders.length > 0) return orders 
+    throw new BadRequestException('There is no orders for this restaurant yet')
   }
 }
 

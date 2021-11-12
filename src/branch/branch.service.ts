@@ -20,10 +20,10 @@ export class BranchService {
     ) { }
 
     async findOne(findBranchDto): Promise<any> {
-        return this._restaurantBranchRepository.findOne({id:"a1387e9a-9348-4455-b7c3-4f8c463565c6"})
+        return this._restaurantBranchRepository.findOne({id:findBranchDto})
     }
     findOne1(
-    ): Promise<any> {
+    ): Promise<any> {//TODO: remove static
         return this._restaurantBranchRepository.find({where:{id:"a1387e9a-9348-4455-b7c3-4f8c463565c6"}});
     }
     async create(createRestaurantBranchDto: CreateRestaurantBranchDto) {

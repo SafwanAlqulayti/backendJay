@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body, Put, Param, Delete, ValidationPipe, UsePipes, UseFilters } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
+import { FindUserDto } from './dto/find-user.dto';
 import { PhoneNumberDto } from './dto/phone-number-validation.dto';
 import { SendOTP } from './dto/send-OTP.dto';
 import { SignInDto } from './dto/signIn-auth.dto'
@@ -10,12 +11,12 @@ import { SignInDto } from './dto/signIn-auth.dto'
 export class AuthController {
   constructor(private readonly authService: AuthService) { }
 
-  @Post('/signUp')
+  @Post('/signUp')//checked
   createUserAndSendOTPMassege(@Body() createAuthDto: CreateAuthDto): Promise<any> {
     return this.authService.signUp(createAuthDto);
   }
 
-  @Post('/signIn')
+  @Post('signIn')//checked
   signIn(@Body() createAuthDto: SignInDto) {
     return this.authService.signIn(createAuthDto);
   }
@@ -35,16 +36,14 @@ export class AuthController {
     return this.authService.checkOTPByEmail(phoneNumberDto.email, phoneNumberDto.code)
   }
 
-
-
   @Get()
   findAll() {
     return this.authService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.authService.findOne(+id);
+  @Get(':id')//checked
+  findOne(@Param('id') id:FindUserDto ) {
+    return this.authService.findOne(id);
   }
 
   // @Put(':id')

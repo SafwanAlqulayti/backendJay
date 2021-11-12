@@ -1,7 +1,7 @@
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsNotEmpty, IsString, IsUUID } from "class-validator";
 
 export class FindRestauranDto {
-    @IsString()
+    @IsUUID()
     @IsNotEmpty()
     restaurantId:string
 }

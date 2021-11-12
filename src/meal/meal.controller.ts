@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Param, Post, Put, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { CreateMealDto } from './dto/createMealDto';
 import { MealService } from './meal.service';
 import {DeleteMealDto} from './dto/deleteMealDto'
@@ -10,12 +10,12 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { FindMealDto } from './dto/findMealDto';
 
 @Controller('meal')
-// @UseGuards(AuthGuard('jwt'))
+ @UseGuards(AuthGuard('jwt'))
 export class MealController {
     constructor(
         private _mealService: MealService
     ) { }
-
+        //TODO check all end point and handle error
     @Get('/:mealId')
     getMealById(@Param() findMealDto:FindMealDto){
         return this._mealService.findMeal(findMealDto.mealId)
@@ -27,6 +27,9 @@ export class MealController {
         @Body() createMealDto: CreateMealDto,
         @UploadedFile() file
         ) {
+            if (file === undefined) {
+                throw new BadRequestException(['file photo is required'], 'Validation Failed');
+            }
         return this._mealService.create(file ,createMealDto)
     }
     //All meals that belongs to category id
@@ -35,13 +38,13 @@ export class MealController {
         return this._mealService.getAllMeals(getMealByCategory.categoryId);
     }
 
-    @Delete(':MealId')
-    delete(@Param('MealId')deleteMealDto:DeleteMealDto, @GetUser() user ){
-        return this._mealService.delete(deleteMealDto.MealId,user)
+    @Delete(':mealId')
+    delete(@Param('mealId')deleteMealDto:DeleteMealDto, @GetUser() user ){
+        return this._mealService.delete(deleteMealDto.mealId,user)
     }1
 
-    @Put(':MealId')
-    update(@Param('MealId') updateMealDto:UpdateMealDto,@GetUser() user){
+    @Put(':mealId')
+    update(@Param('mealId') updateMealDto:UpdateMealDto,@GetUser() user){
         return this._mealService.update(updateMealDto,user)
     }
 

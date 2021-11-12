@@ -24,28 +24,23 @@ export class CategoryService {
   ) { }
   async create(createCategoryDto: CreateCategoryDto) {
 
-    let resturant = await this._restaurantBranchService.findOne(createCategoryDto.restaurantBranchId);
-
+    let resturant = await this._restaurantService.findOne({id:createCategoryDto.restaurantId});
     let category = new CategoryEntity();
-
     category.name = createCategoryDto.name;
     category.categoryOrder = createCategoryDto.order;
     category.RestaurantEntity = resturant;
-
-
-
     await this._categoryRepo.save(category)
 
     return category;
-
   }
 
 
   //Get all category that belongs to the resturant
   async findAll(getById: GetById) {
     let resturant = await this._restaurantService.findOne({ id: getById.restaurantId });
-    console.log(resturant)
-    return this._categoryRepo.find({ where: { RestaurantEntity: resturant.id }, relations: ["RestaurantEntity"], order: { categoryOrder: 'ASC' } })
+    let categories = await this._categoryRepo.find({ where: { RestaurantEntity: resturant.id }, relations: ["RestaurantEntity"], order: { categoryOrder: 'ASC' } })
+    if(categories.length === 0) throw new BadRequestException('There is no categories for this restaurant')
+    return categories
   }
 
   async findOne(id: UUID) {
@@ -71,11 +66,14 @@ export class CategoryService {
       throw new UnauthorizedException()
     }
     let category = await this.findOne(updateCategoryDto.categoryId)
+    if(category){
     category.name = updateCategoryDto.name
     category.categoryOrder = updateCategoryDto.order
     await this._categoryRepo.save(category)
 
     return category
+    }
+    throw new BadRequestException('Category does not exist')
   }
 
   async delete(id, user) {
@@ -83,10 +81,11 @@ export class CategoryService {
       throw new UnauthorizedException()
     }
 
+     await this.findOne(id)
     const queryBuilder = await this._categoryRepo.createQueryBuilder()
       .update(CategoryEntity)
       .set({ IsActive: true })
       .where({ id: id }).execute();
-    return true;
+    return {message:'Category has been deleted'};
   }
 }

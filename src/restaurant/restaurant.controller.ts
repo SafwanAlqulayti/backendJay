@@ -9,6 +9,7 @@ import {
   UseGuards,
   UseInterceptors,
   UploadedFile,
+  BadRequestException,
 } from '@nestjs/common';
 import { RestaurantService } from './restaurant.service';
 import { CreateRestaurantDto } from './dto/create-restaurant.dto';
@@ -29,12 +30,16 @@ export class RestaurantController {
   constructor(private readonly restaurantService: RestaurantService) { }
 
   @Post()
+  //checked
   @UseInterceptors(FileInterceptor('file'))
   create(
     @Body() createRestaurantDto: CreateRestaurantDto,
     @UploadedFile() file,
     @GetUser() user,
   ) {
+    if (file === undefined) {
+      throw new BadRequestException(['file photo is required'], 'Validation Failed');
+  }
     return this.restaurantService.create(createRestaurantDto, user, file);
   }
 
@@ -52,7 +57,9 @@ export class RestaurantController {
   //   (file);
   // }
   // update(@Param('id') id: string, @Body()
-  @Get('all-restaurant')
+
+  @Get()//FE update the end point from restaurant/all-restaurant to get restaurant
+  //checked
   getAllRestaurant(
     @GetUser() user,
     @Query() query: UserLatLongDto,
@@ -61,6 +68,7 @@ export class RestaurantController {
   }
 
   @Put()
+  //checked
   updateRestaurant(
     @Body() updateRestaurantDto: UpdateRestaurantDto,
     @GetUser() user,
@@ -68,12 +76,11 @@ export class RestaurantController {
     return this.restaurantService.update(user, updateRestaurantDto);
   }
 
-  @Delete(':id')
+  @Delete(':id')//checked
   deleteRestaurant(
     @Param() deleteRestaurantDto: DeleteRestaurantDto,
     @GetUser() user,
   ) {
-    console.log(deleteRestaurantDto);
     return this.restaurantService.delete(user, deleteRestaurantDto);
   }
 
@@ -83,14 +90,15 @@ export class RestaurantController {
   // }
 
   @Get('owner')
+  //checked
   getOwnerRestaurants(@GetUser() user) {
     return this.restaurantService.getOwnerRestaurants(user);
   }
 
   @Get(':restaurantId')
+    //checked
   findResturant(@Param() findRestauranDto: FindRestauranDto) {
     return this.restaurantService.getRestaurant(findRestauranDto)
-
   }
 
   // @Get(':id')

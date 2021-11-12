@@ -1,16 +1,8 @@
 import { UUID } from "aws-sdk/clients/inspector";
-import { IsUUID } from "class-validator";
+import { IsNotEmpty, IsUUID } from "class-validator";
 
 export class DeleteMealDto {
- 
-
-
     @IsUUID()
-    MealId:UUID
-
-
-
-
-
-
+    @IsNotEmpty()
+    mealId:UUID
 }

@@ -9,12 +9,13 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 
 
 @Controller('category')
-// @UseGuards(AuthGuard())
+ @UseGuards(AuthGuard())
 
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @Post()
+  //checked
   create(@Body() createCategoryDto: CreateCategoryDto) {
     return this.categoryService.create(createCategoryDto);
   }
@@ -22,6 +23,7 @@ export class CategoryController {
 
   //Get all category that belongs to the resturant
   @Get(':restaurantId')
+  //checked
   findAll(@Param() getById:GetById ) {
     return this.categoryService.findAll(getById);
   }
@@ -32,6 +34,7 @@ export class CategoryController {
   // }
 
   @Put()
+  //checked
   update(@Body() updateCategoryDto: UpdateCategoryDto,@GetUser() user ) {
     return this.categoryService.update(updateCategoryDto,user);
   }

@@ -45,6 +45,9 @@ export class RestaurantEntity extends AbstractEntity {
   @Column({nullable:true})
   closeHour:number;
 
+  @Column({nullable:true})
+  isDeleted:boolean;
+
   @OneToOne(type => RestaurantCashire, RestaurantCashire => RestaurantCashire.Restaurant)
   RestaurantCashire: RestaurantCashire
 

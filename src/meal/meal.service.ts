@@ -31,8 +31,6 @@ export class MealService {
         const category = await this._categoryService.findOne(createMealDto.categoryId)
         const categoryWithResturant = await this._categoryService.findWithRelation(createMealDto.categoryId)
 
-
-
         //let resturant = await this._restaurantBranchService.findOne({id:categoryWithResturant[0].Restaurant.id})
 
         let randomId = (Math.floor(1000 + Math.random() * 9000)).toString()
@@ -55,18 +53,24 @@ export class MealService {
     //All meals that belongs to category id
     async getAllMeals(id:UUID) {
         console.log('Start /////////////////////');
-        const z = await this._mealRepositroy.find({ where: { CategoryId: id }, relations: ["CategoryId"] })
-        return z
+        const meals = await this._mealRepositroy.find({ where: { CategoryId: id }, relations: ["CategoryId"] })
+        if(meals.length > 0) return meals
+        
+        throw new BadRequestException('There is no meals in this category')
     }
 
     async findMeal(mealId) {
-        return this._mealRepositroy.createQueryBuilder('meal')
+        await this.findOne({id:mealId})
+        let meal = await this._mealRepositroy.createQueryBuilder('meal')
         .select(['meal.id','meal.image','meal.price','RestaurantEntity.id','RestaurantEntity.name','RestaurantEntity.rate','CategoryEntity.id'])
         .leftJoin('meal.CategoryId', 'CategoryEntity')
         .leftJoin('CategoryEntity.RestaurantEntity', 'RestaurantEntity')
 
         .where({id:mealId})
         .getOne()
+        if(meal) return meal
+
+        throw new BadRequestException('There is no meal with this id')
        // return  this._mealRepositroy.findOne({id:mealId});
     }
     
@@ -81,13 +85,13 @@ export class MealService {
         if (!user.user_role.includes(UserRole.ADMIN)) {
             throw new UnauthorizedException()
         }
+        await this.findOne({id:id})
 
-
-        const queryBuilder = await this._mealRepositroy.createQueryBuilder()
+          await this._mealRepositroy.createQueryBuilder()
             .update(MealEntity)
             .set({ IsActive: true })
             .where({ id: id }).execute();
-        return true;
+        return {message:`Meal with id ${id} has been deleted`};
 
 
     }
@@ -96,7 +100,7 @@ export class MealService {
         if (!user.user_role.includes(UserRole.ADMIN)) {
             throw new UnauthorizedException()
         }
-        let meal = await this.findMeal(updateMealDto.MealId)
+        let meal = await this.findMeal(updateMealDto.mealId)
         meal.name = updateMealDto.name
         meal.price = updateMealDto.price
         meal.image = updateMealDto.image
@@ -109,7 +113,7 @@ export class MealService {
     async findOne(findData: FindConditions<MealEntity>): Promise<MealEntity> {
         let meal = await this._mealRepositroy.findOne(findData);
         if(!meal){
-          throw new BadRequestException('restauran is not exist')
+          throw new BadRequestException('restaurant is not exist')
         }
         return meal
       }

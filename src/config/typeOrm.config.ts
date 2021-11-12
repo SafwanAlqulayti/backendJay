@@ -6,10 +6,10 @@ console.log(`${Number(process.env.DB_PORT)
 export const typeOrm: TypeOrmModuleOptions = {
   type: 'postgres',
   port: Number(process.env.DB_PORT),
-  database: process.env.DB_DATABASE,
+  database: 'jay-test' ,//process.env.DB_DATABASE,
   host: process.env.DB_HOST,
   username: process.env.DB_USERNAME || 'postgres',
-  password: process.env.DB_PASSWORD || 'postgres',
+  password: process.env.DB_PASSWORD || '123456',
   entities: [__dirname + '/../**/*.entity{.ts,.js}'],
   synchronize: true,
   migrations: ['../../src/migrations/*{.ts,.js}'],

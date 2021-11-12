@@ -21,10 +21,10 @@ import { UserEntity } from 'src/entities/user.entity';
 import { UserLatLongDto } from './dto/userLatLongDto';
 import { AddResturantMainImageDto } from './dto/addRestauranMainImage';
 import { FindRestauranDto } from './dto/findRestaurantDto';
-import { firstBy } from "thenby";
+import { firstBy } from 'thenby';
 import { InjectRepository } from '@nestjs/typeorm';
+import { relative } from 'path';
 var arraySort = require('array-sort');
-
 
 // import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
 
@@ -32,13 +32,13 @@ var arraySort = require('array-sort');
 @EntityRepository(RestaurantEntity)
 export class RestaurantService {
   @InjectRepository(RestaurantEntity)
-  private readonly _restaurantRepository: Repository<RestaurantEntity>
- 
+  private readonly _restaurantRepository: Repository<RestaurantEntity>;
+
   constructor(
     private _authService: AuthService,
     private _minioService: MinioClientService,
-    private _geoLocationService: GeoLocationService
-  ) { }
+    private _geoLocationService: GeoLocationService,
+  ) {}
 
   async create(createRestaurantDto: CreateRestaurantDto, user, file) {
     let restaurant = new RestaurantEntity();
@@ -49,14 +49,22 @@ export class RestaurantService {
     restaurant.latitude = createRestaurantDto.latitude;
     restaurant.longitude = createRestaurantDto.longitude;
     restaurant.image = '';
-    restaurant.userId = user.id
+    restaurant.userId = user.id;
     await this._restaurantRepository.save(restaurant);
-    let mainCourseImage = await this._minioService.putOpject(createRestaurantDto.Bucket, file, restaurant.id)
-    let restaurantImage = await this._minioService.putOpject(createRestaurantDto.Bucket, file, restaurant.id)
+    // let mainCourseImage = await this._minioService.putOpject(
+    //   createRestaurantDto.Bucket,
+    //   file,
+    //   restaurant.id,
+    // );TODO: return this and upload two file
+    let restaurantImage = await this._minioService.putOpject(
+      createRestaurantDto.Bucket,
+      file,
+      restaurant.id,
+    );
 
-    restaurant.mainCourseImage = mainCourseImage.url
-    restaurant.image = restaurantImage.url
-    //resturant.image = result.url;  
+   // restaurant.mainCourseImage = mainCourseImage.url;
+    restaurant.image = restaurantImage.url;
+    //resturant.image = result.url;
     await this._restaurantRepository.save(restaurant);
 
     return restaurant;
@@ -76,17 +84,30 @@ export class RestaurantService {
       restaurant.id,
     );
     //restaurant.image = result.url;
-    restaurant.mainCourseImage = result.url
+    restaurant.mainCourseImage = result.url;
     return this._restaurantRepository.save(restaurant);
   }
 
   async update(user, updateRestaurantDto: UpdateRestaurantDto) {
     // let restaurant = await this._restaurantRepository.findOne({ userId: user.id, id: updateRestaurantDto.id })
-    let userDetail = await this._authService.findOne(user.id)
+    let userDetail = await this._authService.findOne(user.id);
+    //   let userRestaurants = await this._restaurantRepository.find({where:{
+    //     userId:userDetail.id
+    //   },
+    //   relations:['userId']
+    // })
     if (!userDetail.userRole.includes(UserRole.ADMIN)) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException(
+        'This action only available to admins and restaurants owner',
+      );
     }
-    let restaurant = await this.findOne({id:updateRestaurantDto.id});
+
+    let restaurant = await this.findOne({
+      id: updateRestaurantDto.id,
+    });
+
+    if (restaurant.isDeleted === true)
+      throw new BadRequestException('This restaurant is deleted');
     restaurant.name = updateRestaurantDto.name;
     restaurant.kind = updateRestaurantDto.kind;
     await this._restaurantRepository.save(restaurant);
@@ -95,86 +116,126 @@ export class RestaurantService {
   }
 
   async getRestaurant(findRestauranDto: FindRestauranDto) {
-    let restaurant = await this.findOne(
-     {id:findRestauranDto.restaurantId,}
-    );
+    let restaurant = await this.findOne({ id: findRestauranDto.restaurantId });
     return restaurant;
   }
 
   async delete(user, deleteRestaurantDto: DeleteRestaurantDto) {
-    let userDetail = await this._authService.findOne(user.id)
-    if (userDetail.userRole !== UserRole.ADMIN ) {
-      throw new UnauthorizedException();
+    let userDetail = await this._authService.findOne(user.id);
+    if (userDetail.userRole !== UserRole.ADMIN) {
+      throw new UnauthorizedException(
+        'This action only available to admins and restaurants owner',
+      );
     }
-
-     await this._restaurantRepository
+    let restaurant = await this._restaurantRepository.findOne({
+      where: {
+        id: deleteRestaurantDto.id,
+        isDeleted: true,
+      },
+    });
+    if (restaurant)
+      throw new BadRequestException(
+        `Restaurant with the id ${deleteRestaurantDto.id} is already deleted`,
+      );
+    await this._restaurantRepository
       .createQueryBuilder()
       .update(RestaurantEntity)
-      .set({ IsActive: true })
+      .set({ IsActive: false, isDeleted: true })
       .where({ id: deleteRestaurantDto.id })
       .execute();
-    return true;
+    return {
+      message: `the restaurant with the id ${deleteRestaurantDto.id} has been deleted`,
+    };
   }
 
-  getOwnerRestaurants(user) {
-    return this._restaurantRepository.find({
+  async getOwnerRestaurants(user) {
+    let restaurants = await this._restaurantRepository.find({
       where: { userId: user.id },
       relations: ['restaurantFile'],
     });
+    if (restaurants.length > 0 && restaurants) return restaurants;
+
+    throw new BadRequestException('There is no restaurants for this user');
   }
 
-  async queryByName(query) {
-    return this._restaurantRepository.createQueryBuilder('restaurant')
-      .where('restaurant.name LIKE :name', { name: `%${query.name}%` })
-      .getMany()
+  async queryByName(query: string) {
+    return this._restaurantRepository
+      .createQueryBuilder('restaurant')
+      .where('restaurant.name LIKE :name', { name: `%${query}%` })
+      .getMany();
   }
 
-  async getAllRestaurant(user: UserLatLongDto, query: UserLatLongDto): Promise<RestaurantEntity[]> {
+  async getAllRestaurant(
+    user: UserLatLongDto,
+    query: UserLatLongDto,
+  ): Promise<RestaurantEntity[]> {
     // return all restaurants to update isClosed based on current time
+    console.log(query);
     if (query.name) {
-      return this.queryByName(query.name)
+      return this.queryByName(query.name);
     }
 
-    let openedRestaurant: any = await this._restaurantRepository.find({ isClosed: false })
+    let openedRestaurant: any = await this._restaurantRepository.find({
+      isClosed: false,
+    });
     // git the distance based in the user current long and lat
     if (query.long && query.lat) {
-      openedRestaurant.map(async (restaurant: RestaurantEntity & { distance: number }) => {
-        restaurant.distance = await this._geoLocationService.getDistanceFromLatLonInKm(query.lat, query.long, restaurant.latitude, restaurant.longitude)
-      })
+      openedRestaurant.map(
+        async (restaurant: RestaurantEntity & { distance: number }) => {
+          restaurant.distance = await this._geoLocationService.getDistanceFromLatLonInKm(
+            query.lat,
+            query.long,
+            restaurant.latitude,
+            restaurant.longitude,
+          );
+        },
+      );
     }
     // closed restaurants
-    let closedRestaurants = await this._restaurantRepository.find({ isClosed: true })
+    let closedRestaurants = await this._restaurantRepository.find({
+      where: { isClosed: true },
+    });
     //sort restaurant by their distance
-    await openedRestaurant.sort(firstBy("distance", { direction: "asc" }));
-    openedRestaurant = await openedRestaurant.concat(closedRestaurants)
-    return openedRestaurant
+    await openedRestaurant.sort(firstBy('distance', { direction: 'asc' }));
+    openedRestaurant = await openedRestaurant.concat(closedRestaurants);
+    console.log(openedRestaurant);
+    if (openedRestaurant.length > 0) {
+      return openedRestaurant;
+    } else {
+      throw new BadRequestException(
+        'No restaurants available at the moment kindly check agin later',
+      );
+    }
   }
 
   async updateRestaurantStatus() {
-    let allRestaurant: any = await this._restaurantRepository.createQueryBuilder("restaurant")
+    let allRestaurant: any = await this._restaurantRepository
+      .createQueryBuilder('restaurant')
       .getMany();
 
-    let hour: number = this.checkOpenedRestaurant()
-    let openedRestaurantIds: string[] = []
+    let hour: number = this.checkOpenedRestaurant();
+    let openedRestaurantIds: string[] = [];
     // get restaurants ids which are opend
     allRestaurant.forEach(async (restaurant: RestaurantEntity) => {
       if (restaurant.openHour < hour && restaurant.closeHour > hour) {
-        openedRestaurantIds.push(restaurant.id)
+        openedRestaurantIds.push(restaurant.id);
       }
-    })
-    return this._restaurantRepository.createQueryBuilder()
+    });
+    return this._restaurantRepository
+      .createQueryBuilder()
       .update(RestaurantEntity)
       .where({ id: In(openedRestaurantIds) })
       .set({
-        isClosed: true
+        isClosed: true,
       })
-      .execute()
+      .execute();
   }
 
   sortByKey(array, distance) {
     return array.sort(function (a, b) {
-      var x = a[distance]; var y = b[distance];
-      return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+      var x = a[distance];
+      var y = b[distance];
+      return x < y ? -1 : x > y ? 1 : 0;
     });
   }
 
@@ -207,14 +268,14 @@ export class RestaurantService {
   checkOpenedRestaurant() {
     var d = new Date();
     var local = d.getTime();
-    console.log('local', local)
+    console.log('local', local);
     var offset = d.getTimezoneOffset() * (60 * 1000);
-    console.log('offset', offset)
+    console.log('offset', offset);
     var utc = new Date(local + offset);
-    console.log('utc', utc)
-    var riyadh = new Date(utc.getTime() + (3 * 60 * 60 * 1000)); console.log(offset);
-    console.log(riyadh.getHours())
-    return riyadh.getHours()
-
+    console.log('utc', utc);
+    var riyadh = new Date(utc.getTime() + 3 * 60 * 60 * 1000);
+    console.log(offset);
+    console.log(riyadh.getHours());
+    return riyadh.getHours();
   }
 }

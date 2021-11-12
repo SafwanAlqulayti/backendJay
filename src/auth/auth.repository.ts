@@ -1,4 +1,7 @@
-import { BadRequestException, InternalServerErrorException } from '@nestjs/common';
+import {
+  BadRequestException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { EntityRepository, Repository } from 'typeorm';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import * as bcrypt from 'bcryptjs';
@@ -11,24 +14,23 @@ const phone = require('phone');
 
 @EntityRepository(UserEntity)
 export class UserRepository extends Repository<UserEntity> {
-
   async signUp(createAuthDto: CreateAuthDto) {
-
-    let findUser = await this.findOne({ email: createAuthDto.email })
+    let findUser = await this.findOne({ email: createAuthDto.email });
 
     if (findUser) {
       if (findUser.IsActive == true) {
-        throw new BadRequestException('You are already have an account');
+        throw new BadRequestException(
+          'You are already have an account activate it ',
+        );
       }
     }
     if (findUser) {
-      findUser.verifyCode = (Math.floor(1000 + Math.random() * 9000)).toString()
+      findUser.verifyCode = Math.floor(1000 + Math.random() * 9000).toString();
       await this.save(findUser);
       await this.otpPhoneNumber(findUser.phoneNumber, findUser.verifyCode);
-
     } else {
       const { email, userName, phoneNumber, password } = createAuthDto;
-      let user = new UserEntity()
+      let user = new UserEntity();
       user.email = email;
       user.userName = userName;
       user.phoneNumber = phone(phoneNumber, 'SAU')[0];
@@ -41,7 +43,7 @@ export class UserRepository extends Repository<UserEntity> {
       try {
         await this.save(user);
       } catch (error) {
-        (error);
+        error;
         throw new BadRequestException();
       }
       await this.otpPhoneNumber(user.phoneNumber, user.verifyCode);
@@ -55,21 +57,14 @@ export class UserRepository extends Repository<UserEntity> {
   async signIn(createAuthDto: SignInDto) {
     const { email, password } = createAuthDto;
     const UserEntity = await this.findOne({ email: email });
-    console.log('here')
     if (UserEntity) {
-      let x = await UserEntity.validateLogin(password);
-      if (x) {
+      let correctCredential = await UserEntity.validateLogin(password);
+      if (correctCredential) {
         return UserEntity;
-      } else {
-        return null;
       }
-    } else {
-      return null;
     }
+    throw new BadRequestException('Credential not correct');
   }
-
-
-
 
   async otpPhoneNumber(phonenumber: any, verifyCode) {
     //  let user =await this.findOne(PhoneNumberDto.userId);
@@ -79,20 +74,15 @@ export class UserRepository extends Repository<UserEntity> {
     const rest_endpoint = process.env.REST_ENDPOINT;
 
     const timeout = 20 * 1000; // 20 secs
-    const client = new TeleSignSDK(customerId,
-      apiKey,
-      rest_endpoint,
-      timeout
-    );
+    const client = new TeleSignSDK(customerId, apiKey, rest_endpoint, timeout);
 
     const phoneNumber = phonenumber;
-    const messageType = "ARN";
-    const message = "Your code is " + verifyCode;
-
+    const messageType = 'ARN';
+    const message = 'Your code is ' + verifyCode;
 
     function messageCallback(error, responseBody) {
       if (error) {
-        console.error("Unable to send message. " + error);
+        console.error('Unable to send message. ' + error);
       }
     }
     client.sms.message(messageCallback, phoneNumber, message, messageType);

@@ -16,7 +16,8 @@ export class UpdateMealDto {
 
 
     @IsUUID()
-    MealId
+    @IsNotEmpty()
+    mealId
 
     @IsOptional()
     isAvilable:boolean

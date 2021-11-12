@@ -10,5 +10,5 @@ name:string;
 order:string
 
 @IsUUID()
-restaurantBranchId:string
+restaurantId:string
 }
