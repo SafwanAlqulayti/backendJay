@@ -1,7 +1,10 @@
-import { IsNotEmpty, IsUUID } from "class-validator";
+import { uuid } from "aws-sdk/clients/customerprofiles";
+import { IsArray, IsNotEmpty, IsNumber, IsOptional, IsString, IsUUID } from "class-validator";
+import { IsUuidArray } from "../custom-validator";
 
 export class CreateOrderDto {
     @IsNotEmpty()
+    @IsNumber()
     price:number;
 
     @IsNotEmpty()
@@ -12,5 +15,11 @@ export class CreateOrderDto {
     @IsUUID()
     userId:string;
 
-    mealsIds:[string];
+    @IsUuidArray()
+    @IsNotEmpty()
+    mealsIds:string[];
+
+    @IsOptional()
+    @IsString()
+    note?:string
 }

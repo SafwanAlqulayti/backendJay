@@ -117,7 +117,7 @@ export class MealService {
         }
         return meal
       }
-      async addMealToOrder(meals:[string]): Promise<MealEntity[]> {
+      async getMealsForOrder(meals:string[]): Promise<MealEntity[]> {
         let mealsIds = await this._mealRepositroy.createQueryBuilder('meal')
         .where("id IN (:...list)",{list:meals})
         .getMany()

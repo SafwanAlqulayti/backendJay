@@ -23,6 +23,9 @@ export class Order extends AbstractEntity {
     })
     status: OrderStatus;
 
+    @Column({nullable:true})
+    note:string
+    
     @ManyToOne(tyoe => RestaurantEntity, restaurantEntity => restaurantEntity.Order)
     @JoinColumn()
     restaurant: RestaurantEntity

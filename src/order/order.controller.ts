@@ -5,6 +5,7 @@ import { UpdateOrderDto } from './dto/update-order.dto';
 import { HistroyOrderDto } from './dto/history.order.dto';
 import { OrderDetailDto } from './dto/orderDto';
 import { RestataurantOrdersDto } from './dto/restaurantOrdersDto';
+import { GetUser } from 'src/auth/getUser.decorator';
 
 @Controller('order')
 export class OrderController {
@@ -29,4 +30,15 @@ export class OrderController {
   relatedOrders(@Param() restataurantOrdersDto:RestataurantOrdersDto){
     return this.orderService.restaurantOrders(restataurantOrdersDto)
   }
+  @Get(':userId/processing')
+  processingOrders(@Param() histroyOrderDto:HistroyOrderDto){
+    return this.orderService.processingOrders(histroyOrderDto)
+  }
+  @Put()
+  update(
+    @GetUser() user ,
+    @Body() updateOrderDto:UpdateOrderDto){
+    return this.orderService.update(updateOrderDto ,user)
+  }
+  
 }

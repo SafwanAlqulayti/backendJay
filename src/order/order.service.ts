@@ -5,7 +5,6 @@ import { AuthService } from 'src/auth/auth.service';
 import { Order } from 'src/entities/order.entity';
 import { RestaurantService } from 'src/restaurant/restaurant.service';
 import { CreateOrderDto } from './dto/create-order.dto';
-import { UpdateOrderDto } from './dto/update-order.dto';
 import { OrderRepository } from './order.repository';
 import { OrderStatus } from "src/constants/order-status";
 import { HistroyOrderDto } from './dto/history.order.dto';
@@ -14,6 +13,7 @@ import { MealService } from 'src/meal/meal.service';
 import { BranchService } from 'src/branch/branch.service';
 import { OrderDetailDto } from './dto/orderDto';
 import { RestataurantOrdersDto } from './dto/restaurantOrdersDto';
+import { UpdateOrderDto } from './dto/update-order.dto';
 
 @Injectable()
 export class OrderService {
@@ -27,13 +27,15 @@ export class OrderService {
   ) { }
 
   async create(createOrderDto: CreateOrderDto): Promise<Order> {
-    let meals = await this._mealService.addMealToOrder(createOrderDto.mealsIds)
     let user = await this._authService.findOne(createOrderDto.userId)
+    let restaurant = await this._restaurantService.findOne({ id: createOrderDto.restaurantId })//check restauran staus befoure order
+
     if (!user) {
       throw new BadRequestException()
     }
+    let meals = await this._mealService.getMealsForOrder(createOrderDto.mealsIds)
+
     //let restaurantBranch = await this._restaurantBranchService.findOne(createOrderDto.restaurantId)
-    let restaurant = await this._restaurantService.findOne({ id: createOrderDto.restaurantId })//check restauran staus befoure order
     let order = new Order();
     order.price = createOrderDto.price;
     order.user = user,
@@ -41,6 +43,7 @@ export class OrderService {
     order.status = OrderStatus.OPENED,
     order.meals = meals
     order.restaurant = restaurant
+    order.note = createOrderDto.note ? createOrderDto.note : ''
     console.log('start///////////////');
     console.log(order)
     return this._orderRepo.save(order)
@@ -51,7 +54,7 @@ export class OrderService {
       where: { user: histroyOrderDto.userId, status: OrderStatus.COMPLATED }, relations: ['restaurant','meals']
     })
     if (orders.length < 1) {
-      return { message: "no order for this user yet" }
+      return { message: "no order in your history" }
     }
     return orders
   }
@@ -67,6 +70,35 @@ export class OrderService {
     let orders = await this._orderRepo.find({where:{restaurant:restataurantOrdersDto.restaurantId},relations:["restaurant"]})
     if(orders.length > 0) return orders 
     throw new BadRequestException('There is no orders for this restaurant yet')
+  }
+
+  async processingOrders(histroyOrderDto:HistroyOrderDto){
+    let orders = await this._orderRepo.find({
+      where:{
+        user:histroyOrderDto.userId,
+        status: OrderStatus.PROCESSING
+      }
+    })
+    if(orders.length > 0) return orders
+
+    throw new BadRequestException('There is no processing orders for you')
+  }
+
+  async update(updateOrderDto:UpdateOrderDto ,user){
+    await this._authService.findOne(user)
+    let order = await this._orderRepo.findOne(updateOrderDto.orderId)
+    if(!order) throw new BadRequestException('There is no order with this id')
+
+    await this._orderRepo.createQueryBuilder()
+    .update(Order)
+     .set({
+      status:updateOrderDto.status
+    })
+    .where({id:updateOrderDto.orderId})
+    .execute()
+
+    return {message:`The order status has been changed to ${updateOrderDto.status}`}
+ 
   }
 }
 
