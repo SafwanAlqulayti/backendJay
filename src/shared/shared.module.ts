@@ -8,6 +8,6 @@ import { HttpModule } from '@nestjs/common';
   imports: [HttpModule],
   controllers: [SharedController],
   providers: [SharedService, GeoLocationService],
-  exports: [GeoLocationService]
+  exports: [GeoLocationService],
 })
-export class SharedModule { }
+export class SharedModule {}

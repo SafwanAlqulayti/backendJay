@@ -7,12 +7,12 @@ import { RestaurantBranchRepository } from './restaurantBranch.repository';
 import { RestaurantModule } from 'src/restaurant/restaurant.module';
 
 @Module({
-  imports:[
-    TypeOrmModule.forFeature([RestaurantBranchEntity,]),
-    RestaurantModule
+  imports: [
+    TypeOrmModule.forFeature([RestaurantBranchEntity]),
+    RestaurantModule,
   ],
   controllers: [BranchController],
   providers: [BranchService],
-  exports:[BranchService]
+  exports: [BranchService],
 })
 export class RestaurantRestaurantBranchModule {}

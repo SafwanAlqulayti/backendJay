@@ -30,18 +30,19 @@ export class RestaurantFileController {
   }
 
   @Post('make-bucket')
-  makeBucket(@Body() bucket: BucketDto, ) {//@GetUser() user
+  makeBucket(@Body() bucket: BucketDto) {
+    //@GetUser() user
     return this._restaurantFileService.makeBucket(bucket);
   }
-//   @Get('get-all-buckets')
-// getAllBucket() {
-//     return this._restaurantFileService.getAllBuckets()
-// }
-// @Delete('remove-bucket')
-// @UsePipes(ValidationPipe)
-// removeBucket(@Body() bucket:BucketDto) {
-//     return this._restaurantFileService.removeBucket(bucket)
-// }
+  //   @Get('get-all-buckets')
+  // getAllBucket() {
+  //     return this._restaurantFileService.getAllBuckets()
+  // }
+  // @Delete('remove-bucket')
+  // @UsePipes(ValidationPipe)
+  // removeBucket(@Body() bucket:BucketDto) {
+  //     return this._restaurantFileService.removeBucket(bucket)
+  // }
 }
 
 // import { Controller, Post } from '@nestjs/common';
@@ -69,8 +70,6 @@ export class RestaurantFileController {
 // getImage(){
 //     return this._restaurantFileService.getImage()
 // }
-
-
 
 // @Delete('remove-opject')
 // removeOpject(@Body() data) {//{Bucket: , Key:}

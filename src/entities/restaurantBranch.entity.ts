@@ -1,14 +1,12 @@
-import { AbstractEntity } from "src/common/abstract.entity";
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from "typeorm";
-import { CategoryEntity } from "./category.entity";
-import { Order } from "./order.entity";
-import { RestaurantEntity } from "./restaurant.entity";
-import { RestaurantFileEntity } from "./restaurantFile.entity";
+import { AbstractEntity } from 'src/common/abstract.entity';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import { CategoryEntity } from './category.entity';
+import { Order } from './order.entity';
+import { RestaurantEntity } from './restaurant.entity';
+import { RestaurantFileEntity } from './restaurantFile.entity';
 
 @Entity()
-
 export class RestaurantBranchEntity extends AbstractEntity {
-
   @Column()
   branchName: string;
 
@@ -27,16 +25,21 @@ export class RestaurantBranchEntity extends AbstractEntity {
   @Column({ nullable: true })
   image: string;
 
-  @ManyToOne(() => RestaurantFileEntity, (restaurantFile: RestaurantFileEntity) => restaurantFile.id)
+  @ManyToOne(
+    () => RestaurantFileEntity,
+    (restaurantFile: RestaurantFileEntity) => restaurantFile.id,
+  )
   restaurantFile: RestaurantFileEntity;
 
-  @ManyToOne(() => RestaurantEntity, (restaurantEntity: RestaurantEntity) => restaurantEntity.id)
+  @ManyToOne(
+    () => RestaurantEntity,
+    (restaurantEntity: RestaurantEntity) => restaurantEntity.id,
+  )
   restaurant: RestaurantEntity;
 
-  @OneToMany(() => Order, Order => Order.id)
-  Order: Order[]
+  @OneToMany(() => Order, (Order) => Order.id)
+  Order: Order[];
 
-  @OneToMany(() => CategoryEntity, categoryEntity => categoryEntity.id)
-  categories: CategoryEntity[]
-
+  @OneToMany(() => CategoryEntity, (categoryEntity) => categoryEntity.id)
+  categories: CategoryEntity[];
 }

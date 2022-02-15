@@ -1,14 +1,12 @@
-import { IsString, IsUUID } from "class-validator";
+import { IsString, IsUUID } from 'class-validator';
 
 export class CreateCategoryDto {
+  @IsString()
+  name: string;
 
+  @IsString()
+  order: string;
 
-@IsString()
-name:string;
-
-@IsString()
-order:string
-
-@IsUUID()
-restaurantId:string
+  @IsUUID()
+  restaurantId: string;
 }

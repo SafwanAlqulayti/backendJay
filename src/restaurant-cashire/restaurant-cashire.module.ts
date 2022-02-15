@@ -4,6 +4,6 @@ import { RestaurantCashireController } from './restaurant-cashire.controller';
 
 @Module({
   controllers: [RestaurantCashireController],
-  providers: [RestaurantCashireService]
+  providers: [RestaurantCashireService],
 })
 export class RestaurantCashireModule {}

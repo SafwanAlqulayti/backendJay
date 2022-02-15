@@ -1,4 +1,4 @@
 export class test {
-     Bucket:string;
-     name:string
+  Bucket: string;
+  name: string;
 }

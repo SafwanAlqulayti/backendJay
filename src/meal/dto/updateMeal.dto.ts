@@ -1,25 +1,22 @@
-import { IsNotEmpty, IsOptional, IsString, IsUUID } from "class-validator";
+import { IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
 
 export class UpdateMealDto {
-    @IsNotEmpty()
-    @IsString()
-    name:string;
+  @IsNotEmpty()
+  @IsString()
+  name: string;
 
-    @IsNotEmpty()
-    @IsString()
-    price:string;
+  @IsNotEmpty()
+  @IsString()
+  price: string;
 
+  @IsNotEmpty()
+  @IsString()
+  image: string;
 
-    @IsNotEmpty()
-    @IsString()
-    image:string
+  @IsUUID()
+  @IsNotEmpty()
+  mealId;
 
-
-    @IsUUID()
-    @IsNotEmpty()
-    mealId
-
-    @IsOptional()
-    isAvilable:boolean
-
+  @IsOptional()
+  isAvilable: boolean;
 }

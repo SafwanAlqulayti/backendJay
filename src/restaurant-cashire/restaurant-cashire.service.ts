@@ -6,14 +6,11 @@ import { UpdateRestaurantCashireDto } from './dto/update-restaurant-cashire.dto'
 @Injectable()
 export class RestaurantCashireService {
   create(createRestaurantCashireDto: CreateRestaurantCashireDto) {
+    const { user_name, password } = createRestaurantCashireDto;
 
-    const {user_name,password}=createRestaurantCashireDto;
-
-    let cashire=new RestaurantCashire();
-    cashire.user_name=user_name;
-    cashire.password=password;
-
-
+    const cashire = new RestaurantCashire();
+    cashire.user_name = user_name;
+    cashire.password = password;
   }
 
   findAll() {

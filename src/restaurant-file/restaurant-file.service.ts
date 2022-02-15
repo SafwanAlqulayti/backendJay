@@ -17,12 +17,10 @@ import { RestauranFileRepository } from './restauranFileRepository';
 @Injectable()
 export class RestaurantFileService {
   @InjectRepository(RestaurantFileEntity)
-  private readonly _restauranFileRepository: Repository<RestaurantFileEntity>
+  private readonly _restauranFileRepository: Repository<RestaurantFileEntity>;
   constructor(
     @InjectS3() private readonly s3: S3,
     private _restaurantService: RestaurantService,
-
-    
   ) {}
   //   async upload(file){
   //       let test = new RestaurantFileEntity
@@ -35,25 +33,29 @@ export class RestaurantFileService {
   public bucket = process.env.MINIO_BUCKET;
 
   async putOpject(file, createRestaurantFileDto: CreateRestaurantFileDto) {
-    let resturant = await this._restaurantService.findOne({id:createRestaurantFileDto.restaurantId})
-    let key = await new Date().getTime().toString();
-    let params = {
+    const resturant = await this._restaurantService.findOne({
+      id: createRestaurantFileDto.restaurantId,
+    });
+    const key = await new Date().getTime().toString();
+    const params = {
       Bucket: createRestaurantFileDto.bucket,
       Key: key,
       Body: file.buffer,
     };
 
-    let restaurantFile = new RestaurantFileEntity();
+    const restaurantFile = new RestaurantFileEntity();
     // restaurantFile.restaurantBranches.push(resturant);
     restaurantFile.bucket = createRestaurantFileDto.bucket;
-    restaurantFile.mainCourse = createRestaurantFileDto.mainCourse ? true :false
+    restaurantFile.mainCourse = createRestaurantFileDto.mainCourse
+      ? true
+      : false;
 
     await this._restauranFileRepository.save(restaurantFile);
     return await this.uploud(params);
   }
 
   uploud(params) {
-    let fileUrl = `localhost:3000/minio-client/download/${params.Bucket}/${params.Key}`;
+    const fileUrl = `localhost:3000/minio-client/download/${params.Bucket}/${params.Key}`;
     return new Promise((resolve, reject) => {
       return this.s3.putObject(params, (err, eTag) => {
         if (err) {
@@ -69,7 +71,7 @@ export class RestaurantFileService {
   }
 
   downloadFile(bucket, id) {
-    let params = { Bucket: bucket, Key: id };
+    const params = { Bucket: bucket, Key: id };
     return new Promise((resolve, reject) => {
       this.s3.getObject(params, function (err, dataStream) {
         if (err) {
@@ -80,7 +82,8 @@ export class RestaurantFileService {
     });
   }
 
-  async makeBucket(data: BucketDto, ) {//userI
+  async makeBucket(data: BucketDto) {
+    //userI
     // let user = await this._authService.findOne({ id: userI.id });
     // if (!user) {
     //   throw new UnauthorizedException();

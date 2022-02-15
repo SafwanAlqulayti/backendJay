@@ -1,11 +1,7 @@
-import { UUID } from "aws-sdk/clients/inspector";
-import { IsUUID } from "class-validator";
+import { UUID } from 'aws-sdk/clients/inspector';
+import { IsUUID } from 'class-validator';
 
-export class GetByIdDto{
-
-
-    @IsUUID('all')
-    mealId:UUID
-
-
+export class GetByIdDto {
+  @IsUUID('all')
+  mealId: UUID;
 }

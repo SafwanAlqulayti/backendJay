@@ -6,9 +6,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { OrderCategoryDetailRepository } from './order-category-detail.repository';
 
 @Module({
-  imports:[OrderCategoryModule ,
-    TypeOrmModule.forFeature([OrderCategoryDetailRepository])],
+  imports: [
+    OrderCategoryModule,
+    TypeOrmModule.forFeature([OrderCategoryDetailRepository]),
+  ],
   controllers: [OrderCategoryDetailController],
-  providers: [OrderCategoryDetailService]
+  providers: [OrderCategoryDetailService],
 })
 export class OrderCategoryDetailModule {}

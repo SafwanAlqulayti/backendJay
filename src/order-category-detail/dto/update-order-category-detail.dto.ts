@@ -1,16 +1,10 @@
 import { IsString } from 'class-validator';
 import { DeleteOrderCategoryDetailDto } from './delete-order-category-detail.dto';
 
-export class UpdateOrderCategoryDetailDto extends (DeleteOrderCategoryDetailDto) {
+export class UpdateOrderCategoryDetailDto extends DeleteOrderCategoryDetailDto {
+  @IsString()
+  name: string;
 
-
-
-   @IsString()
-    name: string
-
-    
-    @IsString()
-    price:string
-
-
+  @IsString()
+  price: string;
 }

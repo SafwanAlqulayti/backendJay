@@ -1,3 +1,3 @@
 export class RestataurantOrdersDto {
-    restaurantId:string;
+  restaurantId: string;
 }

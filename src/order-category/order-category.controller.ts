@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Put,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { OrderCategoryService } from './order-category.service';
 import { CreateOrderCategoryDto } from './dto/create-order-category.dto';
 import { UpdateOrderCategoryDto } from './dto/update-order-category.dto';
@@ -16,20 +24,16 @@ export class OrderCategoryController {
     return this.orderCategoryService.create(createOrderCategoryDto);
   }
 
-
   //find all order category that belongs to meal
   @Get('checkBox/:mealId')
-  findAllCleckBox(@Param() getByIdDto:GetByIdDto) {
-    return this.orderCategoryService.findOne(getByIdDto.mealId,true);
+  findAllCleckBox(@Param() getByIdDto: GetByIdDto) {
+    return this.orderCategoryService.findOne(getByIdDto.mealId, true);
   }
-
 
   @Get('redioButton/:mealId')
-  findAllRedioButton(@Param() getByIdDto:GetByIdDto) {
-    return this.orderCategoryService.findOne(getByIdDto.mealId,false);
+  findAllRedioButton(@Param() getByIdDto: GetByIdDto) {
+    return this.orderCategoryService.findOne(getByIdDto.mealId, false);
   }
-
-
 
   // @Get(':id')
   // findOne(@Param('id') id: string) {
@@ -37,12 +41,18 @@ export class OrderCategoryController {
   // }
 
   @Put()
-  update(@Body() updateOrderCategoryDto: UpdateOrderCategoryDto,@GetUser() user) {
-    return this.orderCategoryService.update(updateOrderCategoryDto,user);
+  update(
+    @Body() updateOrderCategoryDto: UpdateOrderCategoryDto,
+    @GetUser() user,
+  ) {
+    return this.orderCategoryService.update(updateOrderCategoryDto, user);
   }
 
   @Delete(':mealId')
-  delete(@Param('mealId') deleteCategoryDto:DeleteOrderCategoryDto,@GetUser() user) {
-    return this.orderCategoryService.delete(deleteCategoryDto,user);
+  delete(
+    @Param('mealId') deleteCategoryDto: DeleteOrderCategoryDto,
+    @GetUser() user,
+  ) {
+    return this.orderCategoryService.delete(deleteCategoryDto, user);
   }
 }

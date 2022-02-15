@@ -1,23 +1,23 @@
-import { UserRole } from "aws-sdk/clients/workmail";
-import { Order } from "src/entities/order.entity";
-import { RestaurantEntity } from "src/entities/restaurant.entity";
+import { UserRole } from 'aws-sdk/clients/workmail';
+import { Order } from 'src/entities/order.entity';
+import { RestaurantEntity } from 'src/entities/restaurant.entity';
 
 export interface UserInterFace {
-    id:string;
-    
-    email: string;
+  id: string;
 
-    user_name: string;
+  email: string;
 
-    password: string;
+  user_name: string;
 
-    salt: string;
+  password: string;
 
-    phone_number :string;
- 
-    user_role:UserRole;
+  salt: string;
 
-    Order:Order[];
+  phone_number: string;
 
-    Restaurant:RestaurantEntity[]
+  user_role: UserRole;
+
+  Order: Order[];
+
+  Restaurant: RestaurantEntity[];
 }

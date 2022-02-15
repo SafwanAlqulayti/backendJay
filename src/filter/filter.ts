@@ -9,7 +9,7 @@
 //     const request = ctx.getRequest<Request>();
 //     const status = exception.getStatus();
 //     console.log(exception.response)
-    
+
 //    return response
 //       .status(status)
 //       .json({

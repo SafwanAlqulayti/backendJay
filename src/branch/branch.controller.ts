@@ -13,14 +13,14 @@ export class BranchController {
   constructor(private readonly _branchService: BranchService) {}
 
   @Post()
- async create(@Body() createRestaurantBranchDto:CreateRestaurantBranchDto){
-    return this._branchService.create(createRestaurantBranchDto)
+  async create(@Body() createRestaurantBranchDto: CreateRestaurantBranchDto) {
+    return this._branchService.create(createRestaurantBranchDto);
   }
 
   @Get(':branchId')
-  async getBranch(@Param() findBranchDto):Promise<any>{
-    let result = await this._branchService.findOne1()
-    console.log(result)
-    return result
+  async getBranch(@Param() findBranchDto): Promise<any> {
+    const result = await this._branchService.findOne1();
+    console.log(result);
+    return result;
   }
 }

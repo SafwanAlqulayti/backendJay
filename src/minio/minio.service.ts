@@ -22,18 +22,18 @@ export class MinioClientService {
     });
   }
 
-  async putOpject( bucket: string,opject,resturantId): Promise<any> {
-    let key = resturantId;
-    let params = { Bucket: bucket, Key: key, Body: opject.buffer };
+  async putOpject(bucket: string, opject, resturantId): Promise<any> {
+    const key = resturantId;
+    const params = { Bucket: bucket, Key: key, Body: opject.buffer };
     return await this.uploud(params);
   }
 
   uploud(params): Promise<any> {
-    let fileUrl = `localhost:3000/minio-client/download/${params.Bucket}/${params.Key}`;
+    const fileUrl = `localhost:3000/minio-client/download/${params.Bucket}/${params.Key}`;
     return new Promise((resolve, reject) => {
       return this.s3.putObject(params, async (err, eTag) => {
         if (err) {
-          let errorCheck = await this.errorsCheck(err);
+          const errorCheck = await this.errorsCheck(err);
           if (errorCheck) {
             resolve(errorCheck);
           } else {
@@ -49,11 +49,11 @@ export class MinioClientService {
   }
   async downloadFile(bucket, id): Promise<any> {
     //GetObjectOutput
-    let params = { Bucket: bucket, Key: id };
+    const params = { Bucket: bucket, Key: id };
     return new Promise((resolve, reject) => {
       this.s3.getObject(params, async (err, dataStream) => {
         if (err) {
-          let errorCheck = await this.errorsCheck(err);
+          const errorCheck = await this.errorsCheck(err);
           if (errorCheck) {
             resolve(errorCheck);
           } else {
@@ -69,7 +69,7 @@ export class MinioClientService {
     return new Promise((resolve, reject) => {
       this.s3.deleteObject(data, async (err) => {
         if (err) {
-          let errorCheck = await this.errorsCheck(err);
+          const errorCheck = await this.errorsCheck(err);
           if (errorCheck) {
             resolve(errorCheck);
           } else if (err === null) {
@@ -94,7 +94,7 @@ export class MinioClientService {
     return new Promise((resolve, reject) => {
       this.s3.deleteBucket(data, async (err) => {
         if (err) {
-          let errorCheck = await this.errorsCheck(err);
+          const errorCheck = await this.errorsCheck(err);
           if (errorCheck) {
             resolve(errorCheck);
           } else {
@@ -113,7 +113,7 @@ export class MinioClientService {
     return new Promise((resolve, reject) => {
       return this.s3.createBucket(data, async (err) => {
         if (err) {
-          let errorCheck = await this.errorsCheck(err);
+          const errorCheck = await this.errorsCheck(err);
           if (errorCheck) {
             resolve(errorCheck);
           } else {
@@ -132,7 +132,7 @@ export class MinioClientService {
     return new Promise((resolve, reject) => {
       this.s3.getBucketLocation(data, async (err, exists) => {
         if (err) {
-          let errorCheck = await this.errorsCheck(err);
+          const errorCheck = await this.errorsCheck(err);
           if (errorCheck) {
             resolve(errorCheck);
           } else {
@@ -153,7 +153,7 @@ export class MinioClientService {
     return new Promise((resolve, reject) => {
       this.s3.listObjects(Bucket, async (err, data) => {
         if (err) {
-          let errorCheck = await this.errorsCheck(err);
+          const errorCheck = await this.errorsCheck(err);
           if (errorCheck) {
             resolve(errorCheck);
           } else {

@@ -1,19 +1,9 @@
-import { IsNotEmpty, IsString } from "class-validator";
-
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateRestaurantCashireDto {
+  @IsNotEmpty()
+  user_name: string;
 
-    @IsNotEmpty()
-    user_name:string;
-
-
-    @IsNotEmpty()
-    password:string;
-
-
-
+  @IsNotEmpty()
+  password: string;
 }
-
-
-
-

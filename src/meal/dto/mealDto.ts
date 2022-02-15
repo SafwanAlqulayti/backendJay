@@ -1,11 +1,11 @@
-import { MealEntity } from "src/entities/meal.entity";
+import { MealEntity } from 'src/entities/meal.entity';
 
 export class MealDto {
-    name:string;
+  name: string;
 
-    category:string;
+  category: string;
 
-    price:string;
+  price: string;
 
-    isAvilable:boolean;
+  isAvilable: boolean;
 }

@@ -16,17 +16,15 @@ import { OrderCategoryRepository } from './order-categort.repository';
 @EntityRepository(OrderCategory)
 export class OrderCategoryService {
   @InjectRepository(OrderCategory)
-  private readonly _orderCategoryRepository:Repository<OrderCategory>
-  constructor(private MealService: MealService) { }
+  private readonly _orderCategoryRepository: Repository<OrderCategory>;
+  constructor(private MealService: MealService) {}
   async create(createOrderCategoryDto: CreateOrderCategoryDto) {
-    let meal = await this.MealService.findMeal(createOrderCategoryDto.mealId);
-    let orderCategory = new OrderCategory()
+    const meal = await this.MealService.findMeal(createOrderCategoryDto.mealId);
+    const orderCategory = new OrderCategory();
     orderCategory.name = createOrderCategoryDto.name;
     orderCategory.order = createOrderCategoryDto.order;
     orderCategory.MealEntity = meal;
     return await this._orderCategoryRepository.save(orderCategory);
-
-
   }
 
   // findAll(id:UUID) {
@@ -36,49 +34,50 @@ export class OrderCategoryService {
   //   return;
   // }
 
-  async findOne(id: UUID ,checkBox :boolean) {
-    let meal = await this.MealService.findMeal(id);
+  async findOne(id: UUID, checkBox: boolean) {
+    const meal = await this.MealService.findMeal(id);
 
-    if(checkBox){
-      return this._orderCategoryRepository.find({ where: { MealEntity: meal.id,isCheckBox:true}, relations: ["MealEntity"] })
-    }else{
-      return this._orderCategoryRepository.find({ where: { MealEntity: meal.id,isCheckBox:false}, relations: ["MealEntity"] })
+    if (checkBox) {
+      return this._orderCategoryRepository.find({
+        where: { MealEntity: meal.id, isCheckBox: true },
+        relations: ['MealEntity'],
+      });
+    } else {
+      return this._orderCategoryRepository.find({
+        where: { MealEntity: meal.id, isCheckBox: false },
+        relations: ['MealEntity'],
+      });
     }
-
-
   }
-
-
 
   async findById(id: any) {
     return await this._orderCategoryRepository.findOne(id);
-
   }
 
   async update(updateOrderCategoryDto: UpdateOrderCategoryDto, user) {
-
     if (!user.user_role.includes(UserRole.ADMIN)) {
-      throw new UnauthorizedException()
+      throw new UnauthorizedException();
     }
-    let orderCategory = await this.findById(updateOrderCategoryDto.orderCategoryId)
-    orderCategory.name = updateOrderCategoryDto.name
-    orderCategory.order = updateOrderCategoryDto.order
-    await this._orderCategoryRepository.save(orderCategory)
-    return orderCategory
-
+    const orderCategory = await this.findById(
+      updateOrderCategoryDto.orderCategoryId,
+    );
+    orderCategory.name = updateOrderCategoryDto.name;
+    orderCategory.order = updateOrderCategoryDto.order;
+    await this._orderCategoryRepository.save(orderCategory);
+    return orderCategory;
   }
 
- async delete(id: DeleteOrderCategoryDto,user) {
-
+  async delete(id: DeleteOrderCategoryDto, user) {
     if (!user.user_role.includes(UserRole.ADMIN)) {
-      throw new UnauthorizedException()
+      throw new UnauthorizedException();
     }
 
-
-    const queryBuilder = await this._orderCategoryRepository.createQueryBuilder()
+    const queryBuilder = await this._orderCategoryRepository
+      .createQueryBuilder()
       .update(OrderCategory)
       .set({ IsActive: true })
-      .where({ id: id }).execute();
+      .where({ id: id })
+      .execute();
     return true;
   }
 }

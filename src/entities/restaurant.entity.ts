@@ -1,6 +1,12 @@
-
 import { AbstractEntity } from 'src/common/abstract.entity';
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+} from 'typeorm';
 import { CategoryEntity } from './category.entity';
 import { Order } from './order.entity';
 import { RestaurantCashire } from './restaurant-cashire.entity';
@@ -10,7 +16,6 @@ import { UserEntity } from './user.entity';
 
 @Entity()
 export class RestaurantEntity extends AbstractEntity {
-
   @Column({ nullable: false })
   name: string;
 
@@ -18,14 +23,13 @@ export class RestaurantEntity extends AbstractEntity {
   kind: string;
 
   @ManyToOne(() => UserEntity, (userEntity: UserEntity) => userEntity.id)
-  userId: UserEntity
+  userId: UserEntity;
 
   @Column({ nullable: true })
   rate: string;
 
-
   @Column({ nullable: true })
-  mainCourseImage: string;//الوجبة الشهية
+  mainCourseImage: string; //الوجبة الشهية
 
   @Column({ nullable: true })
   latitude: string;
@@ -36,41 +40,50 @@ export class RestaurantEntity extends AbstractEntity {
   @Column({ nullable: true })
   image: string;
 
-  @Column({nullable:true})
-  isClosed:boolean;
+  @Column({ nullable: true })
+  isClosed: boolean;
 
-  @Column({nullable:true})
-  openHour:number;
+  @Column({ nullable: true })
+  openHour: number;
 
-  @Column({nullable:true})
-  closeHour:number;
+  @Column({ nullable: true })
+  closeHour: number;
 
-  @Column({nullable:true})
-  isDeleted:boolean;
+  @Column({ nullable: true })
+  isDeleted: boolean;
 
-  @OneToOne(type => RestaurantCashire, RestaurantCashire => RestaurantCashire.Restaurant)
-  RestaurantCashire: RestaurantCashire
+  @OneToOne(
+    (type) => RestaurantCashire,
+    (RestaurantCashire) => RestaurantCashire.Restaurant,
+  )
+  RestaurantCashire: RestaurantCashire;
 
-  @ManyToOne(() => RestaurantFileEntity, (restaurantFile: RestaurantFileEntity) => restaurantFile.id)
+  @ManyToOne(
+    () => RestaurantFileEntity,
+    (restaurantFile: RestaurantFileEntity) => restaurantFile.id,
+  )
   restaurantFile: RestaurantFileEntity;
 
-  @ManyToOne(() => RestaurantEntity, (restaurantEntity: RestaurantEntity) => restaurantEntity.id)
+  @ManyToOne(
+    () => RestaurantEntity,
+    (restaurantEntity: RestaurantEntity) => restaurantEntity.id,
+  )
   restaurant: RestaurantEntity;
 
-  @OneToMany(() => Order, Order => Order.id)
-  Order: Order[]
+  @OneToMany(() => Order, (Order) => Order.id)
+  Order: Order[];
 
-  @OneToMany(() => CategoryEntity, categoryEntity => categoryEntity.RestaurantEntity)
-  categories: CategoryEntity[]
+  @OneToMany(
+    () => CategoryEntity,
+    (categoryEntity) => categoryEntity.RestaurantEntity,
+  )
+  categories: CategoryEntity[];
 
   // @OneToMany(type=>RestaurantBranchEntity , RestaurantBranchEntity=>RestaurantBranchEntity.restaurant)
   // RestaurantBranchEntity:RestaurantBranchEntity[]
 }
-    // @OneToOne(type=>User,CASHIER=>CASHIER.Restaurant)
- // CASHIER:User;
+// @OneToOne(type=>User,CASHIER=>CASHIER.Restaurant)
+// CASHIER:User;
 
-  // @ManyToOne(()=>RestaurantFileEntity ,(restaurantFile:RestaurantFileEntity)=> restaurantFile)
-  // restaurantFile:RestaurantFileEntity;
- 
-
-
+// @ManyToOne(()=>RestaurantFileEntity ,(restaurantFile:RestaurantFileEntity)=> restaurantFile)
+// restaurantFile:RestaurantFileEntity;

@@ -1,8 +1,7 @@
-import { UUID } from "aws-sdk/clients/inspector";
-import { IsUUID } from "class-validator";
+import { UUID } from 'aws-sdk/clients/inspector';
+import { IsUUID } from 'class-validator';
 
 export class DeleteCategoryDto {
-
-@IsUUID()
-categoryId:UUID
+  @IsUUID()
+  categoryId: UUID;
 }

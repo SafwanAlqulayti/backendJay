@@ -24,7 +24,7 @@ import { FindRestauranDto } from './dto/findRestaurantDto';
 import { firstBy } from 'thenby';
 import { InjectRepository } from '@nestjs/typeorm';
 import { relative } from 'path';
-var arraySort = require('array-sort');
+const arraySort = require('array-sort');
 
 // import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
 
@@ -41,7 +41,7 @@ export class RestaurantService {
   ) {}
 
   async create(createRestaurantDto: CreateRestaurantDto, user, file) {
-    let restaurant = new RestaurantEntity();
+    const restaurant = new RestaurantEntity();
     //let userLogged = await this._authService.findOne(user.id)
     restaurant.kind = createRestaurantDto.kind;
     restaurant.name = createRestaurantDto.name;
@@ -56,13 +56,13 @@ export class RestaurantService {
     //   file,
     //   restaurant.id,
     // );TODO: return this and upload two file
-    let restaurantImage = await this._minioService.putOpject(
+    const restaurantImage = await this._minioService.putOpject(
       createRestaurantDto.Bucket,
       file,
       restaurant.id,
     );
 
-   // restaurant.mainCourseImage = mainCourseImage.url;
+    // restaurant.mainCourseImage = mainCourseImage.url;
     restaurant.image = restaurantImage.url;
     //resturant.image = result.url;
     await this._restaurantRepository.save(restaurant);
@@ -74,11 +74,11 @@ export class RestaurantService {
     file,
     addResturantMainImageDto: AddResturantMainImageDto,
   ) {
-    let restaurant = await this.findOne({
+    const restaurant = await this.findOne({
       id: addResturantMainImageDto.restaurantId,
     });
 
-    let result = await this._minioService.putOpject(
+    const result = await this._minioService.putOpject(
       file,
       addResturantMainImageDto.bucket,
       restaurant.id,
@@ -90,7 +90,7 @@ export class RestaurantService {
 
   async update(user, updateRestaurantDto: UpdateRestaurantDto) {
     // let restaurant = await this._restaurantRepository.findOne({ userId: user.id, id: updateRestaurantDto.id })
-    let userDetail = await this._authService.findOne(user.id);
+    const userDetail = await this._authService.findOne(user.id);
     //   let userRestaurants = await this._restaurantRepository.find({where:{
     //     userId:userDetail.id
     //   },
@@ -102,7 +102,7 @@ export class RestaurantService {
       );
     }
 
-    let restaurant = await this.findOne({
+    const restaurant = await this.findOne({
       id: updateRestaurantDto.id,
     });
 
@@ -116,18 +116,20 @@ export class RestaurantService {
   }
 
   async getRestaurant(findRestauranDto: FindRestauranDto) {
-    let restaurant = await this.findOne({ id: findRestauranDto.restaurantId });
+    const restaurant = await this.findOne({
+      id: findRestauranDto.restaurantId,
+    });
     return restaurant;
   }
 
   async delete(user, deleteRestaurantDto: DeleteRestaurantDto) {
-    let userDetail = await this._authService.findOne(user.id);
+    const userDetail = await this._authService.findOne(user.id);
     if (userDetail.userRole !== UserRole.ADMIN) {
       throw new UnauthorizedException(
         'This action only available to admins and restaurants owner',
       );
     }
-    let restaurant = await this._restaurantRepository.findOne({
+    const restaurant = await this._restaurantRepository.findOne({
       where: {
         id: deleteRestaurantDto.id,
         isDeleted: true,
@@ -149,7 +151,7 @@ export class RestaurantService {
   }
 
   async getOwnerRestaurants(user) {
-    let restaurants = await this._restaurantRepository.find({
+    const restaurants = await this._restaurantRepository.find({
       where: { userId: user.id },
       relations: ['restaurantFile'],
     });
@@ -182,17 +184,18 @@ export class RestaurantService {
     if (query.long && query.lat) {
       openedRestaurant.map(
         async (restaurant: RestaurantEntity & { distance: number }) => {
-          restaurant.distance = await this._geoLocationService.getDistanceFromLatLonInKm(
-            query.lat,
-            query.long,
-            restaurant.latitude,
-            restaurant.longitude,
-          );
+          restaurant.distance =
+            await this._geoLocationService.getDistanceFromLatLonInKm(
+              query.lat,
+              query.long,
+              restaurant.latitude,
+              restaurant.longitude,
+            );
         },
       );
     }
     // closed restaurants
-    let closedRestaurants = await this._restaurantRepository.find({
+    const closedRestaurants = await this._restaurantRepository.find({
       where: { isClosed: true },
     });
     //sort restaurant by their distance
@@ -209,12 +212,12 @@ export class RestaurantService {
   }
 
   async updateRestaurantStatus() {
-    let allRestaurant: any = await this._restaurantRepository
+    const allRestaurant: any = await this._restaurantRepository
       .createQueryBuilder('restaurant')
       .getMany();
 
-    let hour: number = this.checkOpenedRestaurant();
-    let openedRestaurantIds: string[] = [];
+    const hour: number = this.checkOpenedRestaurant();
+    const openedRestaurantIds: string[] = [];
     // get restaurants ids which are opend
     allRestaurant.forEach(async (restaurant: RestaurantEntity) => {
       if (restaurant.openHour < hour && restaurant.closeHour > hour) {
@@ -233,8 +236,8 @@ export class RestaurantService {
 
   sortByKey(array, distance) {
     return array.sort(function (a, b) {
-      var x = a[distance];
-      var y = b[distance];
+      const x = a[distance];
+      const y = b[distance];
       return x < y ? -1 : x > y ? 1 : 0;
     });
   }
@@ -250,7 +253,7 @@ export class RestaurantService {
   async findOne(
     findData: FindConditions<RestaurantEntity>,
   ): Promise<RestaurantEntity> {
-    let restaurant = await this._restaurantRepository.findOne(findData);
+    const restaurant = await this._restaurantRepository.findOne(findData);
     if (!restaurant) {
       throw new BadRequestException('restauran is not exist');
     }
@@ -266,14 +269,14 @@ export class RestaurantService {
   // }
 
   checkOpenedRestaurant() {
-    var d = new Date();
-    var local = d.getTime();
+    const d = new Date();
+    const local = d.getTime();
     console.log('local', local);
-    var offset = d.getTimezoneOffset() * (60 * 1000);
+    const offset = d.getTimezoneOffset() * (60 * 1000);
     console.log('offset', offset);
-    var utc = new Date(local + offset);
+    const utc = new Date(local + offset);
     console.log('utc', utc);
-    var riyadh = new Date(utc.getTime() + 3 * 60 * 60 * 1000);
+    const riyadh = new Date(utc.getTime() + 3 * 60 * 60 * 1000);
     console.log(offset);
     console.log(riyadh.getHours());
     return riyadh.getHours();

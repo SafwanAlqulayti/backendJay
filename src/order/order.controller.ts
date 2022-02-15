@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Put,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
@@ -22,23 +30,20 @@ export class OrderController {
   }
 
   @Get('detail/:orderId')
-  getOrderDetail(@Param() orderDetailDto:OrderDetailDto){
-    return this.orderService.orderDetail(orderDetailDto)
-  }  
-  
+  getOrderDetail(@Param() orderDetailDto: OrderDetailDto) {
+    return this.orderService.orderDetail(orderDetailDto);
+  }
+
   @Get('related/:restaurantId')
-  relatedOrders(@Param() restataurantOrdersDto:RestataurantOrdersDto){
-    return this.orderService.restaurantOrders(restataurantOrdersDto)
+  relatedOrders(@Param() restataurantOrdersDto: RestataurantOrdersDto) {
+    return this.orderService.restaurantOrders(restataurantOrdersDto);
   }
   @Get(':userId/processing')
-  processingOrders(@Param() histroyOrderDto:HistroyOrderDto){
-    return this.orderService.processingOrders(histroyOrderDto)
+  processingOrders(@Param() histroyOrderDto: HistroyOrderDto) {
+    return this.orderService.processingOrders(histroyOrderDto);
   }
   @Put()
-  update(
-    @GetUser() user ,
-    @Body() updateOrderDto:UpdateOrderDto){
-    return this.orderService.update(updateOrderDto ,user)
+  update(@GetUser() user, @Body() updateOrderDto: UpdateOrderDto) {
+    return this.orderService.update(updateOrderDto, user);
   }
-  
 }

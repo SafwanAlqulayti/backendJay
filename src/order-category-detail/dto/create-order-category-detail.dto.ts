@@ -1,11 +1,9 @@
-import { IsString } from "class-validator"
+import { IsString } from 'class-validator';
 
 export class CreateOrderCategoryDetailDto {
+  @IsString()
+  name: string;
 
-    @IsString()
-    name: string
-
-    
-    @IsString()
-    price:string
+  @IsString()
+  price: string;
 }

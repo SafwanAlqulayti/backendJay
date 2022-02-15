@@ -11,14 +11,17 @@ import { RestaurantBranchEntity } from 'src/entities/restaurantBranch.entity';
 import { RestaurantRestaurantBranchModule } from 'src/branch/branch.module';
 
 @Module({
-  imports:[RestaurantModule,CategoryModule ,
+  imports: [
+    RestaurantModule,
+    CategoryModule,
     MinioModulee,
     RestaurantModule,
-    RestaurantBranchEntity, 
+    RestaurantBranchEntity,
     RestaurantRestaurantBranchModule,
-    TypeOrmModule.forFeature([MealEntity])],
+    TypeOrmModule.forFeature([MealEntity]),
+  ],
   providers: [MealService],
   controllers: [MealController],
-  exports:[MealService]
+  exports: [MealService],
 })
 export class MealModule {}

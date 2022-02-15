@@ -25,9 +25,9 @@ import { FindRestauranDto } from './dto/findRestaurantDto';
 // import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
 
 @Controller('restaurant')
-@UseGuards(AuthGuard())// we can use  it in one handler , now we cant access unless we have token
+@UseGuards(AuthGuard()) // we can use  it in one handler , now we cant access unless we have token
 export class RestaurantController {
-  constructor(private readonly restaurantService: RestaurantService) { }
+  constructor(private readonly restaurantService: RestaurantService) {}
 
   @Post()
   //checked
@@ -38,8 +38,11 @@ export class RestaurantController {
     @GetUser() user,
   ) {
     if (file === undefined) {
-      throw new BadRequestException(['file photo is required'], 'Validation Failed');
-  }
+      throw new BadRequestException(
+        ['file photo is required'],
+        'Validation Failed',
+      );
+    }
     return this.restaurantService.create(createRestaurantDto, user, file);
   }
 
@@ -58,12 +61,9 @@ export class RestaurantController {
   // }
   // update(@Param('id') id: string, @Body()
 
-  @Get()//FE update the end point from restaurant/all-restaurant to get restaurant
+  @Get() //FE update the end point from restaurant/all-restaurant to get restaurant
   //checked
-  getAllRestaurant(
-    @GetUser() user,
-    @Query() query: UserLatLongDto,
-  ) {
+  getAllRestaurant(@GetUser() user, @Query() query: UserLatLongDto) {
     return this.restaurantService.getAllRestaurant(user, query);
   }
 
@@ -76,7 +76,7 @@ export class RestaurantController {
     return this.restaurantService.update(user, updateRestaurantDto);
   }
 
-  @Delete(':id')//checked
+  @Delete(':id') //checked
   deleteRestaurant(
     @Param() deleteRestaurantDto: DeleteRestaurantDto,
     @GetUser() user,
@@ -96,9 +96,9 @@ export class RestaurantController {
   }
 
   @Get(':restaurantId')
-    //checked
+  //checked
   findResturant(@Param() findRestauranDto: FindRestauranDto) {
-    return this.restaurantService.getRestaurant(findRestauranDto)
+    return this.restaurantService.getRestaurant(findRestauranDto);
   }
 
   // @Get(':id')

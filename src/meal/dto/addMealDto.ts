@@ -1,3 +1,3 @@
 export class AssMealsbDto {
-    mealIds:[string]
+  mealIds: [string];
 }

@@ -1,11 +1,21 @@
-import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Put,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { RestaurantCashireService } from './restaurant-cashire.service';
 import { CreateRestaurantCashireDto } from './dto/create-restaurant-cashire.dto';
 import { UpdateRestaurantCashireDto } from './dto/update-restaurant-cashire.dto';
 
 @Controller('restaurant-cashire')
 export class RestaurantCashireController {
-  constructor(private readonly restaurantCashireService: RestaurantCashireService) {}
+  constructor(
+    private readonly restaurantCashireService: RestaurantCashireService,
+  ) {}
 
   @Post()
   create(@Body() createRestaurantCashireDto: CreateRestaurantCashireDto) {
@@ -23,8 +33,14 @@ export class RestaurantCashireController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateRestaurantCashireDto: UpdateRestaurantCashireDto) {
-    return this.restaurantCashireService.update(+id, updateRestaurantCashireDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateRestaurantCashireDto: UpdateRestaurantCashireDto,
+  ) {
+    return this.restaurantCashireService.update(
+      +id,
+      updateRestaurantCashireDto,
+    );
   }
 
   @Delete(':id')

@@ -15,62 +15,61 @@ import { UserRole } from 'src/auth/user-role.enum';
 @EntityRepository(OrderCategoryDetail)
 export class OrderCategoryDetailService {
   @InjectRepository(OrderCategoryDetail)
-  private readonly _orderCategoryRepository: Repository<OrderCategoryDetail>
+  private readonly _orderCategoryRepository: Repository<OrderCategoryDetail>;
 
-  constructor(
-     private _orderCategoryService: OrderCategoryService) { }
+  constructor(private _orderCategoryService: OrderCategoryService) {}
   async create(createOrderCategoryDetailDto: CreateOrderCategoryDetailDto) {
+    const category = await this._orderCategoryService.findById(1);
 
-    let category = await this._orderCategoryService.findById(1);
-
-    let categoryDetail = new OrderCategoryDetail();
+    const categoryDetail = new OrderCategoryDetail();
     categoryDetail.name = createOrderCategoryDetailDto.name;
     categoryDetail.price = createOrderCategoryDetailDto.price;
     categoryDetail.OrderCategory = category;
 
     await this._orderCategoryRepository.save(categoryDetail);
-    return categoryDetail
-
-
+    return categoryDetail;
   }
 
   //Find all order-category-detil That belongs to orderCategory id
-  async findAll(id:UUID) {
-    let orderCategory = await this._orderCategoryService.findById(id);
-    return this._orderCategoryRepository.find({ where: { OrderCategory: orderCategory.id }, relations: ["OrderCategory"] })
+  async findAll(id: UUID) {
+    const orderCategory = await this._orderCategoryService.findById(id);
+    return this._orderCategoryRepository.find({
+      where: { OrderCategory: orderCategory.id },
+      relations: ['OrderCategory'],
+    });
   }
 
   findOneByID(id: UUID) {
     return this._orderCategoryRepository.findOne(id);
   }
 
- async update(updateOrderCategoryDetailDto: UpdateOrderCategoryDetailDto ,user) {
-
+  async update(
+    updateOrderCategoryDetailDto: UpdateOrderCategoryDetailDto,
+    user,
+  ) {
     if (!user.user_role.includes(UserRole.ADMIN)) {
-      throw new UnauthorizedException()
+      throw new UnauthorizedException();
     }
-    let orderCategoryDetail = await this.findOneByID(updateOrderCategoryDetailDto.orderCategoryDetailId)
-    orderCategoryDetail.name = updateOrderCategoryDetailDto.name
-    orderCategoryDetail.price = updateOrderCategoryDetailDto.price
-    await this._orderCategoryRepository.save(orderCategoryDetail)
-    return orderCategoryDetail
-
-
-
+    const orderCategoryDetail = await this.findOneByID(
+      updateOrderCategoryDetailDto.orderCategoryDetailId,
+    );
+    orderCategoryDetail.name = updateOrderCategoryDetailDto.name;
+    orderCategoryDetail.price = updateOrderCategoryDetailDto.price;
+    await this._orderCategoryRepository.save(orderCategoryDetail);
+    return orderCategoryDetail;
   }
 
-  async delete(id:UUID ,user) {
-
+  async delete(id: UUID, user) {
     if (!user.user_role.includes(UserRole.ADMIN)) {
-      throw new UnauthorizedException()
+      throw new UnauthorizedException();
     }
 
-
-    const queryBuilder = await this._orderCategoryRepository.createQueryBuilder()
+    const queryBuilder = await this._orderCategoryRepository
+      .createQueryBuilder()
       .update(OrderCategoryDetail)
       .set({ IsActive: true })
-      .where({ id: id }).execute();
+      .where({ id: id })
+      .execute();
     return true;
   } ///
-  
 }

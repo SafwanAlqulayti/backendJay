@@ -12,7 +12,7 @@ import { SharedModule } from 'src/shared/shared.module';
     AuthModule,
     MinioModulee,
     TypeOrmModule.forFeature([RestaurantEntity]),
-    SharedModule
+    SharedModule,
   ],
   controllers: [RestaurantController],
   providers: [RestaurantService],

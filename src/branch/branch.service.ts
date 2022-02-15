@@ -12,28 +12,30 @@ import { RestaurantBranchRepository } from './restaurantBranch.repository';
 @Injectable()
 @EntityRepository(RestaurantBranchRepository)
 export class BranchService {
-    @InjectRepository(RestaurantBranchEntity)
-    private readonly _restaurantBranchRepository: Repository<RestaurantBranchEntity>
+  @InjectRepository(RestaurantBranchEntity)
+  private readonly _restaurantBranchRepository: Repository<RestaurantBranchEntity>;
 
-    constructor(
-        private _restaurantService: RestaurantService
-    ) { }
+  constructor(private _restaurantService: RestaurantService) {}
 
-    async findOne(findBranchDto): Promise<any> {
-        return this._restaurantBranchRepository.findOne({id:findBranchDto})
-    }
-    findOne1(
-    ): Promise<any> {//TODO: remove static
-        return this._restaurantBranchRepository.find({where:{id:"a1387e9a-9348-4455-b7c3-4f8c463565c6"}});
-    }
-    async create(createRestaurantBranchDto: CreateRestaurantBranchDto) {
-        let branch = new RestaurantBranchEntity()
-        let restarunt = await this._restaurantService.findOne({ id: createRestaurantBranchDto.requestId })
-        branch.branchName = createRestaurantBranchDto.branchName;
-        branch.latitude = createRestaurantBranchDto.branclLatitude;
-        branch.longitude = createRestaurantBranchDto.branchLongitude;
-        branch.kind = createRestaurantBranchDto.kind;
-        restarunt;
-        await this._restaurantBranchRepository.save(branch)
-    }
+  async findOne(findBranchDto): Promise<any> {
+    return this._restaurantBranchRepository.findOne({ id: findBranchDto });
+  }
+  findOne1(): Promise<any> {
+    //TODO: remove static
+    return this._restaurantBranchRepository.find({
+      where: { id: 'a1387e9a-9348-4455-b7c3-4f8c463565c6' },
+    });
+  }
+  async create(createRestaurantBranchDto: CreateRestaurantBranchDto) {
+    const branch = new RestaurantBranchEntity();
+    const restarunt = await this._restaurantService.findOne({
+      id: createRestaurantBranchDto.requestId,
+    });
+    branch.branchName = createRestaurantBranchDto.branchName;
+    branch.latitude = createRestaurantBranchDto.branclLatitude;
+    branch.longitude = createRestaurantBranchDto.branchLongitude;
+    branch.kind = createRestaurantBranchDto.kind;
+    restarunt;
+    await this._restaurantBranchRepository.save(branch);
+  }
 }

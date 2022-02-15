@@ -28,9 +28,9 @@ import { RestaurantRestaurantBranchModule } from 'src/branch/branch.module';
     //   useSSL: true,
     //   accessKey: process.env.MINIO_ACCESSKEY,
     //   secretKey: process.env.MINIO_SECRETKEY
-    //   }),  
+    //   }),
     TypeOrmModule.forFeature([RestaurantFileEntity]),
-    RestaurantRestaurantBranchModule
+    RestaurantRestaurantBranchModule,
   ],
   providers: [RestaurantFileService],
   controllers: [RestaurantFileController],

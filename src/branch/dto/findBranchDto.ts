@@ -1,7 +1,7 @@
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class FindBranchDto {
-    @IsNotEmpty()
-    @IsString()
-    branchId:string;
+  @IsNotEmpty()
+  @IsString()
+  branchId: string;
 }

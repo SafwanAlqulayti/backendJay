@@ -8,14 +8,14 @@ import * as bcrypt from 'bcryptjs';
 import { UserEntity } from '../entities/user.entity';
 import { SignInDto } from './dto/signIn-auth.dto';
 const readline = require('readline');
-var TeleSignSDK = require('telesignsdk');
+const TeleSignSDK = require('telesignsdk');
 
 const phone = require('phone');
 
 @EntityRepository(UserEntity)
 export class UserRepository extends Repository<UserEntity> {
   async signUp(createAuthDto: CreateAuthDto) {
-    let findUser = await this.findOne({ email: createAuthDto.email });
+    const findUser = await this.findOne({ email: createAuthDto.email });
 
     if (findUser) {
       if (findUser.IsActive == true) {
@@ -30,7 +30,7 @@ export class UserRepository extends Repository<UserEntity> {
       await this.otpPhoneNumber(findUser.phoneNumber, findUser.verifyCode);
     } else {
       const { email, userName, phoneNumber, password } = createAuthDto;
-      let user = new UserEntity();
+      const user = new UserEntity();
       user.email = email;
       user.userName = userName;
       user.phoneNumber = phone(phoneNumber, 'SAU')[0];
@@ -58,7 +58,7 @@ export class UserRepository extends Repository<UserEntity> {
     const { email, password } = createAuthDto;
     const UserEntity = await this.findOne({ email: email });
     if (UserEntity) {
-      let correctCredential = await UserEntity.validateLogin(password);
+      const correctCredential = await UserEntity.validateLogin(password);
       if (correctCredential) {
         return UserEntity;
       }

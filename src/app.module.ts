@@ -14,13 +14,13 @@ import { OrderCategoryDetailModule } from './order-category-detail/order-categor
 import { MinioModulee } from './minio/minio.module';
 import { UserRepository } from './auth/auth.repository';
 import { SharedModule } from './shared/shared.module';
-import messagebird from 'messagebird'
+import messagebird from 'messagebird';
 import { OrderModule } from './order/order.module';
 import { MiddlewareConsumer } from '@nestjs/common';
 import { AppLoggerMiddleware } from './middleware/loggerMiddleware';
 import { RestaurantRestaurantBranchModule } from './branch/branch.module';
 import { config } from 'process';
-import { typeOrm } from './config/typeOrm.config'
+import { typeOrm } from './config/typeOrm.config';
 import * as path from 'path';
 import {
   AcceptLanguageResolver,
@@ -36,7 +36,14 @@ import {
     SharedModule,
     forwardRef(() => TypeOrmModule.forRoot(typeOrm)),
     AuthModule,
-    RestaurantModule, RestaurantFileModule, MealModule, CategoryModule, OrderCategoryModule, OrderCategoryDetailModule, MinioModulee, UserRepository,
+    RestaurantModule,
+    RestaurantFileModule,
+    MealModule,
+    CategoryModule,
+    OrderCategoryModule,
+    OrderCategoryDetailModule,
+    MinioModulee,
+    UserRepository,
     OrderModule,
     RestaurantRestaurantBranchModule,
     I18nModule.forRootAsync({
@@ -50,13 +57,11 @@ import {
       },
       parser: I18nJsonParser,
       resolvers: [new HeaderResolver(['lang']), AcceptLanguageResolver],
-    })
+    }),
   ],
   controllers: [AppController],
-  providers:[AppService,],
-
+  providers: [AppService],
 })
-
 export class AppModule {
   configure(consumer: MiddlewareConsumer): void {
     consumer.apply(AppLoggerMiddleware).forRoutes('*');

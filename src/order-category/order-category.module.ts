@@ -10,10 +10,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { MealModule } from 'src/meal/meal.module';
 
 @Module({
-  imports:[RestaurantModule,MealModule ,
-    TypeOrmModule.forFeature([OrderCategory])],
+  imports: [
+    RestaurantModule,
+    MealModule,
+    TypeOrmModule.forFeature([OrderCategory]),
+  ],
   controllers: [OrderCategoryController],
   providers: [OrderCategoryService],
-  exports : [OrderCategoryService]
+  exports: [OrderCategoryService],
 })
 export class OrderCategoryModule {}

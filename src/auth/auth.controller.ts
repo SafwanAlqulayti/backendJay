@@ -1,22 +1,35 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, ValidationPipe, UsePipes, UseFilters } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Put,
+  Param,
+  Delete,
+  ValidationPipe,
+  UsePipes,
+  UseFilters,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { FindUserDto } from './dto/find-user.dto';
 import { PhoneNumberDto } from './dto/phone-number-validation.dto';
 import { SendOTP } from './dto/send-OTP.dto';
-import { SignInDto } from './dto/signIn-auth.dto'
+import { SignInDto } from './dto/signIn-auth.dto';
 
 @Controller('auth')
 @UsePipes(ValidationPipe)
 export class AuthController {
-  constructor(private readonly authService: AuthService) { }
+  constructor(private readonly authService: AuthService) {}
 
-  @Post('/signUp')//checked
-  createUserAndSendOTPMassege(@Body() createAuthDto: CreateAuthDto): Promise<any> {
+  @Post('/signUp') //checked
+  createUserAndSendOTPMassege(
+    @Body() createAuthDto: CreateAuthDto,
+  ): Promise<any> {
     return this.authService.signUp(createAuthDto);
   }
 
-  @Post('signIn')//checked
+  @Post('signIn') //checked
   signIn(@Body() createAuthDto: SignInDto) {
     return this.authService.signIn(createAuthDto);
   }
@@ -28,12 +41,15 @@ export class AuthController {
 
   @Post('send-otp')
   sendOTP(@Body() sendOTP: SendOTP) {
-    return this.authService.sendOTP(sendOTP)
+    return this.authService.sendOTP(sendOTP);
   }
 
   @Post('/checkOTP-by-email')
   checkOTPByEmail(@Body() phoneNumberDto: PhoneNumberDto) {
-    return this.authService.checkOTPByEmail(phoneNumberDto.email, phoneNumberDto.code)
+    return this.authService.checkOTPByEmail(
+      phoneNumberDto.email,
+      phoneNumberDto.code,
+    );
   }
 
   @Get()
@@ -41,8 +57,8 @@ export class AuthController {
     return this.authService.findAll();
   }
 
-  @Get(':id')//checked
-  findOne(@Param('id') id:FindUserDto ) {
+  @Get(':id') //checked
+  findOne(@Param('id') id: FindUserDto) {
     return this.authService.findOne(id);
   }
 
