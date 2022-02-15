@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { AbstractEntity } from 'src/common/abstract.entity';
 import {
   BaseEntity,
@@ -7,12 +8,14 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { RestaurantEntity } from './restaurant.entity';
+import { RestaurantEntity } from '../restaurant/restaurant.entity';
 @Entity()
 export class RestaurantCashire extends AbstractEntity {
+  @ApiProperty()
   @Column()
   user_name: string;
 
+  @ApiProperty()
   @Column()
   password: string;
 

@@ -12,7 +12,7 @@ import { UserRole } from '../auth/user-role.enum';
 import * as bcrypt from 'bcryptjs';
 import { AbstractEntity } from 'src/common/abstract.entity';
 import { Order } from './order.entity';
-import { RestaurantEntity } from './restaurant.entity';
+import { RestaurantEntity } from '../restaurant/restaurant.entity';
 
 @Entity()
 // @Unique(['email'])

@@ -1,3 +1,4 @@
+import { ApiTags } from '@nestjs/swagger';
 import { Post } from '@nestjs/common';
 import { Body } from '@nestjs/common';
 import { Get } from '@nestjs/common';
@@ -8,6 +9,7 @@ import { BranchService } from './branch.service';
 import { CreateRestaurantBranchDto } from './dto/createRestauranBranchDto';
 import { FindBranchDto } from './dto/findBranchDto';
 
+@ApiTags('Branch')
 @Controller('branch')
 export class BranchController {
   constructor(private readonly _branchService: BranchService) {}

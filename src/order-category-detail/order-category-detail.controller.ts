@@ -1,3 +1,4 @@
+import { ApiTags } from '@nestjs/swagger';
 import {
   Controller,
   Get,
@@ -14,6 +15,8 @@ import { DeleteOrderCategoryDetailDto } from './dto/delete-order-category-detail
 import { GetUser } from 'src/auth/getUser.decorator';
 import { GetByIdOrderCategoryDto } from './dto/get-by-id.dto';
 
+
+@ApiTags('Order category detail')
 @Controller('order-category-detail')
 export class OrderCategoryDetailController {
   constructor(

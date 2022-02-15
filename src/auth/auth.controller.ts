@@ -1,3 +1,4 @@
+import { ApiTags } from '@nestjs/swagger';
 import {
   Controller,
   Get,
@@ -17,6 +18,7 @@ import { PhoneNumberDto } from './dto/phone-number-validation.dto';
 import { SendOTP } from './dto/send-OTP.dto';
 import { SignInDto } from './dto/signIn-auth.dto';
 
+@ApiTags('Auth')
 @Controller('auth')
 @UsePipes(ValidationPipe)
 export class AuthController {

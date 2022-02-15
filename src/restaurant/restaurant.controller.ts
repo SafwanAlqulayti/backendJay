@@ -1,36 +1,32 @@
+import { AllRestaurantsDto } from './dto/all-restaurants.dto';
+import { RestaurantEntity } from 'src/restaurant/restaurant.entity';
 import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Put,
-  Param,
-  Delete,
-  UseGuards,
-  UseInterceptors,
-  UploadedFile,
-  BadRequestException,
+  BadRequestException, Body, Controller,
+  Delete, Get,
+  Param, Post,
+  Put, Query, UploadedFile, UseInterceptors
 } from '@nestjs/common';
-import { RestaurantService } from './restaurant.service';
-import { CreateRestaurantDto } from './dto/create-restaurant.dto';
-import { GetUser } from 'src/auth/getUser.decorator';
-import { AuthGuard } from '@nestjs/passport';
-import { UpdateRestaurantDto } from './dto/updateRestaurantDto';
-import { DeleteRestaurantDto } from './dto/deleteRestaurantDto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { UserLatLongDto } from './dto/userLatLongDto';
-import { Query } from '@nestjs/common';
+import { ApiExtraModels, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { GetUser } from 'src/auth/getUser.decorator';
 import { AddResturantMainImageDto } from './dto/addRestauranMainImage';
+import { CreateRestaurantDto } from './dto/create-restaurant.dto';
+import { DeleteRestaurantDto } from './dto/deleteRestaurantDto';
 import { FindRestauranDto } from './dto/findRestaurantDto';
+import { UpdateRestaurantDto } from './dto/updateRestaurantDto';
+import { UserLatLongDto } from './dto/userLatLongDto';
+import { RestaurantService } from './restaurant.service';
 // import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
 
 @Controller('restaurant')
-@UseGuards(AuthGuard()) // we can use  it in one handler , now we cant access unless we have token
+@ApiTags('Restaurants')
+//@UseGuards(AuthGuard()) // we can use  it in one handler , now we cant access unless we have token
 export class RestaurantController {
   constructor(private readonly restaurantService: RestaurantService) {}
 
   @Post()
   //checked
+  @ApiResponse({type:RestaurantEntity})
   @UseInterceptors(FileInterceptor('file'))
   create(
     @Body() createRestaurantDto: CreateRestaurantDto,
@@ -47,6 +43,7 @@ export class RestaurantController {
   }
 
   @Post('upload-main-image')
+  @ApiResponse({type:RestaurantEntity})
   @UseInterceptors(FileInterceptor('file'))
   uploadFile(@UploadedFile() file, @Body() data: AddResturantMainImageDto) {
     return this.restaurantService.addResturantMainImage(file, data);
@@ -63,12 +60,14 @@ export class RestaurantController {
 
   @Get() //FE update the end point from restaurant/all-restaurant to get restaurant
   //checked
+  @ApiResponse({type:[AllRestaurantsDto]})
   getAllRestaurant(@GetUser() user, @Query() query: UserLatLongDto) {
     return this.restaurantService.getAllRestaurant(user, query);
   }
 
   @Put()
   //checked
+  @ApiResponse({type:RestaurantEntity})
   updateRestaurant(
     @Body() updateRestaurantDto: UpdateRestaurantDto,
     @GetUser() user,
@@ -76,6 +75,17 @@ export class RestaurantController {
     return this.restaurantService.update(user, updateRestaurantDto);
   }
 
+  @ApiResponse({
+    schema:{
+      type:'object',
+      properties:{
+          message: {
+            type:'string',
+            example:`the restaurant with the id 8792302382983283 has been deleted`,
+          }
+      }
+    }
+  })
   @Delete(':id') //checked
   deleteRestaurant(
     @Param() deleteRestaurantDto: DeleteRestaurantDto,
@@ -90,6 +100,7 @@ export class RestaurantController {
   // }
 
   @Get('owner')
+  @ApiResponse({type:[AllRestaurantsDto]})
   //checked
   getOwnerRestaurants(@GetUser() user) {
     return this.restaurantService.getOwnerRestaurants(user);
@@ -98,6 +109,7 @@ export class RestaurantController {
   @Get(':restaurantId')
   //checked
   findResturant(@Param() findRestauranDto: FindRestauranDto) {
+    console.log(findRestauranDto)
     return this.restaurantService.getRestaurant(findRestauranDto);
   }
 

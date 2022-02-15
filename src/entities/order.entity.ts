@@ -1,4 +1,4 @@
-import { RestaurantEntity } from '../entities/restaurant.entity';
+import { RestaurantEntity } from '../restaurant/restaurant.entity';
 import {
   Column,
   Entity,

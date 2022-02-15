@@ -1,3 +1,4 @@
+import { ApiTags } from '@nestjs/swagger';
 import {
   BadRequestException,
   Body,
@@ -21,8 +22,10 @@ import { GetMealByCategory } from './dto/getMealByCategory.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FindMealDto } from './dto/findMealDto';
 
+
+@ApiTags('Meal')
 @Controller('meal')
-@UseGuards(AuthGuard('jwt'))
+//@UseGuards(AuthGuard('jwt'))
 export class MealController {
   constructor(private _mealService: MealService) {}
   //TODO check all end point and handle error
