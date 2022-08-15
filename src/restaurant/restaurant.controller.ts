@@ -107,6 +107,7 @@ export class RestaurantController {
   }
 
   @Get(':restaurantId')
+  @ApiResponse({type:RestaurantEntity})
   //checked
   findResturant(@Param() findRestauranDto: FindRestauranDto) {
     console.log(findRestauranDto)
