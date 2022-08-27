@@ -15,7 +15,7 @@ export const typeOrm: TypeOrmModuleOptions = {
   cli: {
     migrationsDir: '../../src/migrations',
   },
-  // url: process.env.NODE_ENV === 'prod' ? 'ec2-63-33-239-176.eu-west-1.compute.amazonaws.com' : '',
-  // ssl: { rejectUnauthorized: process.env.NODE_ENV === 'prod' ? false : true }Required in heroku
-  // ssl: { rejectUnauthorized: false } Required in heroku
+  url: process.env.NODE_ENV === 'prod' ? 'ec2-63-33-239-176.eu-west-1.compute.amazonaws.com' : '',
+  ssl: { rejectUnauthorized: process.env.NODE_ENV === 'prod' ? false : true }//Required in heroku
+  // ssl: { rejectUnauthorized: false }// Required in heroku
 };
