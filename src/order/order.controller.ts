@@ -1,3 +1,4 @@
+import { ApiTags } from '@nestjs/swagger';
 import {
   Controller,
   Get,
@@ -15,6 +16,7 @@ import { OrderDetailDto } from './dto/orderDto';
 import { RestataurantOrdersDto } from './dto/restaurantOrdersDto';
 import { GetUser } from 'src/auth/getUser.decorator';
 
+@ApiTags('Order')
 @Controller('order')
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}

@@ -1,4 +1,4 @@
-import { RestaurantEntity } from 'src/entities/restaurant.entity';
+import { RestaurantEntity } from 'src/restaurant/restaurant.entity';
 import { EntityRepository, Repository } from 'typeorm';
 
 @EntityRepository(RestaurantEntity)

@@ -8,7 +8,7 @@ import {
   OneToOne,
 } from 'typeorm';
 import { MealEntity } from './meal.entity';
-import { RestaurantEntity } from './restaurant.entity';
+import { RestaurantEntity } from '../restaurant/restaurant.entity';
 import { RestaurantBranchEntity } from './restaurantBranch.entity';
 
 @Entity()

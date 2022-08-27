@@ -1,3 +1,4 @@
+import { ApiTags } from '@nestjs/swagger';
 import {
   Controller,
   Get,
@@ -18,8 +19,9 @@ import { DeleteCategoryDto } from './dto/deleteCategory.dto';
 import { GetById } from './dto/getById.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 
+@ApiTags('Category')
 @Controller('category')
-@UseGuards(AuthGuard())
+//@UseGuards(AuthGuard())
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 

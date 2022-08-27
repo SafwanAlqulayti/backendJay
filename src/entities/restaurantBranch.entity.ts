@@ -2,7 +2,7 @@ import { AbstractEntity } from 'src/common/abstract.entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { CategoryEntity } from './category.entity';
 import { Order } from './order.entity';
-import { RestaurantEntity } from './restaurant.entity';
+import { RestaurantEntity } from '../restaurant/restaurant.entity';
 import { RestaurantFileEntity } from './restaurantFile.entity';
 
 @Entity()

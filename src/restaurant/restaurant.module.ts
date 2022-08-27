@@ -1,4 +1,4 @@
-import { RestaurantEntity } from 'src/entities/restaurant.entity';
+import { RestaurantEntity } from 'src/restaurant/restaurant.entity';
 import { Module } from '@nestjs/common';
 import { RestaurantService } from './restaurant.service';
 import { RestaurantController } from './restaurant.controller';

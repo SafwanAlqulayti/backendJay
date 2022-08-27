@@ -1,3 +1,4 @@
+import { ApiTags } from '@nestjs/swagger';
 import {
   Body,
   Controller,
@@ -17,6 +18,7 @@ import { MinioClientService } from './minio.service';
 // import { OpjectDto } from './dto/opjectDto';
 // import { MinioClientService } from './minio-client.service';
 
+@ApiTags('Minio client')
 @Controller('minio-client')
 export class MinioClientController {
   constructor(private _minioClientService: MinioClientService) {}

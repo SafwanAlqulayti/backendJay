@@ -9,11 +9,12 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiTags } from '@nestjs/swagger';
 import { GetUser } from 'src/auth/getUser.decorator';
 import { BucketDto } from './dto/bucketDto';
 import { CreateRestaurantFileDto } from './dto/createRestaurantFileDto';
 import { RestaurantFileService } from './restaurant-file.service';
-
+@ApiTags('Restaurant file')
 @Controller('restaurant-file')
 export class RestaurantFileController {
   constructor(private _restaurantFileService: RestaurantFileService) {}

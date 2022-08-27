@@ -1,3 +1,4 @@
+import { ApiTags } from '@nestjs/swagger';
 import {
   Controller,
   Get,
@@ -11,6 +12,7 @@ import { RestaurantCashireService } from './restaurant-cashire.service';
 import { CreateRestaurantCashireDto } from './dto/create-restaurant-cashire.dto';
 import { UpdateRestaurantCashireDto } from './dto/update-restaurant-cashire.dto';
 
+@ApiTags('Restaurant cashier')
 @Controller('restaurant-cashire')
 export class RestaurantCashireController {
   constructor(

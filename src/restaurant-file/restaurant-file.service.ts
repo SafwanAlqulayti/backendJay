@@ -5,7 +5,7 @@ import { S3 } from 'aws-sdk';
 import { InjectS3 } from 'nestjs-s3';
 import { AuthService } from 'src/auth/auth.service';
 import { BranchService } from 'src/branch/branch.service';
-import { RestaurantEntity } from 'src/entities/restaurant.entity';
+import { RestaurantEntity } from 'src/restaurant/restaurant.entity';
 import { RestaurantFileEntity } from 'src/entities/restaurantFile.entity';
 import { RestaurantService } from 'src/restaurant/restaurant.service';
 import { In } from 'typeorm';

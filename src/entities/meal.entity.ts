@@ -12,7 +12,7 @@ import {
 import { CategoryEntity } from './category.entity';
 import { OrderCategory } from './order-category.entity';
 import { Order } from './order.entity';
-import { RestaurantEntity } from './restaurant.entity';
+import { RestaurantEntity } from '../restaurant/restaurant.entity';
 
 @Entity('meal')
 export class MealEntity extends AbstractEntity {

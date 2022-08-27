@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { AuthService } from 'src/auth/auth.service';
 import { UserRole } from 'src/auth/user-role.enum';
-import { RestaurantEntity } from 'src/entities/restaurant.entity';
+import { RestaurantEntity } from 'src/restaurant/restaurant.entity';
 import { EntityRepository, FindConditions, In, Like } from 'typeorm';
 import { CreateRestaurantDto } from './dto/create-restaurant.dto';
 import { DeleteRestaurantDto } from './dto/deleteRestaurantDto';
@@ -24,12 +24,13 @@ import { FindRestauranDto } from './dto/findRestaurantDto';
 import { firstBy } from 'thenby';
 import { InjectRepository } from '@nestjs/typeorm';
 import { relative } from 'path';
+import { ApiTags } from '@nestjs/swagger';
 const arraySort = require('array-sort');
 
 // import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
-
 @Injectable()
 @EntityRepository(RestaurantEntity)
+@ApiTags('Restaurants')
 export class RestaurantService {
   @InjectRepository(RestaurantEntity)
   private readonly _restaurantRepository: Repository<RestaurantEntity>;
